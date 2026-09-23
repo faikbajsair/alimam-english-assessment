@@ -10,7 +10,7 @@
 
 **SMP Al-Imam English Assessment System** adalah platform ujian Bahasa Inggris berskala enterprise yang dirancang khusus untuk SMP Al-Imam Islamic School (AI IS) guna memenuhi standar ujian internasional (**TOEFL ITP/PBT, IELTS Academic & General, TOEIC, dan Al-Imam EPT**).
 
-Sistem dibangun menggunakan pola arsitektur **MVC (Model-View-Controller)** yang sangat ringan, efisien, memiliki proctoring ketat (anti-curang), mengadopsi fleksibilitas pembobotan **App Rapor MBU**, serta **siap dikomersialkan / dijual sebagai produk SaaS atau On-Premise White-Label** dengan CMS Appearance Configurator lengkap.
+Sistem dibangun menggunakan pola arsitektur **MVC (Model-View-Controller)** yang sangat ringan, efisien, memiliki proctoring ketat (anti-curang), sistem penilaian rubrik terstandarisasi, serta **siap dikomersialkan / digunakan sebagai produk SaaS atau On-Premise White-Label** dengan CMS Appearance Configurator lengkap.
 
 ---
 
@@ -34,13 +34,13 @@ Sistem dibangun menggunakan pola arsitektur **MVC (Model-View-Controller)** yang
 - **AI Camera Proctoring**: Snapshot berkala webcam peserta untuk memastikan integritas ujian.
 - **Randomization Engine**: Pengacakan urutan nomor soal dan opsi jawaban secara otomatis.
 
-### C. Penilaian & Integrasi Rapor MBU
+### C. Penilaian & Konversi Skor Internasional
 - **Konversi Skor Otomatis**:
   - Konversi otomatis nilai mentah (*raw score*) ke skala **TOEFL (310–677)**.
   - Konversi skor ke **IELTS Band (0–9.0)** dengan pembulatan resmi.
   - Pemetaan standar kecakapan **CEFR (A1, A2, B1, B2, C1, C2)**.
-- **Rubrik Penilaian MBU**: Antrean penilaian esai dan audio respon untuk dewan penguji (*Examiner*) dengan 4 kriteria analitik dan catatan adab/akhlak santri.
-- **Generator Sertifikat & Rapor PDF**: Penerbitan sertifikat digital resmi lengkap dengan QR code verifikasi keaslian dan tanda tangan digital dewan penguji.
+- **Rubrik Penilaian Standar**: Antrean penilaian esai dan audio respon untuk dewan penguji (*Examiner*) dengan 4 kriteria analitik dan catatan adab/akhlak santri.
+- **Generator Sertifikat & Laporan Hasil Asesmen**: Penerbitan sertifikat digital resmi lengkap dengan QR code verifikasi keaslian dan tanda tangan digital dewan penguji.
 
 ### D. CMS Appearance & SaaS Licensing Configurator
 - **Theme & Branding Customizer**: Pengaturan instan warna utama (*Primary/Secondary/Accent*), logo instansi, motto/tagline, dan footer.
@@ -59,7 +59,7 @@ Sistem dibangun menggunakan pola arsitektur **MVC (Model-View-Controller)** yang
 │   │   ├── UserModel.gs          # Kelola Auth, Role, Student Data & Quota
 │   │   ├── QuestionModel.gs     # Kelola Bank Soal TOEFL/IELTS/EPT & Audio URL
 │   │   ├── ExaminationModel.gs  # Kelola Sesi Ujian, Timer, Heartbeat & Pelanggaran
-│   │   └── GradeModel.gs        # Konversi Skor Skala TOEFL/IELTS & Logik Rapor MBU
+│   │   └── GradeModel.gs        # Konversi Skor Skala TOEFL/IELTS & Logik Nilai
 │   ├── controllers/
 │   │   ├── AuthController.gs    # Handler Login, Token Session & Otorisasi Role
 │   │   ├── ExamController.gs    # Logic Anti-Curang, Submit, Audio & Auto-Save
@@ -113,12 +113,12 @@ Sistem dibangun menggunakan pola arsitektur **MVC (Model-View-Controller)** yang
 |---|---|---|---|
 | **Super Admin** | `superadmin` | `admin123` | Akses penuh, manajemen lisensi & backup database |
 | **Admin CMS** | `admincms` | `admin123` | Kustomisasi tampilan white-label & jadwal ujian |
-| **Teacher / Examiner** | `teacher` | `teacher123` | Pembuat bank soal & penilai esai/audio MBU |
+| **Teacher / Examiner** | `teacher` | `teacher123` | Pembuat bank soal & penilai esai/audio respon |
 | **Student / Candidate** | `candidate1` | `student123` | Peserta ujian, pengerjaan soal & unduh sertifikat |
 
 ---
 
 ## 6. LISENSI & HAK CIPTA
 
-Dikembangkan oleh **Tim Pengembang EdTech Al-Imam** untuk **Lembaga Pendidikan Al-Imam**.  
+Dikembangkan oleh **Al-Imam EduTech** untuk **SMP Al-Imam Islamic School (AI IS)**.  
 Hak Cipta Dilindungi Undang-Undang © 2026.

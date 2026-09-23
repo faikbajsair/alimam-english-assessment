@@ -257,7 +257,7 @@
           prompt: "In the era of rapid artificial intelligence adoption, some educators argue that foundational ethics and human empathy must become the core focus of academic institutions rather than pure technical specialization. To what extent do you agree or disagree? (Write at least 250 words)",
           audioUrl: "",
           options: [],
-          correct: "MBU Rubric",
+          correct: "Standard Rubric",
           points: 100
         },
         {
@@ -364,7 +364,7 @@
             </h1>
 
             <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
-              Platform ujian Bahasa Inggris resmi <strong>SMP Al-Imam Islamic School (AI IS)</strong> dengan standar internasional (<strong>TOEFL ITP/PBT, IELTS Academic, TOEIC, & EPT</strong>). Dilengkapi pengawasan kamera AI, sensor perpindahan tab, mikrofon audio speaking, dan konversi skor rapor MBU otomatis.
+              Platform ujian Bahasa Inggris resmi <strong>SMP Al-Imam Islamic School (AI IS)</strong> dengan standar internasional (<strong>TOEFL ITP/PBT, IELTS Academic, TOEIC, & EPT</strong>). Dilengkapi pengawasan kamera AI, sensor perpindahan tab, mikrofon audio speaking, dan konversi skor standar internasional otomatis.
             </p>
 
             <!-- Key Badges -->
@@ -983,7 +983,7 @@
               <div>
                 <div class="flex items-center gap-2">
                   <h1 class="text-base font-bold text-slate-900 leading-none">Al-Imam Assessment Hub</h1>
-                  <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-brand-800 text-[10px] font-extrabold uppercase">MBU Enterprise v2.5</span>
+                  <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-brand-800 text-[10px] font-extrabold uppercase">Enterprise Edition v2.5</span>
                 </div>
                 <p class="text-xs text-slate-500 mt-0.5">Dashboard Pengelola, Bank Soal & Dewan Penguji</p>
               </div>
@@ -1049,7 +1049,7 @@
               <i data-lucide="shield-check" class="w-4 h-4 text-emerald-600"></i> Live Proctoring Center
             </button>
             <button onclick="switchAdminTab('grading')" id="btnTabGrading" class="px-4 py-2.5 rounded-xl bg-white text-slate-600 hover:bg-slate-100 flex items-center gap-2 whitespace-nowrap border border-slate-200">
-              <i data-lucide="check-square" class="w-4 h-4 text-amber-500"></i> Antrean Penilaian (MBU Rubric)
+              <i data-lucide="check-square" class="w-4 h-4 text-amber-500"></i> Antrean Penilaian (Writing & Speaking Rubric)
             </button>
             <button onclick="switchAdminTab('cert')" id="btnTabCert" class="px-4 py-2.5 rounded-xl bg-white text-slate-600 hover:bg-slate-100 flex items-center gap-2 whitespace-nowrap border border-slate-200">
               <i data-lucide="printer" class="w-4 h-4 text-purple-600"></i> Generator Sertifikat & Rapor
@@ -1159,10 +1159,10 @@
             </div>
           </div>
 
-          <!-- TAB 3: MBU GRADING -->
+          <!-- TAB 3: EXAMINER GRADING -->
           <div id="adminTabGrading" class="hidden space-y-4">
             <div class="bg-white p-5 rounded-2xl border border-slate-200">
-              <h2 class="text-base font-bold text-slate-900">Penilaian Manual Rubrik MBU (Writing & Speaking)</h2>
+              <h2 class="text-base font-bold text-slate-900">Penilaian Manual Rubrik Asesmen (Writing & Speaking)</h2>
               <p class="text-xs text-slate-500">Evaluasi esai dan rekaman suara siswa dengan kriteria terstandarisasi</p>
             </div>
 
@@ -1192,7 +1192,7 @@
               </div>
 
               <div class="lg:col-span-5 bg-white p-6 rounded-2xl border border-slate-200 space-y-4 shadow-sm">
-                <h3 class="font-bold text-slate-900 text-xs uppercase text-brand-700 tracking-wider">Form Rubrik Penilaian MBU</h3>
+                <h3 class="font-bold text-slate-900 text-xs uppercase text-brand-700 tracking-wider">Form Rubrik Penilaian Standar</h3>
                 <div class="space-y-3 text-xs">
                   <div>
                     <div class="flex justify-between font-semibold text-slate-700 mb-1">
@@ -1220,7 +1220,7 @@
                   <label class="block text-xs font-bold text-slate-700 mb-1 uppercase">Catatan Adab & Akhlak Santri:</label>
                   <textarea rows="2" class="w-full p-2.5 rounded-xl border border-slate-300 text-xs outline-none focus:border-brand-500">Menunjukkan ketulusan argumentasi dan integritas thalabul 'ilmi yang sangat luhur.</textarea>
                 </div>
-                <button onclick="showToast('Skor rubrik MBU berhasil disimpan ke rapor!')" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 rounded-xl shadow-md transition-all text-xs flex items-center justify-center gap-1.5">
+                <button onclick="showToast('Skor rubrik berhasil disimpan ke data asesmen!')" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 rounded-xl shadow-md transition-all text-xs flex items-center justify-center gap-1.5">
                   <i data-lucide="check-circle" class="w-4 h-4"></i> Simpan Nilai Rubrik
                 </button>
               </div>
@@ -1524,7 +1524,7 @@
             <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex gap-4">
               <div class="w-10 h-10 rounded-2xl bg-purple-600 text-white flex items-center justify-center font-black flex-shrink-0">3</div>
               <div class="space-y-1">
-                <h3 class="text-sm font-bold text-slate-900">Penerbitan Sertifikat & Rapor MBU</h3>
+                <h3 class="text-sm font-bold text-slate-900">Penerbitan Sertifikat & Laporan Hasil Asesmen</h3>
                 <p class="text-xs text-slate-600">Nilai otomatis dikonversi ke skala TOEFL (310-677) atau IELTS Band (0-9.0) beserta QR code verifikasi keaslian digital.</p>
               </div>
             </div>

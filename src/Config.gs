@@ -73,7 +73,7 @@ var CONFIG = {
     CUSTOM: "Custom Institutional Exam"
   },
 
-  // Dynamic Assessment Weights (MBU Core Rubric Standard)
+  // Dynamic Assessment Section Weights (Standard English Rubric)
   DEFAULT_WEIGHTS: {
     listening: 30,
     structure: 25,

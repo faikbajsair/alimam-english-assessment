@@ -1,6 +1,6 @@
 /**
  * AL-IMAM PROFESSIONAL ENGLISH ASSESSMENT SYSTEM
- * ReportController.gs - PDF Certificate, MBU Rapor Data & Performance Analytics
+ * ReportController.gs - PDF Certificate, Assessment Report Data & Performance Analytics
  */
 
 var ReportController = (function () {
@@ -31,7 +31,7 @@ var ReportController = (function () {
           { name: "Section 3: Reading Comprehension", raw: "42/50", scaled: 58, max: 67, percentage: 86 }
         ]
       },
-      mbuEvaluation: {
+      assessmentEvaluation: {
         strengths: "Excellent mastery of complex grammatical clauses, high listening accuracy for academic dialogue.",
         recommendations: "Practice rapid reading for main ideas and idiomatic phrasal verbs.",
         islamicCharacterAdab: "Sangat Beradab, Jujur, dan Menjaga Integritas Ujian Digital secara Istiqomah (Nilai Akhlak: A)."

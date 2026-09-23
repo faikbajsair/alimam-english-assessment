@@ -1,6 +1,6 @@
 /**
  * AL-IMAM PROFESSIONAL ENGLISH ASSESSMENT SYSTEM
- * GradeModel.gs - Score Conversion Engine, MBU-Style Assessment Rubrics & Certificate Payload
+ * GradeModel.gs - Score Conversion Engine, Standardized Assessment Rubrics & Certificate Payload
  */
 
 var GradeModel = (function () {
@@ -108,7 +108,7 @@ var GradeModel = (function () {
   }
 
   /**
-   * Generate comprehensive MBU Assessment Report & Certificate Data
+   * Generate comprehensive Assessment Report & Certificate Data
    */
   function generateCertificateData(submission, user, exam) {
     var certNumber = "CERT/AL-IMAM/" + new Date().getFullYear() + "/" + (submission.id || "001");
@@ -152,7 +152,7 @@ var GradeModel = (function () {
   }
 
   /**
-   * Generate descriptive qualitative feedback (MBU Rapor style)
+   * Generate descriptive qualitative feedback (Standard Assessment Report style)
    */
   function generateQualitativeFeedback(submission, examType) {
     return {
