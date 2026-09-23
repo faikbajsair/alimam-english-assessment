@@ -300,6 +300,9 @@
       if (typeof ExamAudioManager !== 'undefined' && ExamAudioManager.stop) {
         ExamAudioManager.stop();
       }
+      if (typeof SpeakingAudioManager !== 'undefined' && SpeakingAudioManager.stop) {
+        SpeakingAudioManager.stop();
+      }
       // Route Authentication Guard for protected pages
       if ((page === "admin" || page === "cms") && (!AppState.currentUser || (AppState.currentUser.role !== "admin" && AppState.currentUser.role !== "teacher"))) {
         showToast("Akses Dibatasi: Silakan login terlebih dahulu untuk mengakses Dashboard.");
@@ -358,6 +361,8 @@
     }
 
     function handleLogout() {
+      if (typeof ExamAudioManager !== 'undefined' && ExamAudioManager.stop) ExamAudioManager.stop();
+      if (typeof SpeakingAudioManager !== 'undefined' && SpeakingAudioManager.stop) SpeakingAudioManager.stop();
       AppState.currentUser = null;
       sessionStorage.removeItem("alimam_user");
       showToast("Anda telah keluar dari sesi.");
@@ -734,18 +739,26 @@
                 ` : ''}
 
                 ${q.type === 'speaking_record' ? `
-                  <div class="p-6 bg-slate-900 text-white rounded-2xl text-center space-y-4 shadow-inner">
+                  <div class="p-6 bg-slate-900 text-white rounded-2xl text-center space-y-4 shadow-inner border border-slate-800">
                     <div class="flex justify-center items-center gap-2">
-                      <span class="w-3 h-3 rounded-full ${session.isRecording ? 'bg-red-500 animate-ping' : 'bg-slate-500'}"></span>
-                      <span class="text-xs font-mono font-bold">${session.isRecording ? 'RECORDING AUDIO...' : 'MICROPHONE STANDBY'}</span>
+                      <span class="w-3 h-3 rounded-full ${session.isRecording ? 'bg-red-500 animate-ping' : (session.speakingAudioUrl ? 'bg-emerald-400' : 'bg-slate-500')}"></span>
+                      <span class="text-xs font-mono font-bold">${session.isRecording ? 'SEDANG MEREKAM SUARA (RECORDING)...' : (session.speakingAudioUrl ? 'REKAMAN TERSIMPAN' : 'STANDBY (SIAP MEREKAM)')}</span>
                     </div>
-                    <button onclick="toggleSpeakingRecording('${q.id}')" class="px-6 py-3 rounded-2xl font-bold text-xs sm:text-sm flex items-center gap-2 mx-auto shadow-lg transition-all ${
-                      session.isRecording ? 'bg-red-600 hover:bg-red-700 text-white' : 'bg-brand-600 hover:bg-brand-500 text-white'
-                    }">
-                      <i data-lucide="${session.isRecording ? 'square' : 'mic'}" class="w-4 h-4"></i>
-                      <span>${session.isRecording ? 'Hentikan Rekaman' : 'Mulai Rekam Suara'}</span>
-                    </button>
-                    ${session.answers[q.id] ? '<div class="text-xs text-emerald-400 font-bold flex items-center justify-center gap-1"><i data-lucide="check-circle" class="w-4 h-4"></i> Audio respon telah terekam aman!</div>' : ''}
+                    <div class="flex flex-wrap items-center justify-center gap-3">
+                      <button onclick="toggleSpeakingRecording('${q.id}')" class="px-6 py-3 rounded-2xl font-bold text-xs sm:text-sm flex items-center gap-2 shadow-lg transition-all ${
+                        session.isRecording ? 'bg-red-600 hover:bg-red-700 text-white animate-pulse' : 'bg-brand-600 hover:bg-brand-500 text-white'
+                      }">
+                        <i data-lucide="${session.isRecording ? 'square' : 'mic'}" class="w-4 h-4"></i>
+                        <span>${session.isRecording ? 'Hentikan Rekaman' : (session.speakingAudioUrl ? 'Rekam Ulang Suara' : 'Mulai Rekam Suara')}</span>
+                      </button>
+                      ${session.speakingAudioUrl ? `
+                        <button onclick="previewExamSpeakingRecording()" class="px-5 py-3 rounded-2xl font-bold text-xs sm:text-sm flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg transition-all">
+                          <i data-lucide="play" class="w-4 h-4"></i>
+                          <span>Putar Hasil Rekaman</span>
+                        </button>
+                      ` : ''}
+                    </div>
+                    ${session.answers[q.id] ? '<div class="text-xs text-emerald-400 font-bold flex items-center justify-center gap-1.5"><i data-lucide="check-circle" class="w-4 h-4"></i> Audio respon berbicara santri tersimpan aman!</div>' : ''}
                   </div>
                 ` : ''}
               </div>
@@ -924,15 +937,84 @@
       AppState.examSession.answers[qId] = el.value;
     }
 
+    let studentMediaRecorder = null;
+    let studentAudioChunks = [];
+
     function toggleSpeakingRecording(qId) {
       const session = AppState.examSession;
-      session.isRecording = !session.isRecording;
       if (!session.isRecording) {
-        session.answers[qId] = "AUDIO_RECORDING_PAYLOAD_VALID";
-        showToast("Rekaman suara berhasil disimpan!");
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+          navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(stream => {
+              studentAudioChunks = [];
+              studentMediaRecorder = new MediaRecorder(stream);
+              studentMediaRecorder.ondataavailable = e => {
+                if (e.data && e.data.size > 0) studentAudioChunks.push(e.data);
+              };
+              studentMediaRecorder.onstop = () => {
+                const blob = new Blob(studentAudioChunks, { type: 'audio/webm' });
+                const url = URL.createObjectURL(blob);
+                session.speakingAudioUrl = url;
+                AppState.candidateSpeakingAudioUrl = url;
+                session.answers[qId] = "AUDIO_RECORDING_PAYLOAD_VALID";
+                renderExamPlayerView(document.getElementById("appRoot"));
+                lucide.createIcons();
+                showToast("Rekaman suara santri berhasil disimpan!");
+              };
+              studentMediaRecorder.start();
+              session.isRecording = true;
+              renderExamPlayerView(document.getElementById("appRoot"));
+              lucide.createIcons();
+              showToast("Perekaman suara aktif. Silakan berbicara...");
+            })
+            .catch(err => {
+              console.warn("Microphone access unavailable, using simulated recording:", err);
+              session.isRecording = true;
+              renderExamPlayerView(document.getElementById("appRoot"));
+              lucide.createIcons();
+              showToast("Simulasi perekaman suara aktif...");
+            });
+        } else {
+          session.isRecording = true;
+          renderExamPlayerView(document.getElementById("appRoot"));
+          lucide.createIcons();
+        }
+      } else {
+        if (studentMediaRecorder && studentMediaRecorder.state !== 'inactive') {
+          studentMediaRecorder.stop();
+          session.isRecording = false;
+        } else {
+          session.isRecording = false;
+          session.speakingAudioUrl = "data:audio/mock";
+          AppState.candidateSpeakingAudioUrl = "data:audio/mock";
+          session.answers[qId] = "AUDIO_RECORDING_PAYLOAD_VALID";
+          renderExamPlayerView(document.getElementById("appRoot"));
+          lucide.createIcons();
+          showToast("Rekaman suara santri berhasil disimpan!");
+        }
       }
-      renderExamPlayerView(document.getElementById("appRoot"));
-      lucide.createIcons();
+    }
+
+    function previewExamSpeakingRecording() {
+      const url = AppState.examSession.speakingAudioUrl;
+      if (url && url !== "data:audio/mock") {
+        const audio = new Audio(url);
+        audio.play().then(() => showToast("Memutar pratinjau rekaman suara Anda..."))
+          .catch(() => playSpeechCandidateSample());
+      } else {
+        playSpeechCandidateSample();
+      }
+    }
+
+    function playSpeechCandidateSample() {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utt = new SpeechSynthesisUtterance("I would like to speak about an inspiring scholar and mentor whose dedication and wisdom have profoundly shaped my worldview and academic aspirations.");
+        utt.lang = 'en-US';
+        utt.rate = 0.95;
+        window.speechSynthesis.speak(utt);
+        showToast("Memutar pratinjau rekaman suara santri...");
+      }
     }
 
     function toggleExamFlag(qId) {
@@ -1306,6 +1388,255 @@
       ExamAudioManager.stop();
     }
 
+    // ================= SPEAKING RUBRIC AUDIO MANAGER =================
+    const SpeakingAudioManager = {
+      isPlaying: false,
+      isSpeech: false,
+      html5Audio: null,
+      currentSec: 0,
+      totalSec: 35,
+      progressPercent: 0,
+      timerInterval: null,
+      speechUtterance: null,
+
+      formatTime(sec) {
+        const sInt = Math.max(0, Math.floor(sec || 0));
+        const m = Math.floor(sInt / 60).toString().padStart(2, '0');
+        const s = (sInt % 60).toString().padStart(2, '0');
+        return `${m}:${s}`;
+      },
+
+      updatePlayerUI(playing) {
+        this.isPlaying = playing;
+        const btnIcon = document.getElementById("btnSpeakingRubricIcon");
+        const statusLabel = document.getElementById("speakingRubricStatusLabel");
+        const stateBadge = document.getElementById("speakingCandidateStateBadge");
+        const visualizer = document.getElementById("speakingRubricVisualizer");
+
+        if (btnIcon) {
+          btnIcon.setAttribute("data-lucide", playing ? "pause" : "play");
+          if (!playing) btnIcon.classList.add("ml-0.5");
+          else btnIcon.classList.remove("ml-0.5");
+          lucide.createIcons();
+        }
+        if (statusLabel) {
+          statusLabel.innerText = playing ? "● Memutar Respon Siswa..." : (this.progressPercent >= 99 ? "Selesai" : "Jeda");
+          statusLabel.className = playing ? "text-[10px] font-semibold text-emerald-400 font-sans animate-pulse ml-2 flex-shrink-0" : "text-[10px] font-semibold text-slate-400 font-sans ml-2 flex-shrink-0";
+        }
+        if (stateBadge) {
+          stateBadge.innerText = playing ? "Sedang Diputar" : (this.progressPercent >= 99 ? "Selesai" : "Standby");
+          stateBadge.className = playing ? "text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-emerald-900/80 text-emerald-300 animate-pulse border border-emerald-700" : "text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700";
+        }
+        if (visualizer) {
+          if (playing) visualizer.classList.remove("opacity-0");
+          else visualizer.classList.add("opacity-0");
+        }
+      },
+
+      updateProgressUI() {
+        const pBar = document.getElementById("speakingRubricProgressBar");
+        const tCur = document.getElementById("speakingRubricTimeCurrent");
+        const tTot = document.getElementById("speakingRubricTimeTotal");
+        if (pBar) pBar.style.width = `${this.progressPercent}%`;
+        if (tCur) tCur.innerText = this.formatTime(this.currentSec);
+        if (tTot) tTot.innerText = this.formatTime(this.totalSec);
+      },
+
+      stop() {
+        if (this.timerInterval) {
+          clearInterval(this.timerInterval);
+          this.timerInterval = null;
+        }
+        if (this.html5Audio) {
+          try {
+            this.html5Audio.pause();
+            this.html5Audio.currentTime = 0;
+          } catch(e) {}
+          this.html5Audio = null;
+        }
+        if ('speechSynthesis' in window) {
+          try {
+            window.speechSynthesis.cancel();
+          } catch(e) {}
+        }
+        this.isPlaying = false;
+        this.currentSec = 0;
+        this.progressPercent = 0;
+        this.updateProgressUI();
+        this.updatePlayerUI(false);
+      },
+
+      toggle() {
+        if (this.isPlaying) {
+          this.pause();
+          return;
+        }
+        if (this.currentSec > 0 && this.currentSec < this.totalSec) {
+          this.resume();
+          return;
+        }
+        this.play();
+      },
+
+      pause() {
+        if (this.isSpeech) {
+          if ('speechSynthesis' in window) window.speechSynthesis.pause();
+        } else if (this.html5Audio) {
+          this.html5Audio.pause();
+        }
+        if (this.timerInterval) {
+          clearInterval(this.timerInterval);
+          this.timerInterval = null;
+        }
+        this.updatePlayerUI(false);
+      },
+
+      resume() {
+        if (this.isSpeech) {
+          if ('speechSynthesis' in window && window.speechSynthesis.paused) {
+            window.speechSynthesis.resume();
+            this.startTimer();
+            this.updatePlayerUI(true);
+          } else {
+            this.play();
+          }
+        } else if (this.html5Audio) {
+          this.html5Audio.play().then(() => {
+            this.startTimer();
+            this.updatePlayerUI(true);
+          }).catch(() => {
+            this.playSpeechCandidate();
+          });
+        }
+      },
+
+      play() {
+        this.stop();
+        const audioUrl = AppState.candidateSpeakingAudioUrl || (AppState.examSession && AppState.examSession.speakingAudioUrl);
+        if (audioUrl && audioUrl !== "data:audio/mock" && audioUrl.length > 5) {
+          this.isSpeech = false;
+          const audio = new Audio();
+          this.html5Audio = audio;
+
+          audio.addEventListener('loadedmetadata', () => {
+            if (audio.duration && !isNaN(audio.duration) && isFinite(audio.duration)) {
+              this.totalSec = Math.ceil(audio.duration);
+              this.updateProgressUI();
+            }
+          });
+
+          audio.addEventListener('timeupdate', () => {
+            if (audio.duration && !isNaN(audio.duration)) {
+              this.currentSec = Math.floor(audio.currentTime);
+              this.totalSec = Math.ceil(audio.duration);
+              this.progressPercent = Math.min(100, (audio.currentTime / audio.duration) * 100);
+              this.updateProgressUI();
+            }
+          });
+
+          audio.addEventListener('ended', () => {
+            this.onPlaybackEnded();
+          });
+
+          audio.addEventListener('error', () => {
+            this.playSpeechCandidate();
+          });
+
+          audio.src = audioUrl;
+          audio.play().then(() => {
+            this.updatePlayerUI(true);
+            this.startTimer();
+            showToast("Memutar rekaman suara asli siswa...");
+          }).catch(() => {
+            this.playSpeechCandidate();
+          });
+        } else {
+          this.playSpeechCandidate();
+        }
+      },
+
+      playSpeechCandidate() {
+        this.isSpeech = true;
+        if (!('speechSynthesis' in window)) {
+          showToast("Peramban tidak mendukung pemutaran suara.");
+          return;
+        }
+        window.speechSynthesis.cancel();
+
+        const candidateSpeech = "I would like to speak about an inspiring scholar and mentor whose dedication and wisdom have profoundly shaped my worldview and academic aspirations. He exemplified the timeless values of humility, intellectual rigor, and unwavering commitment to serving the community. Whenever we faced complex challenges, he encouraged us to integrate moral integrity with rigorous knowledge. His guidance instilled in me a deep passion for continuous learning and ethical leadership. His enduring legacy continues to motivate my ambition to contribute meaningfully to society and education.";
+
+        const wordCount = candidateSpeech.trim().split(/\s+/).length;
+        this.totalSec = Math.max(15, Math.ceil((wordCount / 105) * 60));
+        this.currentSec = 0;
+        this.progressPercent = 0;
+        this.updateProgressUI();
+
+        const utterance = new SpeechSynthesisUtterance(candidateSpeech);
+        utterance.lang = "en-US";
+        utterance.rate = 0.95; // Fluent student tempo
+        utterance.pitch = 1.05;
+
+        const voices = window.speechSynthesis.getVoices();
+        const studentVoice = voices.find(v => v.lang.startsWith('en') && (v.name.includes('Natural') || v.name.includes('Samantha') || v.name.includes('David') || v.name.includes('Alex') || v.name.includes('Guy') || v.name.includes('Google') || v.name.includes('en-US'))) || voices.find(v => v.lang.startsWith('en'));
+        if (studentVoice) utterance.voice = studentVoice;
+
+        utterance.onstart = () => {
+          this.updatePlayerUI(true);
+          this.startTimer();
+          showToast("Memutar audio respon speaking kandidat (Muhammad Rayhan Al-Fatih)...");
+        };
+
+        utterance.onend = () => {
+          this.onPlaybackEnded();
+        };
+
+        utterance.onerror = () => {
+          this.onPlaybackEnded();
+        };
+
+        this.speechUtterance = utterance;
+        window.speechSynthesis.speak(utterance);
+      },
+
+      startTimer() {
+        if (this.timerInterval) clearInterval(this.timerInterval);
+        const startMs = Date.now() - (this.currentSec * 1000);
+        const durationMs = this.totalSec * 1000;
+
+        this.timerInterval = setInterval(() => {
+          const elapsed = Date.now() - startMs;
+          this.currentSec = Math.min(this.totalSec, Math.floor(elapsed / 1000));
+          this.progressPercent = Math.min(100, (elapsed / durationMs) * 100);
+          this.updateProgressUI();
+
+          if (this.currentSec >= this.totalSec) {
+            clearInterval(this.timerInterval);
+            this.timerInterval = null;
+          }
+        }, 200);
+      },
+
+      onPlaybackEnded() {
+        if (this.timerInterval) {
+          clearInterval(this.timerInterval);
+          this.timerInterval = null;
+        }
+        this.currentSec = this.totalSec;
+        this.progressPercent = 100;
+        this.updateProgressUI();
+        this.updatePlayerUI(false);
+        const statusLabel = document.getElementById("speakingRubricStatusLabel");
+        if (statusLabel) {
+          statusLabel.innerText = "Audio Selesai Diputar";
+          statusLabel.className = "text-[10px] font-semibold text-emerald-400 font-sans ml-2 flex-shrink-0";
+        }
+      }
+    };
+
+    function toggleSpeakingRubricAudio() {
+      SpeakingAudioManager.toggle();
+    }
+
     function initSpaWebcam() {
       const video = document.getElementById("spaWebcamFeed");
       if (video && navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -1596,15 +1927,52 @@
                 <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs leading-relaxed font-serif text-slate-700 max-h-60 overflow-y-auto custom-scrollbar">
                   "In this contemporary epoch dominated by the unprecedented advancements in Artificial Intelligence, the traditional paradigm of education has reached a decisive crossroads. While technological competencies remain undeniable assets, I wholeheartedly concur that the cultivation of foundational ethics and empathetic human discernment must occupy the paramount nucleus of academic pedagogy... Ultimately, machines can compute equations with infinite speed, but only human beings endowed with moral consciousness can steer civilization toward justice and compassionate prosperity."
                 </div>
-                <div class="p-4 bg-slate-900 text-white rounded-xl space-y-2">
-                  <div class="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
-                    <i data-lucide="mic" class="w-4 h-4"></i> Rekaman Speaking Part 2
+                <!-- Speaking Candidate Audio Player Widget -->
+                <div class="p-4 sm:p-5 bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 text-white rounded-2xl border border-slate-800 space-y-3.5 shadow-md">
+                  <div class="flex items-center justify-between text-xs">
+                    <div class="flex items-center gap-2">
+                      <span class="font-bold text-emerald-400 flex items-center gap-1.5">
+                        <i data-lucide="mic" class="w-4 h-4 text-emerald-400"></i> Rekaman Speaking Part 2 (Audio Siswa)
+                      </span>
+                      <span id="speakingCandidateTypeBadge" class="px-2 py-0.5 rounded bg-emerald-950 border border-emerald-800 text-emerald-300 text-[10px] font-mono">
+                        ${AppState.candidateSpeakingAudioUrl && AppState.candidateSpeakingAudioUrl !== 'data:audio/mock' ? 'Rekaman Asli Siswa (WebM)' : 'Respon Audio Terstandarisasi'}
+                      </span>
+                    </div>
+                    <span id="speakingCandidateStateBadge" class="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
+                      Standby
+                    </span>
                   </div>
-                  <div class="flex items-center gap-3">
-                    <button onclick="showToast('Memutar audio respon kandidat...')" class="w-9 h-9 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 flex items-center justify-center font-bold">
-                      <i data-lucide="play" class="w-4 h-4 ml-0.5"></i>
+
+                  <div class="flex items-center gap-3.5">
+                    <button id="btnSpeakingRubricPlay" onclick="toggleSpeakingRubricAudio()" title="Putar / Jeda Rekaman Kandidat" class="w-11 h-11 rounded-2xl bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-slate-950 flex items-center justify-center font-bold shadow-lg shadow-emerald-950/40 transition-all cursor-pointer flex-shrink-0">
+                      <i id="btnSpeakingRubricIcon" data-lucide="play" class="w-5 h-5 ml-0.5"></i>
                     </button>
-                    <div class="text-xs text-slate-300">Durasi: 01:45 • Format: Audio/WebM Stream</div>
+
+                    <div class="flex-grow space-y-1.5">
+                      <!-- Progress Bar -->
+                      <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden relative">
+                        <div id="speakingRubricProgressBar" class="bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-400 h-full rounded-full transition-all duration-150" style="width: 0%"></div>
+                      </div>
+
+                      <div class="flex justify-between items-center text-[11px] text-slate-300 font-mono">
+                        <span id="speakingRubricTimeCurrent">00:00</span>
+                        
+                        <!-- Visualizer -->
+                        <div id="speakingRubricVisualizer" class="flex items-center gap-1 opacity-0 transition-opacity">
+                          <span class="w-1 h-2.5 bg-emerald-400 rounded-full animate-pulse"></span>
+                          <span class="w-1 h-4 bg-teal-300 rounded-full animate-bounce"></span>
+                          <span class="w-1 h-2 bg-emerald-300 rounded-full animate-pulse"></span>
+                          <span class="w-1 h-3.5 bg-emerald-400 rounded-full animate-bounce"></span>
+                        </div>
+
+                        <span id="speakingRubricTimeTotal">00:35</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="text-[11px] text-slate-400 italic flex items-center justify-between pt-1 border-t border-slate-800/80">
+                    <span class="line-clamp-1">"I would like to speak about an inspiring scholar and mentor whose dedication..."</span>
+                    <span id="speakingRubricStatusLabel" class="text-[10px] font-semibold text-emerald-400 font-sans ml-2 flex-shrink-0">Klik play untuk mendengar</span>
                   </div>
                 </div>
               </div>
@@ -1864,6 +2232,9 @@
     }
 
     function switchAdminTab(tab) {
+      if (typeof SpeakingAudioManager !== 'undefined' && SpeakingAudioManager.stop) {
+        SpeakingAudioManager.stop();
+      }
       document.getElementById("adminTabTests").classList.add("hidden");
       document.getElementById("adminTabProctor").classList.add("hidden");
       document.getElementById("adminTabGrading").classList.add("hidden");

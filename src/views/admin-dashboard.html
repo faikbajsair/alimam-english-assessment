@@ -303,16 +303,48 @@
             "In this contemporary epoch dominated by the unprecedented advancements in Artificial Intelligence, the traditional paradigm of education has reached a decisive crossroads. While technological competencies remain undeniable assets, I wholeheartedly concur that the cultivation of foundational ethics and empathetic human discernment must occupy the paramount nucleus of academic pedagogy... Ultimately, machines can compute equations with infinite speed, but only human beings endowed with moral consciousness can steer civilization toward justice and compassionate prosperity."
           </div>
 
-          <!-- Audio Speaking Sample Review -->
-          <div class="p-4 bg-slate-900 text-white rounded-xl space-y-2">
-            <div class="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
-              <i data-lucide="mic" class="w-4 h-4"></i> Rekaman Speaking Part 2 (Audio Candidate)
+          <!-- Audio Speaking Sample Review Player -->
+          <div class="p-4 sm:p-5 bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 text-white rounded-2xl border border-slate-800 space-y-3.5 shadow-md">
+            <div class="flex items-center justify-between text-xs">
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-emerald-400 flex items-center gap-1.5">
+                  <i data-lucide="mic" class="w-4 h-4 text-emerald-400"></i> Rekaman Speaking Part 2 (Audio Siswa)
+                </span>
+                <span class="px-2 py-0.5 rounded bg-emerald-950 border border-emerald-800 text-emerald-300 text-[10px] font-mono">
+                  Audio/WebM • 44.1 kHz
+                </span>
+              </div>
+              <span id="speakingStateBadge" class="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
+                Standby
+              </span>
             </div>
-            <div class="flex items-center gap-3">
-              <button onclick="alert('Memutar rekaman audio kandidat...')" class="w-9 h-9 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 flex items-center justify-center font-bold">
-                <i data-lucide="play" class="w-4 h-4 ml-0.5"></i>
+
+            <div class="flex items-center gap-3.5">
+              <button id="btnPlaySpeaking" onclick="toggleSpeakingAudio()" title="Putar / Jeda Rekaman Siswa" class="w-11 h-11 rounded-2xl bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-slate-950 flex items-center justify-center font-bold shadow-lg shadow-emerald-950/40 transition-all cursor-pointer flex-shrink-0">
+                <i id="speakingAudioIcon" data-lucide="play" class="w-5 h-5 ml-0.5"></i>
               </button>
-              <div class="text-xs text-slate-300">Durasi: 01:45 • Format: Audio/WebM Standard</div>
+
+              <div class="flex-grow space-y-1.5">
+                <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden relative">
+                  <div id="speakingProgressBar" class="bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-400 h-full rounded-full transition-all duration-150" style="width: 0%"></div>
+                </div>
+
+                <div class="flex justify-between items-center text-[11px] text-slate-300 font-mono">
+                  <span id="speakingTimeCurrent">00:00</span>
+                  <div id="speakingVisualizer" class="flex items-center gap-1 opacity-0 transition-opacity">
+                    <span class="w-1 h-2.5 bg-emerald-400 rounded-full animate-pulse"></span>
+                    <span class="w-1 h-4 bg-teal-300 rounded-full animate-bounce"></span>
+                    <span class="w-1 h-2 bg-emerald-300 rounded-full animate-pulse"></span>
+                    <span class="w-1 h-3.5 bg-emerald-400 rounded-full animate-bounce"></span>
+                  </div>
+                  <span id="speakingTimeTotal">00:35</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-[11px] text-slate-400 italic flex items-center justify-between pt-1 border-t border-slate-800/80">
+              <span class="line-clamp-1">"I would like to speak about an inspiring scholar and mentor whose dedication..."</span>
+              <span id="speakingStatusLabel" class="text-[10px] font-semibold text-emerald-400 font-sans ml-2 flex-shrink-0">Klik play untuk mendengar</span>
             </div>
           </div>
         </div>
@@ -560,6 +592,7 @@
     });
 
     function switchTab(tabId) {
+      if (typeof SpeakingAudioManager !== 'undefined') SpeakingAudioManager.stop();
       document.querySelectorAll('.tab-content').forEach(function(el) { el.classList.add('hidden'); });
       document.querySelectorAll('.tab-btn').forEach(function(el) {
         el.classList.remove('bg-brand-600', 'text-white');
@@ -572,6 +605,219 @@
       activeBtn.classList.remove('bg-white', 'text-slate-600');
 
       lucide.createIcons();
+    }
+
+    // ================= SPEAKING CANDIDATE AUDIO MANAGER =================
+    var SpeakingAudioManager = {
+      isPlaying: false,
+      isSpeech: false,
+      html5Audio: null,
+      currentSec: 0,
+      totalSec: 35,
+      progressPercent: 0,
+      timerInterval: null,
+      speechUtterance: null,
+
+      formatTime: function(sec) {
+        var sInt = Math.max(0, Math.floor(sec || 0));
+        var m = Math.floor(sInt / 60).toString().padStart(2, '0');
+        var s = (sInt % 60).toString().padStart(2, '0');
+        return m + ':' + s;
+      },
+
+      updatePlayerUI: function(playing) {
+        this.isPlaying = playing;
+        var btnIcon = document.getElementById('speakingAudioIcon');
+        var statusLabel = document.getElementById('speakingStatusLabel');
+        var stateBadge = document.getElementById('speakingStateBadge');
+        var visualizer = document.getElementById('speakingVisualizer');
+
+        if (btnIcon) {
+          btnIcon.setAttribute('data-lucide', playing ? 'pause' : 'play');
+          if (!playing) btnIcon.classList.add('ml-0.5');
+          else btnIcon.classList.remove('ml-0.5');
+          lucide.createIcons();
+        }
+        if (statusLabel) {
+          statusLabel.innerText = playing ? "● Memutar Respon Siswa..." : (this.progressPercent >= 99 ? "Selesai" : "Jeda");
+          statusLabel.className = playing ? "text-[10px] font-semibold text-emerald-400 font-sans animate-pulse ml-2 flex-shrink-0" : "text-[10px] font-semibold text-slate-400 font-sans ml-2 flex-shrink-0";
+        }
+        if (stateBadge) {
+          stateBadge.innerText = playing ? "Sedang Diputar" : (this.progressPercent >= 99 ? "Selesai" : "Standby");
+          stateBadge.className = playing ? "text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-emerald-900/80 text-emerald-300 animate-pulse border border-emerald-700" : "text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700";
+        }
+        if (visualizer) {
+          if (playing) visualizer.classList.remove('opacity-0');
+          else visualizer.classList.add('opacity-0');
+        }
+      },
+
+      updateProgressUI: function() {
+        var pBar = document.getElementById('speakingProgressBar');
+        var tCur = document.getElementById('speakingTimeCurrent');
+        var tTot = document.getElementById('speakingTimeTotal');
+        if (pBar) pBar.style.width = this.progressPercent + '%';
+        if (tCur) tCur.innerText = this.formatTime(this.currentSec);
+        if (tTot) tTot.innerText = this.formatTime(this.totalSec);
+      },
+
+      stop: function() {
+        if (this.timerInterval) {
+          clearInterval(this.timerInterval);
+          this.timerInterval = null;
+        }
+        if (this.html5Audio) {
+          try {
+            this.html5Audio.pause();
+            this.html5Audio.currentTime = 0;
+          } catch(e) {}
+          this.html5Audio = null;
+        }
+        if ('speechSynthesis' in window) {
+          try {
+            window.speechSynthesis.cancel();
+          } catch(e) {}
+        }
+        this.isPlaying = false;
+        this.currentSec = 0;
+        this.progressPercent = 0;
+        this.updateProgressUI();
+        this.updatePlayerUI(false);
+      },
+
+      toggle: function() {
+        if (this.isPlaying) {
+          this.pause();
+          return;
+        }
+        if (this.currentSec > 0 && this.currentSec < this.totalSec) {
+          this.resume();
+          return;
+        }
+        this.play();
+      },
+
+      pause: function() {
+        if (this.isSpeech) {
+          if ('speechSynthesis' in window) window.speechSynthesis.pause();
+        } else if (this.html5Audio) {
+          this.html5Audio.pause();
+        }
+        if (this.timerInterval) {
+          clearInterval(this.timerInterval);
+          this.timerInterval = null;
+        }
+        this.updatePlayerUI(false);
+      },
+
+      resume: function() {
+        var self = this;
+        if (this.isSpeech) {
+          if ('speechSynthesis' in window && window.speechSynthesis.paused) {
+            window.speechSynthesis.resume();
+            this.startTimer();
+            this.updatePlayerUI(true);
+          } else {
+            this.play();
+          }
+        } else if (this.html5Audio) {
+          this.html5Audio.play().then(function() {
+            self.startTimer();
+            self.updatePlayerUI(true);
+          }).catch(function() {
+            self.playSpeechCandidate();
+          });
+        }
+      },
+
+      play: function() {
+        this.stop();
+        this.playSpeechCandidate();
+      },
+
+      playSpeechCandidate: function() {
+        var self = this;
+        this.isSpeech = true;
+        if (!('speechSynthesis' in window)) {
+          alert("Peramban tidak mendukung pemutaran suara.");
+          return;
+        }
+        window.speechSynthesis.cancel();
+
+        var candidateSpeech = "I would like to speak about an inspiring scholar and mentor whose dedication and wisdom have profoundly shaped my worldview and academic aspirations. He exemplified the timeless values of humility, intellectual rigor, and unwavering commitment to serving the community. Whenever we faced complex challenges, he encouraged us to integrate moral integrity with rigorous knowledge. His guidance instilled in me a deep passion for continuous learning and ethical leadership. His enduring legacy continues to motivate my ambition to contribute meaningfully to society and education.";
+
+        var wordCount = candidateSpeech.trim().split(/\s+/).length;
+        this.totalSec = Math.max(15, Math.ceil((wordCount / 105) * 60));
+        this.currentSec = 0;
+        this.progressPercent = 0;
+        this.updateProgressUI();
+
+        var utterance = new SpeechSynthesisUtterance(candidateSpeech);
+        utterance.lang = "en-US";
+        utterance.rate = 0.95;
+        utterance.pitch = 1.05;
+
+        var voices = window.speechSynthesis.getVoices();
+        var studentVoice = voices.find(function(v) {
+          return v.lang.startsWith('en') && (v.name.includes('Natural') || v.name.includes('Samantha') || v.name.includes('David') || v.name.includes('Alex') || v.name.includes('Guy') || v.name.includes('Google') || v.name.includes('en-US'));
+        }) || voices.find(function(v) { return v.lang.startsWith('en'); });
+        if (studentVoice) utterance.voice = studentVoice;
+
+        utterance.onstart = function() {
+          self.updatePlayerUI(true);
+          self.startTimer();
+        };
+
+        utterance.onend = function() {
+          self.onPlaybackEnded();
+        };
+
+        utterance.onerror = function() {
+          self.onPlaybackEnded();
+        };
+
+        this.speechUtterance = utterance;
+        window.speechSynthesis.speak(utterance);
+      },
+
+      startTimer: function() {
+        var self = this;
+        if (this.timerInterval) clearInterval(this.timerInterval);
+        var startMs = Date.now() - (this.currentSec * 1000);
+        var durationMs = this.totalSec * 1000;
+
+        this.timerInterval = setInterval(function() {
+          var elapsed = Date.now() - startMs;
+          self.currentSec = Math.min(self.totalSec, Math.floor(elapsed / 1000));
+          self.progressPercent = Math.min(100, (elapsed / durationMs) * 100);
+          self.updateProgressUI();
+
+          if (self.currentSec >= self.totalSec) {
+            clearInterval(self.timerInterval);
+            self.timerInterval = null;
+          }
+        }, 200);
+      },
+
+      onPlaybackEnded: function() {
+        if (this.timerInterval) {
+          clearInterval(this.timerInterval);
+          this.timerInterval = null;
+        }
+        this.currentSec = this.totalSec;
+        this.progressPercent = 100;
+        this.updateProgressUI();
+        this.updatePlayerUI(false);
+        var statusLabel = document.getElementById('speakingStatusLabel');
+        if (statusLabel) {
+          statusLabel.innerText = "Audio Selesai Diputar";
+          statusLabel.className = "text-[10px] font-semibold text-emerald-400 font-sans ml-2 flex-shrink-0";
+        }
+      }
+    };
+
+    function toggleSpeakingAudio() {
+      SpeakingAudioManager.toggle();
     }
 
     function renderQuestionsTable(items) {
