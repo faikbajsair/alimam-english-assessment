@@ -217,6 +217,50 @@
           points: 1
         },
         {
+          id: "Q-VOCAB-01",
+          examType: "TOEFL_ITP",
+          section: "structure",
+          type: "sentence_blank",
+          passage: "",
+          prompt: "The rookie's __________________ celebration after his first goal went on so long the referee had to walk over and remind him the game wasn't over, him sprinting the length of the field, arms out, before sliding on his knees into the corner flag.",
+          audioUrl: "",
+          options: [
+            { key: "A", text: "exuberant" },
+            { key: "B", text: "aggressive" },
+            { key: "C", text: "competitive" },
+            { key: "D", text: "nervous" }
+          ],
+          correct: "A",
+          points: 1,
+          hints: [
+            "Hint 1: Look for an adjective that describes unrestrained, enthusiastic energy and joyful excitement.",
+            "Hint 2: The sentence describes sprinting the length of the field and sliding on knees out of pure happiness.",
+            "Hint 3: The correct word is synonymous with 'ebullient' or 'high-spirited'."
+          ]
+        },
+        {
+          id: "Q-VOCAB-02",
+          examType: "TOEFL_ITP",
+          section: "structure",
+          type: "sentence_blank",
+          passage: "",
+          prompt: "Despite facing harsh desert conditions, the ancient botanists developed __________________ irrigation techniques that allowed date palms and citrus groves to thrive across arid oases.",
+          audioUrl: "",
+          options: [
+            { key: "A", text: "ingenious" },
+            { key: "B", text: "negligent" },
+            { key: "C", text: "fragile" },
+            { key: "D", text: "obsolete" }
+          ],
+          correct: "A",
+          points: 1,
+          hints: [
+            "Hint 1: The context highlights remarkable innovation ('allowed date palms to thrive in arid oases').",
+            "Hint 2: It means clever, brilliantly inventive, or resourceful.",
+            "Hint 3: Originates from the Latin root related to 'genius'."
+          ]
+        },
+        {
           id: "Q-READ-01",
           examType: "TOEFL_ITP",
           section: "reading",
@@ -232,6 +276,23 @@
           ],
           correct: "A",
           points: 1
+        },
+        {
+          id: "Q-CLOZE-01",
+          examType: "TOEFL_ITP",
+          section: "reading",
+          type: "cloze_text",
+          passage: "Historical Science Story: The Polymath of Kath\n\nAbu Rayhan al-Biruni was an extraordinary Islamic scholar who made groundbreaking discoveries in multiple disciplines. In the field of astronomy, he devised an innovative method using trigonometric formulas from a mountain peak to determine the [1] of the Earth with astounding accuracy. Unlike earlier philosophers who relied solely on theoretical deduction, al-Biruni strongly advocated for empirical [2] and systematic observation. During his extensive travels across South Asia, he compiled 'Tahqiq ma li-l-Hind', a masterwork that remains a premier [3] account of 11th-century Indian geography, science, and cultural traditions.",
+          prompt: "Lengkapi rumpang kalimat pada kisah sejarah di atas dengan mengetikkan kata bahasa Inggris yang tepat.",
+          audioUrl: "",
+          options: [],
+          clozeAnswers: {
+            "1": ["radius", "circumference", "size", "dimension"],
+            "2": ["observation", "evidence", "experimentation", "experiments", "measurement"],
+            "3": ["historical", "scholarly", "cultural", "academic", "scientific"]
+          },
+          correct: "1: radius | 2: evidence | 3: historical",
+          points: 3
         },
         {
           id: "Q-READ-02",
@@ -282,6 +343,7 @@
         currentSection: "listening",
         answers: {},
         flagged: {},
+        hintsUnlocked: {},
         strikes: 0,
         maxStrikes: 3,
         timerSeconds: 115 * 60,
@@ -702,33 +764,155 @@
                 </div>
               ` : ''}
 
-              <!-- Passage Reader -->
-              ${q.passage ? `
+              <!-- Passage Reader (for multiple choice and standard reading) -->
+              ${(q.passage && q.type !== 'sentence_blank' && q.type !== 'cloze_text') ? `
                 <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl text-xs sm:text-sm text-slate-700 leading-relaxed font-serif max-h-56 overflow-y-auto custom-scrollbar">
                   <div class="font-bold text-slate-900 mb-1 font-sans">Teks Bacaan:</div>
                   ${q.passage.replace(/\n/g, '<br>')}
                 </div>
               ` : ''}
 
-              <!-- Prompt -->
-              <h2 class="text-sm sm:text-base font-bold text-slate-900 leading-snug">
-                ${q.prompt.replace(/\n/g, '<br>')}
-              </h2>
+              <!-- TYPE 1: SENTENCE COMPLETION (MISSING WORD IN SENTENCE WITH HINTS & NUMBERED PILLS) -->
+              ${q.type === 'sentence_blank' ? (() => {
+                const selectedKey = session.answers[q.id];
+                const selectedOpt = (q.options && q.options.find(o => o.key === selectedKey)) || null;
+                const blankReplacement = selectedOpt ? 
+                  `<span class="inline-block px-3.5 py-0.5 mx-1 font-bold text-emerald-950 bg-emerald-100 border-b-2 border-brand-600 rounded-lg shadow-sm align-baseline">${selectedOpt.text}</span>` : 
+                  `<span class="inline-block px-4 py-0.5 mx-1 border-b-2 border-dashed border-slate-400 font-mono text-slate-400 tracking-widest bg-slate-50 rounded align-baseline">_______________</span>`;
+                const formattedPrompt = (q.prompt || '').replace(/_{3,}|\[blank\]|\{\{blank\}\}/g, blankReplacement);
+                const hintsUnlocked = (session.hintsUnlocked && session.hintsUnlocked[q.id]) || 0;
+                const hasHints = q.hints && q.hints.length > 0;
 
-              <!-- Answer Arena -->
-              <div class="space-y-3 pt-2">
-                ${q.type === 'multiple_choice' ? q.options.map(opt => `
-                  <div onclick="selectExamAnswer('${q.id}', '${opt.key}')" class="p-3.5 sm:p-4 rounded-2xl border transition-all cursor-pointer flex items-start gap-3 ${
-                    session.answers[q.id] === opt.key ? 'bg-emerald-50 border-brand-500 shadow-sm ring-1 ring-brand-500' : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50'
-                  }">
-                    <div class="w-7 h-7 rounded-xl flex items-center justify-center font-black text-xs flex-shrink-0 ${
-                      session.answers[q.id] === opt.key ? 'bg-brand-600 text-white shadow' : 'bg-slate-100 text-slate-700 border border-slate-300'
-                    }">${opt.key}</div>
-                    <div class="text-xs sm:text-sm text-slate-800 pt-0.5">${opt.text}</div>
+                return `
+                  <div class="space-y-4">
+                    <div class="text-xs font-semibold text-slate-500 flex items-center justify-between">
+                      <span>Choose the best option to fill in the blank</span>
+                      <span class="text-[10px] font-mono font-bold text-brand-700 bg-brand-50 border border-brand-200 px-2.5 py-0.5 rounded-full">Sentence Completion</span>
+                    </div>
+
+                    <h2 class="text-sm sm:text-base font-semibold text-slate-900 leading-relaxed bg-slate-50/70 p-4 rounded-2xl border border-slate-200/80">
+                      ${formattedPrompt}
+                    </h2>
+
+                    ${hasHints ? `
+                      <div class="pt-1">
+                        <button type="button" onclick="unlockNextHint('${q.id}')" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 active:scale-95 text-amber-900 border border-amber-200 font-bold text-xs transition-all shadow-sm cursor-pointer">
+                          <i data-lucide="lightbulb" class="w-3.5 h-3.5 text-amber-500"></i>
+                          <span>${hintsUnlocked < q.hints.length ? `💡 Use hint ${hintsUnlocked + 1} of ${q.hints.length}` : `Semua ${q.hints.length} Petunjuk Terbuka`}</span>
+                        </button>
+                        ${hintsUnlocked > 0 ? `
+                          <div class="mt-2.5 p-3.5 bg-amber-50/90 border border-amber-200 rounded-2xl space-y-2 text-xs text-amber-950 shadow-sm">
+                            <div class="font-bold text-[11px] uppercase tracking-wider text-amber-800 flex items-center gap-1.5">
+                              <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-600"></i> Petunjuk Kata (Hints Unlocked):
+                            </div>
+                            ${q.hints.slice(0, hintsUnlocked).map((h, hIdx) => `
+                              <div class="flex items-start gap-2 bg-white/70 p-2 rounded-xl border border-amber-200/60">
+                                <span class="w-4 h-4 rounded-full bg-amber-200 text-amber-900 font-bold text-[10px] flex items-center justify-center flex-shrink-0 mt-0.5">${hIdx + 1}</span>
+                                <span class="font-medium leading-relaxed">${h}</span>
+                              </div>
+                            `).join('')}
+                          </div>
+                        ` : ''}
+                      </div>
+                    ` : ''}
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                      ${q.options.map((opt, idx) => {
+                        const isSelected = session.answers[q.id] === opt.key;
+                        return `
+                          <div onclick="selectExamAnswer('${q.id}', '${opt.key}')" class="p-4 rounded-2xl border transition-all cursor-pointer flex items-center gap-3 ${
+                            isSelected ? 'bg-emerald-50 border-brand-500 shadow-md ring-2 ring-brand-500/20' : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50 shadow-sm'
+                          }">
+                            <div class="w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs flex-shrink-0 ${
+                              isSelected ? 'bg-brand-600 text-white shadow' : 'bg-slate-200 text-slate-700'
+                            }">${idx + 1}</div>
+                            <div class="font-bold text-xs sm:text-sm text-slate-800 text-center flex-grow">${opt.text}</div>
+                          </div>
+                        `;
+                      }).join('')}
+                    </div>
                   </div>
-                `).join('') : ''}
+                `;
+              })() : ''}
 
-                ${q.type === 'essay' ? `
+              <!-- TYPE 2: CLOZE PASSAGE TEST (TYPED INLINE WORDS IN STORY / PARAGRAPH) -->
+              ${q.type === 'cloze_text' ? (() => {
+                const clozeAnswers = session.answers[q.id] || {};
+                let totalBlanksCount = 0;
+                let filledBlanksCount = 0;
+
+                const renderedClozePassage = (q.passage || '').replace(/\[(\d+)\]/g, (match, blankNum) => {
+                  totalBlanksCount++;
+                  const currentVal = (typeof clozeAnswers === 'object' && clozeAnswers[blankNum]) || '';
+                  if (currentVal && currentVal.length > 0) filledBlanksCount++;
+                  return `
+                    <span class="inline-flex items-center gap-1 mx-1 my-1 align-middle bg-white px-2 py-1 rounded-xl border border-emerald-300 shadow-sm">
+                      <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-mono font-bold">${blankNum}</span>
+                      <input type="text" 
+                        oninput="handleClozeInput('${q.id}', '${blankNum}', this.value)" 
+                        value="${currentVal}" 
+                        placeholder="Ketik kata..." 
+                        class="px-2 py-0.5 text-xs sm:text-sm font-bold text-emerald-950 bg-emerald-50/40 focus:bg-white focus:border-brand-600 rounded-md outline-none w-28 sm:w-36 text-center transition-all">
+                    </span>
+                  `;
+                });
+
+                return `
+                  <div class="space-y-4">
+                    <div class="text-xs font-semibold text-slate-500 flex items-center justify-between">
+                      <span>Lengkapi bagian rumpang pada cerita di bawah ini dengan mengetikkan kata yang tepat</span>
+                      <span class="text-[10px] font-mono font-bold text-purple-700 bg-purple-100 border border-purple-300 px-2.5 py-0.5 rounded-full">Story Cloze Typing</span>
+                    </div>
+
+                    <h2 class="text-sm sm:text-base font-bold text-slate-900 leading-snug">
+                      ${q.prompt.replace(/\n/g, '<br>')}
+                    </h2>
+
+                    <div class="p-5 bg-gradient-to-br from-slate-50 to-emerald-50/30 border border-emerald-200/80 rounded-2xl text-xs sm:text-sm text-slate-800 leading-loose font-serif max-h-80 overflow-y-auto custom-scrollbar shadow-inner">
+                      ${renderedClozePassage.replace(/\n\n/g, '<br><br>').replace(/\n/g, '<br>')}
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 p-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs">
+                      <div class="flex items-center gap-2">
+                        <i data-lucide="keyboard" class="w-4 h-4 text-emerald-600"></i>
+                        <span class="text-slate-600 font-semibold">Status Pengisian Rumpang:</span>
+                        <span id="clozeProgressBadge_${q.id}" class="font-bold font-mono text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-lg border border-emerald-200">${filledBlanksCount} / ${totalBlanksCount} Terisi</span>
+                      </div>
+                      <span class="text-[11px] text-slate-500 italic">Ketik langsung pada kotak rumpang di atas (tersimpan otomatis)</span>
+                    </div>
+                  </div>
+                `;
+              })() : ''}
+
+              <!-- STANDARD MULTIPLE CHOICE & ERROR IDENTIFICATION -->
+              ${(q.type === 'multiple_choice' || q.type === 'error_identification') ? `
+                <div>
+                  <h2 class="text-sm sm:text-base font-bold text-slate-900 leading-snug mb-3">
+                    ${q.prompt.replace(/\n/g, '<br>')}
+                  </h2>
+
+                  <div class="space-y-3">
+                    ${q.options.map(opt => `
+                      <div onclick="selectExamAnswer('${q.id}', '${opt.key}')" class="p-3.5 sm:p-4 rounded-2xl border transition-all cursor-pointer flex items-start gap-3 ${
+                        session.answers[q.id] === opt.key ? 'bg-emerald-50 border-brand-500 shadow-sm ring-1 ring-brand-500' : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50'
+                      }">
+                        <div class="w-7 h-7 rounded-xl flex items-center justify-center font-black text-xs flex-shrink-0 ${
+                          session.answers[q.id] === opt.key ? 'bg-brand-600 text-white shadow' : 'bg-slate-100 text-slate-700 border border-slate-300'
+                        }">${opt.key}</div>
+                        <div class="text-xs sm:text-sm text-slate-800 pt-0.5">${opt.text}</div>
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+              ` : ''}
+
+              <!-- ESSAY TASK -->
+              ${q.type === 'essay' ? `
+                <div>
+                  <h2 class="text-sm sm:text-base font-bold text-slate-900 leading-snug mb-3">
+                    ${q.prompt.replace(/\n/g, '<br>')}
+                  </h2>
+
                   <div class="space-y-2">
                     <textarea oninput="handleEssayInput('${q.id}', this)" rows="8" placeholder="Tuliskan esai akademik Anda di sini..." class="w-full p-4 rounded-2xl border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 text-xs sm:text-sm outline-none font-sans leading-relaxed custom-scrollbar">${session.answers[q.id] || ''}</textarea>
                     <div class="flex justify-between items-center text-xs text-slate-500 font-mono">
@@ -736,9 +920,16 @@
                       <span class="font-bold text-brand-700">${session.answers[q.id] ? session.answers[q.id].trim().split(/\s+/).length : 0} Kata</span>
                     </div>
                   </div>
-                ` : ''}
+                </div>
+              ` : ''}
 
-                ${q.type === 'speaking_record' ? `
+              <!-- SPEAKING AUDIO TASK -->
+              ${q.type === 'speaking_record' ? `
+                <div>
+                  <h2 class="text-sm sm:text-base font-bold text-slate-900 leading-snug mb-3">
+                    ${q.prompt.replace(/\n/g, '<br>')}
+                  </h2>
+
                   <div class="p-6 bg-slate-900 text-white rounded-2xl text-center space-y-4 shadow-inner border border-slate-800">
                     <div class="flex justify-center items-center gap-2">
                       <span class="w-3 h-3 rounded-full ${session.isRecording ? 'bg-red-500 animate-ping' : (session.speakingAudioUrl ? 'bg-emerald-400' : 'bg-slate-500')}"></span>
@@ -760,8 +951,8 @@
                     </div>
                     ${session.answers[q.id] ? '<div class="text-xs text-emerald-400 font-bold flex items-center justify-center gap-1.5"><i data-lucide="check-circle" class="w-4 h-4"></i> Audio respon berbicara santri tersimpan aman!</div>' : ''}
                   </div>
-                ` : ''}
-              </div>
+                </div>
+              ` : ''}
 
               <!-- Prev / Next Navigation -->
               <div class="flex items-center justify-between pt-6 border-t border-slate-100">
@@ -820,7 +1011,9 @@
               <div class="grid grid-cols-4 sm:grid-cols-5 gap-2 max-h-56 overflow-y-auto custom-scrollbar p-1">
                 ${AppState.questions.map((qItem, idx) => {
                   const isCurrent = idx === session.currentIndex;
-                  const isAnswered = !!session.answers[qItem.id];
+                  const isAnswered = typeof session.answers[qItem.id] === 'object' && session.answers[qItem.id] !== null 
+                    ? Object.values(session.answers[qItem.id]).some(v => v && v.toString().trim().length > 0)
+                    : !!session.answers[qItem.id];
                   const isFlagged = !!session.flagged[qItem.id];
                   let btnClass = 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200';
                   if (isCurrent) btnClass = 'ring-2 ring-brand-600 bg-brand-50 font-black text-brand-800 border-brand-500';
@@ -828,7 +1021,7 @@
                   else if (isAnswered) btnClass = 'bg-brand-600 text-white font-bold border-brand-700';
 
                   return `
-                    <button onclick="jumpToExamQuestion(${idx})" class="h-9 rounded-xl border text-xs font-mono transition-all flex items-center justify-center ${btnClass}">
+                    <button id="paletteBtn_${qItem.id}" onclick="jumpToExamQuestion(${idx})" class="h-9 rounded-xl border text-xs font-mono transition-all flex items-center justify-center ${btnClass}">
                       ${idx + 1}
                     </button>
                   `;
@@ -877,25 +1070,25 @@
               <div class="flex items-center justify-between border-b border-emerald-800 pb-3">
                 <div>
                   <div class="text-xs text-emerald-400 font-bold uppercase">Skor Terkonversi (TOEFL Scale)</div>
-                  <div class="text-3xl font-black text-white">577 <span class="text-sm font-normal text-slate-300">/ 677</span></div>
+                  <div class="text-3xl font-black text-white"><span id="spaResultScaledScore">577</span> <span class="text-sm font-normal text-slate-300">/ 677</span></div>
                 </div>
                 <div class="text-right">
-                  <span class="px-3 py-1 rounded-full bg-emerald-500 text-slate-950 text-xs font-black">CEFR B2</span>
-                  <div class="text-[10px] text-slate-300 mt-1">Upper Intermediate</div>
+                  <span id="spaResultCefrBadge" class="px-3 py-1 rounded-full bg-emerald-500 text-slate-950 text-xs font-black">CEFR B2</span>
+                  <div id="spaResultCefrLabel" class="text-[10px] text-slate-300 mt-1">Upper Intermediate</div>
                 </div>
               </div>
               <div class="grid grid-cols-3 gap-2 text-center text-xs">
                 <div class="p-2 bg-emerald-950/60 rounded-xl border border-emerald-800">
                   <div class="text-slate-400 text-[10px]">Listening</div>
-                  <div class="font-bold text-emerald-300 font-mono">58 / 68</div>
+                  <div id="spaResultListeningScore" class="font-bold text-emerald-300 font-mono">58 / 68</div>
                 </div>
                 <div class="p-2 bg-emerald-950/60 rounded-xl border border-emerald-800">
-                  <div class="text-slate-400 text-[10px]">Structure</div>
-                  <div class="font-bold text-emerald-300 font-mono">57 / 68</div>
+                  <div class="text-slate-400 text-[10px]">Structure & Blank</div>
+                  <div id="spaResultStructureScore" class="font-bold text-emerald-300 font-mono">57 / 68</div>
                 </div>
                 <div class="p-2 bg-emerald-950/60 rounded-xl border border-emerald-800">
-                  <div class="text-slate-400 text-[10px]">Reading</div>
-                  <div class="font-bold text-emerald-300 font-mono">58 / 67</div>
+                  <div class="text-slate-400 text-[10px]">Reading & Cloze</div>
+                  <div id="spaResultReadingScore" class="font-bold text-emerald-300 font-mono">58 / 67</div>
                 </div>
               </div>
             </div>
@@ -931,6 +1124,41 @@
       AppState.examSession.answers[qId] = key;
       renderExamPlayerView(document.getElementById("appRoot"));
       lucide.createIcons();
+    }
+
+    function unlockNextHint(qId) {
+      if (!AppState.examSession.hintsUnlocked) AppState.examSession.hintsUnlocked = {};
+      const currentCount = AppState.examSession.hintsUnlocked[qId] || 0;
+      const q = AppState.questions.find(item => item.id === qId);
+      const maxHints = (q && q.hints) ? q.hints.length : 0;
+      if (currentCount < maxHints) {
+        AppState.examSession.hintsUnlocked[qId] = currentCount + 1;
+        renderExamPlayerView(document.getElementById("appRoot"));
+        lucide.createIcons();
+        showToast(`Petunjuk ${currentCount + 1} berhasil dibuka!`);
+      }
+    }
+
+    function handleClozeInput(qId, blankKey, value) {
+      if (!AppState.examSession.answers[qId] || typeof AppState.examSession.answers[qId] !== 'object') {
+        AppState.examSession.answers[qId] = {};
+      }
+      AppState.examSession.answers[qId][blankKey] = value.trim();
+      
+      const currentQ = AppState.questions.find(q => q.id === qId);
+      const totalBlanks = currentQ && currentQ.clozeAnswers ? Object.keys(currentQ.clozeAnswers).length : (currentQ && currentQ.passage ? (currentQ.passage.match(/\[\d+\]/g) || []).length : 1);
+      const filled = Object.values(AppState.examSession.answers[qId]).filter(v => v && v.toString().trim().length > 0).length;
+      
+      const badgeEl = document.getElementById(`clozeProgressBadge_${qId}`);
+      if (badgeEl) {
+        badgeEl.innerText = `${filled} / ${totalBlanks} Terisi`;
+      }
+      const paletteBtn = document.getElementById(`paletteBtn_${qId}`);
+      if (paletteBtn) {
+        if (filled > 0) {
+          paletteBtn.className = "h-9 rounded-xl border text-xs font-mono transition-all flex items-center justify-center bg-brand-600 text-white font-bold border-brand-700";
+        }
+      }
     }
 
     function handleEssayInput(qId, el) {
@@ -1697,6 +1925,71 @@
     function submitSpaExam() {
       if (typeof ExamAudioManager !== 'undefined') ExamAudioManager.stop();
       AppState.examSession.submitted = true;
+      
+      let listCorrect = 0, listTotal = 0;
+      let strucCorrect = 0, strucTotal = 0;
+      let readCorrect = 0, readTotal = 0;
+      
+      AppState.questions.forEach(q => {
+        const ans = AppState.examSession.answers[q.id];
+        if (q.section === "listening") {
+          listTotal += (q.points || 1);
+          if (ans === q.correct) listCorrect += (q.points || 1);
+        } else if (q.section === "structure") {
+          strucTotal += (q.points || 1);
+          if (ans === q.correct) strucCorrect += (q.points || 1);
+        } else if (q.section === "reading") {
+          if (q.type === "cloze_text") {
+            const clozeDefs = q.clozeAnswers || {};
+            const totalBlanks = Object.keys(clozeDefs).length || 3;
+            readTotal += (q.points || totalBlanks);
+            let subCorrect = 0;
+            if (ans && typeof ans === 'object') {
+              Object.entries(clozeDefs).forEach(([bNum, allowed]) => {
+                const studentVal = (ans[bNum] || '').toLowerCase().trim();
+                const allowedList = Array.isArray(allowed) ? allowed.map(a => a.toLowerCase().trim()) : [allowed.toString().toLowerCase().trim()];
+                if (allowedList.includes(studentVal)) {
+                  subCorrect++;
+                }
+              });
+            }
+            readCorrect += (q.points ? (subCorrect / totalBlanks) * q.points : subCorrect);
+          } else {
+            readTotal += (q.points || 1);
+            if (ans === q.correct) readCorrect += (q.points || 1);
+          }
+        }
+      });
+
+      const listRatio = listTotal > 0 ? (listCorrect / listTotal) : 0.85;
+      const strucRatio = strucTotal > 0 ? (strucCorrect / strucTotal) : 0.82;
+      const readRatio = readTotal > 0 ? (readCorrect / readTotal) : 0.88;
+
+      const listScaled = Math.round(31 + listRatio * 37);
+      const strucScaled = Math.round(31 + strucRatio * 37);
+      const readScaled = Math.round(31 + readRatio * 36);
+      const totalScaled = Math.round(((listScaled + strucScaled + readScaled) * 10) / 3);
+
+      let cefr = "B2";
+      let cefrLabel = "Upper Intermediate";
+      if (totalScaled >= 627) { cefr = "C1"; cefrLabel = "Advanced / Proficient"; }
+      else if (totalScaled >= 543) { cefr = "B2"; cefrLabel = "Upper Intermediate"; }
+      else if (totalScaled >= 460) { cefr = "B1"; cefrLabel = "Intermediate"; }
+      else { cefr = "A2"; cefrLabel = "Elementary / Pre-Intermediate"; }
+
+      const elTotal = document.getElementById("spaResultScaledScore");
+      if (elTotal) elTotal.innerText = totalScaled;
+      const elCefr = document.getElementById("spaResultCefrBadge");
+      if (elCefr) elCefr.innerText = "CEFR " + cefr;
+      const elCefrLabel = document.getElementById("spaResultCefrLabel");
+      if (elCefrLabel) elCefrLabel.innerText = cefrLabel;
+      const elList = document.getElementById("spaResultListeningScore");
+      if (elList) elList.innerText = `${listScaled} / 68`;
+      const elStruc = document.getElementById("spaResultStructureScore");
+      if (elStruc) elStruc.innerText = `${strucScaled} / 68`;
+      const elRead = document.getElementById("spaResultReadingScore");
+      if (elRead) elRead.innerText = `${readScaled} / 67`;
+
       const modal = document.getElementById("spaResultModal");
       if (modal) modal.classList.remove("hidden");
 
@@ -1705,7 +1998,7 @@
         if (qrEl) {
           new QRious({
             element: qrEl,
-            value: "https://alimamischool.com/verify?cert=CERT/AL-IMAM/2026/SUB-001",
+            value: `https://alimamischool.com/verify?cert=CERT/AL-IMAM/2026/SUB-001&score=${totalScaled}`,
             size: 140
           });
         }
@@ -2136,6 +2429,8 @@
                   <label class="block font-bold text-slate-700 uppercase mb-1">Tipe Soal</label>
                   <select id="modalType" onchange="handleSectionTypeChange()" class="w-full p-2.5 rounded-xl border border-slate-300 font-semibold outline-none focus:border-brand-500 bg-slate-50">
                     <option value="multiple_choice">Multiple Choice</option>
+                    <option value="sentence_blank">Sentence Completion (Missing Word & Hint)</option>
+                    <option value="cloze_text">Paragraph Cloze Test (Isian Ketik Cerita)</option>
                     <option value="error_identification">Error Identification</option>
                     <option value="essay">Task Essay</option>
                     <option value="speaking_record">Speaking Audio Record</option>
@@ -2154,45 +2449,56 @@
               </div>
 
               <div>
-                <label class="block font-bold text-slate-700 uppercase mb-1">Teks Bacaan / Passage (Opsional)</label>
-                <textarea id="modalPassage" rows="3" placeholder="Teks bacaan pendukung atau petunjuk instruksi..." class="w-full p-2.5 rounded-xl border border-slate-300 outline-none focus:border-brand-500 leading-relaxed"></textarea>
+                <label class="block font-bold text-slate-700 uppercase mb-1">Teks Bacaan / Cerita (Gunakan [1], [2] untuk Cloze Test)</label>
+                <textarea id="modalPassage" rows="3" placeholder="Teks bacaan pendukung atau cerita rumpang dengan [1], [2], [3]..." class="w-full p-2.5 rounded-xl border border-slate-300 outline-none focus:border-brand-500 leading-relaxed"></textarea>
               </div>
 
               <div>
-                <label class="block font-bold text-slate-700 uppercase mb-1">Pertanyaan / Prompt Soal <span class="text-red-500">*</span></label>
-                <textarea id="modalPrompt" rows="2" required placeholder="Tuliskan pertanyaan / instruksi soal di sini..." class="w-full p-2.5 rounded-xl border border-slate-300 outline-none focus:border-brand-500"></textarea>
+                <label class="block font-bold text-slate-700 uppercase mb-1">Pertanyaan / Kalimat Soal <span class="text-red-500">*</span></label>
+                <textarea id="modalPrompt" rows="2" required placeholder="Tuliskan kalimat soal (gunakan __________ untuk rumpang) atau petunjuk soal..." class="w-full p-2.5 rounded-xl border border-slate-300 outline-none focus:border-brand-500"></textarea>
+              </div>
+
+              <div id="fieldHints" class="hidden space-y-1">
+                <label class="block font-bold text-slate-700 uppercase">Petunjuk Kata / Hints (Pisahkan tiap petunjuk dengan baris baru)</label>
+                <textarea id="modalHints" rows="2" placeholder="Hint 1: Adjective describing joyful energy&#10;Hint 2: Synonymous with exuberant" class="w-full p-2.5 rounded-xl border border-slate-300 outline-none focus:border-brand-500 leading-relaxed"></textarea>
+              </div>
+
+              <div id="fieldClozeAnswers" class="hidden space-y-1">
+                <label class="block font-bold text-slate-700 uppercase">Kunci Isian Rumpang Cerita (Format: 1: kata1, alt1 | 2: kata2)</label>
+                <textarea id="modalClozeAnswers" rows="2" placeholder="1: radius, circumference | 2: observation, evidence | 3: historical" class="w-full p-2.5 rounded-xl border border-slate-300 outline-none focus:border-brand-500 font-mono"></textarea>
+                <p class="text-[11px] text-slate-500">Tuliskan teks cerita di kolom 'Teks Bacaan' di atas dan tandai rumpang dengan [1], [2], [3], dst.</p>
               </div>
 
               <div id="fieldOptions" class="space-y-2">
-                <label class="block font-bold text-slate-700 uppercase">Pilihan Jawaban (A, B, C, D)</label>
+                <label class="block font-bold text-slate-700 uppercase">Pilihan Jawaban (A, B, C, D / 1, 2, 3, 4)</label>
                 <div class="grid grid-cols-1 gap-2">
                   <div class="flex items-center gap-2">
                     <span class="font-bold text-slate-500 w-5">A:</span>
-                    <input type="text" id="optA" placeholder="Teks Pilihan A" class="w-full p-2 rounded-lg border border-slate-300 outline-none focus:border-brand-500">
+                    <input type="text" id="optA" placeholder="Teks Pilihan A / 1" class="w-full p-2 rounded-lg border border-slate-300 outline-none focus:border-brand-500">
                   </div>
                   <div class="flex items-center gap-2">
                     <span class="font-bold text-slate-500 w-5">B:</span>
-                    <input type="text" id="optB" placeholder="Teks Pilihan B" class="w-full p-2 rounded-lg border border-slate-300 outline-none focus:border-brand-500">
+                    <input type="text" id="optB" placeholder="Teks Pilihan B / 2" class="w-full p-2 rounded-lg border border-slate-300 outline-none focus:border-brand-500">
                   </div>
                   <div class="flex items-center gap-2">
                     <span class="font-bold text-slate-500 w-5">C:</span>
-                    <input type="text" id="optC" placeholder="Teks Pilihan C" class="w-full p-2 rounded-lg border border-slate-300 outline-none focus:border-brand-500">
+                    <input type="text" id="optC" placeholder="Teks Pilihan C / 3" class="w-full p-2 rounded-lg border border-slate-300 outline-none focus:border-brand-500">
                   </div>
                   <div class="flex items-center gap-2">
                     <span class="font-bold text-slate-500 w-5">D:</span>
-                    <input type="text" id="optD" placeholder="Teks Pilihan D" class="w-full p-2 rounded-lg border border-slate-300 outline-none focus:border-brand-500">
+                    <input type="text" id="optD" placeholder="Teks Pilihan D / 4" class="w-full p-2 rounded-lg border border-slate-300 outline-none focus:border-brand-500">
                   </div>
                 </div>
               </div>
 
               <div class="grid grid-cols-2 gap-3">
-                <div>
+                <div id="fieldCorrectContainer">
                   <label class="block font-bold text-slate-700 uppercase mb-1">Kunci Jawaban / Penilai</label>
                   <select id="modalCorrect" class="w-full p-2.5 rounded-xl border border-slate-300 font-bold outline-none focus:border-brand-500 bg-slate-50">
-                    <option value="A">Pilihan A</option>
-                    <option value="B">Pilihan B</option>
-                    <option value="C">Pilihan C</option>
-                    <option value="D">Pilihan D</option>
+                    <option value="A">Pilihan A (Opsi 1)</option>
+                    <option value="B">Pilihan B (Opsi 2)</option>
+                    <option value="C">Pilihan C (Opsi 3)</option>
+                    <option value="D">Pilihan D (Opsi 4)</option>
                     <option value="Standard Rubric">Standard Rubric (Esai/Writing)</option>
                     <option value="Examiner Rubric">Examiner Rubric (Speaking)</option>
                   </select>
@@ -2271,6 +2577,8 @@
       const form = document.getElementById("spaAddQuestionForm");
       const title = document.getElementById("modalQuestionTitle");
       const editingInput = document.getElementById("modalEditingId");
+      const modalHints = document.getElementById("modalHints");
+      const modalClozeAnswers = document.getElementById("modalClozeAnswers");
       
       if (editingId) {
         const q = AppState.questions.find(item => item.id === editingId);
@@ -2292,7 +2600,23 @@
           const pointsEl = document.getElementById("modalPoints");
           if (pointsEl) pointsEl.value = q.points !== undefined ? q.points : 1;
           
+          if (modalHints) {
+            modalHints.value = (q.hints && Array.isArray(q.hints)) ? q.hints.join('\n') : "";
+          }
+          if (modalClozeAnswers) {
+            if (q.clozeAnswers && Object.keys(q.clozeAnswers).length > 0) {
+              modalClozeAnswers.value = Object.entries(q.clozeAnswers).map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(', ') : v}`).join(' | ');
+            } else {
+              modalClozeAnswers.value = q.correct || "";
+            }
+          }
+
           handleSectionTypeChange();
+
+          const optA = document.getElementById("optA");
+          const optB = document.getElementById("optB");
+          const optC = document.getElementById("optC");
+          const optD = document.getElementById("optD");
 
           const getOptText = (opt) => {
             if (!opt) return "";
@@ -2335,6 +2659,8 @@
         if (optB) optB.value = "";
         if (optC) optC.value = "";
         if (optD) optD.value = "";
+        if (modalHints) modalHints.value = "";
+        if (modalClozeAnswers) modalClozeAnswers.value = "";
         const correctEl = document.getElementById("modalCorrect");
         if (correctEl) correctEl.value = "A";
         handleSectionTypeChange();
@@ -2362,8 +2688,15 @@
       const type = typeEl.value;
       const fieldOptions = document.getElementById("fieldOptions");
       const fieldAudio = document.getElementById("fieldAudioUrl");
+      const fieldHints = document.getElementById("fieldHints");
+      const fieldCloze = document.getElementById("fieldClozeAnswers");
+      const fieldCorrect = document.getElementById("fieldCorrectContainer");
       const correctSelect = document.getElementById("modalCorrect");
       const pointsInput = document.getElementById("modalPoints");
+
+      if (fieldHints) fieldHints.classList.add("hidden");
+      if (fieldCloze) fieldCloze.classList.add("hidden");
+      if (fieldCorrect) fieldCorrect.classList.remove("hidden");
 
       if (sec === "writing" || type === "essay") {
         if (fieldOptions) fieldOptions.classList.add("hidden");
@@ -2375,6 +2708,20 @@
         if (fieldAudio) fieldAudio.classList.remove("hidden");
         if (correctSelect) correctSelect.value = "Examiner Rubric";
         if (pointsInput && pointsInput.value === "1") pointsInput.value = "100";
+      } else if (type === "sentence_blank") {
+        if (fieldOptions) fieldOptions.classList.remove("hidden");
+        if (fieldHints) fieldHints.classList.remove("hidden");
+        if (fieldAudio) fieldAudio.classList.add("hidden");
+        if (correctSelect && (correctSelect.value === "Standard Rubric" || correctSelect.value === "Examiner Rubric")) {
+          correctSelect.value = "A";
+        }
+        if (pointsInput && pointsInput.value === "100") pointsInput.value = "1";
+      } else if (type === "cloze_text") {
+        if (fieldOptions) fieldOptions.classList.add("hidden");
+        if (fieldCloze) fieldCloze.classList.remove("hidden");
+        if (fieldAudio) fieldAudio.classList.add("hidden");
+        if (fieldCorrect) fieldCorrect.classList.add("hidden");
+        if (pointsInput && pointsInput.value === "1") pointsInput.value = "3";
       } else {
         if (fieldOptions) fieldOptions.classList.remove("hidden");
         if (sec === "listening") {
@@ -2385,7 +2732,7 @@
         if (correctSelect && (correctSelect.value === "Standard Rubric" || correctSelect.value === "Examiner Rubric")) {
           correctSelect.value = "A";
         }
-        if (pointsInput && pointsInput.value === "100") pointsInput.value = "1";
+        if (pointsInput && (pointsInput.value === "100" || pointsInput.value === "3")) pointsInput.value = "1";
       }
     }
 
@@ -2429,11 +2776,32 @@
       const audioUrl = document.getElementById("modalAudioUrl").value;
       const passage = document.getElementById("modalPassage").value;
       const prompt = document.getElementById("modalPrompt").value;
-      const correct = document.getElementById("modalCorrect").value;
+      let correct = document.getElementById("modalCorrect") ? document.getElementById("modalCorrect").value : "A";
       const points = parseInt(document.getElementById("modalPoints").value, 10) || 1;
 
+      let hints = [];
+      const modalHintsEl = document.getElementById("modalHints");
+      if (modalHintsEl && modalHintsEl.value.trim().length > 0) {
+        hints = modalHintsEl.value.split('\n').map(h => h.trim()).filter(h => h.length > 0);
+      }
+
+      let clozeAnswers = {};
+      if (type === "cloze_text") {
+        const rawCloze = document.getElementById("modalClozeAnswers") ? document.getElementById("modalClozeAnswers").value.trim() : "";
+        correct = rawCloze || "Ketik sesuai rumpang [1], [2]";
+        const entries = rawCloze.split(/\||\n/).map(e => e.trim()).filter(e => e.length > 0);
+        entries.forEach(item => {
+          const parts = item.split(':');
+          if (parts.length >= 2) {
+            const num = parts[0].trim().replace(/[\[\]]/g, '');
+            const answers = parts[1].split(',').map(a => a.trim()).filter(a => a.length > 0);
+            clozeAnswers[num] = answers;
+          }
+        });
+      }
+
       let options = [];
-      if (type === "multiple_choice" || type === "error_identification") {
+      if (type === "multiple_choice" || type === "error_identification" || type === "sentence_blank") {
         options = [
           { key: "A", text: document.getElementById("optA").value || "Pilihan A" },
           { key: "B", text: document.getElementById("optB").value || "Pilihan B" },
@@ -2455,7 +2823,9 @@
             audioUrl,
             options,
             correct,
-            points
+            points,
+            hints,
+            clozeAnswers
           };
           showToast(`Soal ${editingId} berhasil diperbarui!`);
         }
@@ -2472,7 +2842,9 @@
           audioUrl,
           options,
           correct,
-          points
+          points,
+          hints,
+          clozeAnswers
         });
         showToast(`Soal baru ${newId} berhasil ditambahkan!`);
       }
@@ -2525,21 +2897,36 @@
         return;
       }
 
-      tbody.innerHTML = items.map(q => `
-        <tr class="hover:bg-slate-50 transition-colors">
-          <td class="p-3.5 font-bold font-mono text-slate-800">
-            ${q.id}<br><span class="text-[10px] text-brand-700 font-sans font-semibold">${q.examType || 'TOEFL_ITP'}</span>
-          </td>
-          <td class="p-3.5 uppercase font-bold text-slate-600">${q.section}</td>
-          <td class="p-3.5 text-slate-700">${(q.type || 'multiple_choice').replace('_', ' ')}</td>
-          <td class="p-3.5 text-slate-700 max-w-xs truncate" title="${q.prompt}">${q.prompt}</td>
-          <td class="p-3.5 font-bold font-mono text-emerald-700">${q.correct}</td>
-          <td class="p-3.5 text-right whitespace-nowrap">
-            <button onclick="editQuestionSpa('${q.id}')" class="text-brand-600 font-bold hover:underline mr-2.5 cursor-pointer">Edit</button>
-            <button onclick="deleteQuestionSpa('${q.id}')" class="text-red-600 font-bold hover:underline cursor-pointer">Hapus</button>
-          </td>
-        </tr>
-      `).join('');
+      tbody.innerHTML = items.map(q => {
+        let typeBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700">Multiple Choice</span>`;
+        if (q.type === 'sentence_blank') {
+          typeBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">Sentence Blank (Hint)</span>`;
+        } else if (q.type === 'cloze_text') {
+          typeBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-100 text-purple-800 border border-purple-200">Story Cloze (Ketik)</span>`;
+        } else if (q.type === 'essay') {
+          typeBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">Task Essay</span>`;
+        } else if (q.type === 'speaking_record') {
+          typeBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">Speaking Audio</span>`;
+        }
+
+        const displayText = q.prompt || q.passage || 'Soal Asesmen';
+
+        return `
+          <tr class="hover:bg-slate-50 transition-colors">
+            <td class="p-3.5 font-bold font-mono text-slate-800">
+              ${q.id}<br><span class="text-[10px] text-brand-700 font-sans font-semibold">${q.examType || 'TOEFL_ITP'}</span>
+            </td>
+            <td class="p-3.5 uppercase font-bold text-slate-600">${q.section}</td>
+            <td class="p-3.5 whitespace-nowrap">${typeBadge}</td>
+            <td class="p-3.5 text-slate-700 max-w-xs truncate" title="${displayText}">${displayText}</td>
+            <td class="p-3.5 font-bold font-mono text-emerald-700 text-[11px] max-w-[120px] truncate" title="${q.correct}">${q.correct}</td>
+            <td class="p-3.5 text-right whitespace-nowrap">
+              <button onclick="editQuestionSpa('${q.id}')" class="text-brand-600 font-bold hover:underline mr-2.5 cursor-pointer">Edit</button>
+              <button onclick="deleteQuestionSpa('${q.id}')" class="text-red-600 font-bold hover:underline cursor-pointer">Hapus</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
 
       lucide.createIcons();
     }
@@ -2625,6 +3012,7 @@
     }
 
     // Expose handlers globally to window
+    window.AppState = AppState;
     window.navigateTo = navigateTo;
     window.scrollToPortal = scrollToPortal;
     window.setCredentials = setCredentials;
@@ -2644,6 +3032,20 @@
     window.downloadSpaCertPdf = downloadSpaCertPdf;
     window.handleGuideDashboardClick = handleGuideDashboardClick;
     window.handleLogout = handleLogout;
+    window.selectExamAnswer = selectExamAnswer;
+    window.unlockNextHint = unlockNextHint;
+    window.handleClozeInput = handleClozeInput;
+    window.handleEssayInput = handleEssayInput;
+    window.switchExamSection = switchExamSection;
+    window.prevExamQuestion = prevExamQuestion;
+    window.nextExamQuestion = nextExamQuestion;
+    window.jumpToExamQuestion = jumpToExamQuestion;
+    window.toggleExamFlag = toggleExamFlag;
+    window.toggleExamListeningAudio = toggleExamListeningAudio;
+    window.confirmExitExam = confirmExitExam;
+    window.confirmFinishExam = confirmFinishExam;
+    window.closeViolationModal = closeViolationModal;
+    window.switchAdminTab = switchAdminTab;
 
     // ================= VIEW 4: CMS APPEARANCE & SAAS =================
     function renderCmsAppearanceView(container) {
