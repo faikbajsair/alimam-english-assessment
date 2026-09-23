@@ -18,6 +18,10 @@ var CONFIG = {
   INSTITUTION_WEBSITE: "https://alimamischool.com",
   LOGO_URL: "https://alimamischool.com/wp-content/uploads/2020/08/Al-Imam-Islamic-School-alimamischool.com-sekolah-sunnah-logo.png",
   FAVICON_URL: "https://alimamischool.com/wp-content/uploads/2020/08/Al-Imam-Islamic-School-alimamischool.com-sekolah-sunnah-logo.png",
+  SIGNATURE_1_TITLE: "Kepala Sekolah",
+  SIGNATURE_1_ORG: "SMP Al-Imam Islamic School (AI IS)",
+  SIGNATURE_2_TITLE: "Ketua Yayasan",
+  SIGNATURE_2_ORG: "Yayasan SAPIN Darussalam",
 
   // Theme & Appearance Defaults
   DEFAULT_THEME: {

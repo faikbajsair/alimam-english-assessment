@@ -148,8 +148,10 @@ var GradeModel = (function () {
       cefrBadge: submission.cefr || { level: "B2", name: "Vantage / Upper Intermediate", color: "#2563eb" },
       qualitativeAnalysis: qualitativeAnalysis,
       qrVerificationPayload: qrPayload,
-      leadExaminer: "Ustazah Sarah Jenkins, M.Ed",
-      headOfSchool: "Ust. Dr. Ahmad Fauzi, M.Pd"
+      leadExaminer: "Kepala Sekolah",
+      leadExaminerSub: "SMP Al-Imam Islamic School (AI IS)",
+      headOfSchool: "Ketua Yayasan",
+      headOfSchoolSub: "Yayasan SAPIN Darussalam"
     };
   }
 
