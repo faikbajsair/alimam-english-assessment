@@ -509,23 +509,25 @@
 
         <div class="space-y-2">
           <label class="block font-bold text-slate-700 uppercase">Pilihan Jawaban A, B, C, D</label>
-          <input type="text" id="optA" placeholder="Pilihan A" required class="w-full p-2 rounded-lg border border-slate-300">
-          <input type="text" id="optB" placeholder="Pilihan B" required class="w-full p-2 rounded-lg border border-slate-300">
-          <input type="text" id="optC" placeholder="Pilihan C" required class="w-full p-2 rounded-lg border border-slate-300">
-          <input type="text" id="optD" placeholder="Pilihan D" required class="w-full p-2 rounded-lg border border-slate-300">
+          <input type="text" id="optA" placeholder="Pilihan A" class="w-full p-2 rounded-lg border border-slate-300">
+          <input type="text" id="optB" placeholder="Pilihan B" class="w-full p-2 rounded-lg border border-slate-300">
+          <input type="text" id="optC" placeholder="Pilihan C" class="w-full p-2 rounded-lg border border-slate-300">
+          <input type="text" id="optD" placeholder="Pilihan D" class="w-full p-2 rounded-lg border border-slate-300">
         </div>
 
         <div>
-          <label class="block font-bold text-slate-700 uppercase mb-1">Kunci Jawaban Benar</label>
+          <label class="block font-bold text-slate-700 uppercase mb-1">Kunci Jawaban Benar / Rubrik</label>
           <select id="modalCorrect" class="w-full p-2.5 rounded-xl border border-slate-300 font-bold outline-none">
             <option value="A">Pilihan A</option>
             <option value="B">Pilihan B</option>
             <option value="C">Pilihan C</option>
             <option value="D">Pilihan D</option>
+            <option value="Standard Rubric">Standard Rubric (Esai)</option>
+            <option value="Examiner Rubric">Examiner Rubric (Speaking)</option>
           </select>
         </div>
 
-        <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 rounded-xl shadow-md transition-all">
+        <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 rounded-xl shadow-md transition-all cursor-pointer">
           Simpan Soal ke Database
         </button>
       </form>
@@ -622,9 +624,15 @@
           document.getElementById('modalSection').value = q.section || 'listening';
           document.getElementById('modalPrompt').value = q.prompt || '';
           document.getElementById('modalCorrect').value = q.correct || 'A';
+          document.getElementById('modalAudioUrl').value = q.audioUrl || '';
+          document.getElementById('modalPassage').value = q.passage || '';
+          document.getElementById('optA').value = (q.options && q.options[0] && q.options[0].text) || '';
+          document.getElementById('optB').value = (q.options && q.options[1] && q.options[1].text) || '';
+          document.getElementById('optC').value = (q.options && q.options[2] && q.options[2].text) || '';
+          document.getElementById('optD').value = (q.options && q.options[3] && q.options[3].text) || '';
         }
       } else {
-        form.reset();
+        if (form) form.reset();
       }
       modal.classList.remove('hidden');
     }
@@ -654,6 +662,8 @@
           masterQuestions[idx].section = document.getElementById('modalSection').value;
           masterQuestions[idx].prompt = document.getElementById('modalPrompt').value;
           masterQuestions[idx].correct = document.getElementById('modalCorrect').value;
+          masterQuestions[idx].audioUrl = document.getElementById('modalAudioUrl').value;
+          masterQuestions[idx].passage = document.getElementById('modalPassage').value;
         }
       } else {
         var newQ = {
@@ -662,13 +672,24 @@
           section: document.getElementById('modalSection').value,
           type: "Multiple Choice",
           prompt: document.getElementById('modalPrompt').value,
-          correct: document.getElementById('modalCorrect').value
+          correct: document.getElementById('modalCorrect').value,
+          audioUrl: document.getElementById('modalAudioUrl').value,
+          passage: document.getElementById('modalPassage').value
         };
         masterQuestions.unshift(newQ);
       }
       filterQuestionsTable();
       closeAddQuestionModal();
     }
+
+    // Expose functions globally
+    window.openAddQuestionModal = openAddQuestionModal;
+    window.closeAddQuestionModal = closeAddQuestionModal;
+    window.editQuestion = editQuestion;
+    window.deleteQuestion = deleteQuestion;
+    window.handleAddQuestionSubmit = handleAddQuestionSubmit;
+    window.filterQuestionsTable = filterQuestionsTable;
+    window.renderQuestionsTable = renderQuestionsTable;
 
     function exportQuestionsCsv() {
       var csv = "id,examType,section,type,prompt,correct\n";

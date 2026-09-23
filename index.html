@@ -1486,7 +1486,7 @@
     }
 
     // Question Bank Interactive Handlers
-    function openAddQuestionSpaModal(editingId = null) {
+    function openAddQuestionSpaModal(editingId) {
       const modal = document.getElementById("addQuestionSpaModal");
       if (!modal) return;
       
@@ -1497,7 +1497,7 @@
       if (editingId) {
         const q = AppState.questions.find(item => item.id === editingId);
         if (q) {
-          title.innerText = `Edit Soal (${q.id})`;
+          title.innerText = "Edit Soal (" + q.id + ")";
           editingInput.value = q.id;
           document.getElementById("modalExamType").value = q.examType || "TOEFL_ITP";
           document.getElementById("modalSection").value = q.section || "listening";
@@ -1505,13 +1505,20 @@
           document.getElementById("modalAudioUrl").value = q.audioUrl || "";
           document.getElementById("modalPassage").value = q.passage || "";
           document.getElementById("modalPrompt").value = q.prompt || "";
-          document.getElementById("modalPoints").value = q.points || 1;
+          document.getElementById("modalPoints").value = q.points !== undefined ? q.points : 1;
           
+          handleSectionTypeChange();
+
           if (q.options && q.options.length >= 4) {
             document.getElementById("optA").value = q.options[0].text || "";
             document.getElementById("optB").value = q.options[1].text || "";
             document.getElementById("optC").value = q.options[2].text || "";
             document.getElementById("optD").value = q.options[3].text || "";
+          } else if (q.options && q.options.length > 0) {
+            document.getElementById("optA").value = (q.options[0] && q.options[0].text) || "";
+            document.getElementById("optB").value = (q.options[1] && q.options[1].text) || "";
+            document.getElementById("optC").value = (q.options[2] && q.options[2].text) || "";
+            document.getElementById("optD").value = (q.options[3] && q.options[3].text) || "";
           } else {
             document.getElementById("optA").value = "";
             document.getElementById("optB").value = "";
@@ -1524,11 +1531,15 @@
       } else {
         title.innerText = "Tambah Soal ke Bank Asesmen";
         editingInput.value = "";
-        form.reset();
+        if (form) form.reset();
         document.getElementById("modalPoints").value = 1;
+        document.getElementById("optA").value = "";
+        document.getElementById("optB").value = "";
+        document.getElementById("optC").value = "";
+        document.getElementById("optD").value = "";
+        handleSectionTypeChange();
       }
       
-      handleSectionTypeChange();
       modal.classList.remove("hidden");
       lucide.createIcons();
     }
@@ -1791,6 +1802,20 @@
       html2pdf().set(opt).from(el).save();
       showToast("PDF Sertifikat sedang diunduh...");
     }
+
+    // Expose handlers globally to window
+    window.openAddQuestionSpaModal = openAddQuestionSpaModal;
+    window.closeAddQuestionSpaModal = closeAddQuestionSpaModal;
+    window.handleSectionTypeChange = handleSectionTypeChange;
+    window.testModalAudio = testModalAudio;
+    window.saveQuestionSpa = saveQuestionSpa;
+    window.editQuestionSpa = editQuestionSpa;
+    window.deleteQuestionSpa = deleteQuestionSpa;
+    window.renderAdminQuestionsTable = renderAdminQuestionsTable;
+    window.triggerSpaCsvImport = triggerSpaCsvImport;
+    window.handleSpaCsvImport = handleSpaCsvImport;
+    window.exportSpaQuestionsCsv = exportSpaQuestionsCsv;
+    window.downloadSpaCertPdf = downloadSpaCertPdf;
 
     // ================= VIEW 4: CMS APPEARANCE & SAAS =================
     function renderCmsAppearanceView(container) {
