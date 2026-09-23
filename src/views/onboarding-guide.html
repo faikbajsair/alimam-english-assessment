@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panduan Penggunaan & Onboarding | Al-Imam Assessment</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+              800: '#065f46',
+              900: '#064e3b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="?page=index" class="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i>
+        </a>
+        <h1 class="text-base font-bold text-slate-900 leading-tight">Panduan Penggunaan & Onboarding Wizard</h1>
+      </div>
+      <a href="?page=admin-dashboard" class="bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition-all flex items-center gap-1.5">
+        <span>Buka Dashboard</span> <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+      </a>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto w-full px-4 sm:px-6 py-10 space-y-8 flex-grow">
+    
+    <div class="text-center space-y-2">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 text-brand-800 text-xs font-bold uppercase">
+        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Interactive Teacher & Examiner Tutorial
+      </div>
+      <h2 class="text-2xl sm:text-3xl font-black text-slate-900">Langkah Mudah Mengelola Asesmen Bahasa Inggris</h2>
+      <p class="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto">
+        Pelajari tata cara pembuatan bank soal internasional, konfigurasi sistem anti-curang, hingga penilaian rubrik MBU dan penerbitan sertifikat digital.
+      </p>
+    </div>
+
+    <!-- Step-by-Step Interactive Cards -->
+    <div class="space-y-6">
+      
+      <!-- Step 1 -->
+      <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col sm:flex-row gap-5 items-start">
+        <div class="w-12 h-12 rounded-2xl bg-brand-600 text-white flex items-center justify-center font-black text-lg flex-shrink-0 shadow-md">
+          1
+        </div>
+        <div class="space-y-2 flex-grow">
+          <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+            Membuat Bank Soal TOEFL, IELTS, atau EPT
+          </h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Buka menu <strong>Bank Soal & Test Builder</strong> pada dashboard admin. Pilih section yang diinginkan (Listening, Structure, Reading, Writing, atau Speaking). Anda dapat memasukkan URL file audio (MP3/OGG) untuk Listening, atau menentukan minimal jumlah kata dan rubrik analitik untuk Writing Task 2.
+          </p>
+          <div class="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-emerald-800 text-[11px] font-semibold">
+            Tip: Anda juga dapat mengimpor ratusan soal sekaligus menggunakan fitur <strong>Export & Import CSV Template</strong>.
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col sm:flex-row gap-5 items-start">
+        <div class="w-12 h-12 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center font-black text-lg flex-shrink-0 shadow-md">
+          2
+        </div>
+        <div class="space-y-2 flex-grow">
+          <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+            Pengawasan Proctoring & Keamanan Ujian (Anti-Cheat)
+          </h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Selama ujian berlangsung, peserta wajib mengaktifkan izin kamera dan masuk ke mode layar penuh (fullscreen). Sistem akan secara otomatis:
+          </p>
+          <ul class="list-disc list-inside text-xs text-slate-600 space-y-1">
+            <li>Mengunci fungsi klik kanan, seleksi teks, dan shortcut (`Ctrl+C`, `Ctrl+V`, `F12`).</li>
+            <li>Mendeteksi perpindahan tab atau aplikasi lain dengan sistem <strong>3 Peringatan (Strikes)</strong> sebelum auto-submit.</li>
+            <li>Mengambil snapshot kamera berkala untuk memastikan integritas peserta di ruang ujian.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col sm:flex-row gap-5 items-start">
+        <div class="w-12 h-12 rounded-2xl bg-purple-600 text-white flex items-center justify-center font-black text-lg flex-shrink-0 shadow-md">
+          3
+        </div>
+        <div class="space-y-2 flex-grow">
+          <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+            Penilaian Manual Speaking & Writing (Rubrik MBU)
+          </h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Dewan penguji (Examiner) dapat membuka tab <strong>Antrean Penilaian</strong> untuk memeriksa respon esai dan memutar rekaman suara peserta (Speaking Part 2). Berikan skor berdasarkan 4 kriteria: Task Achievement, Coherence & Cohesion, Lexical Resource, dan Grammatical Accuracy, beserta catatan adab/akhlak santri.
+          </p>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col sm:flex-row gap-5 items-start">
+        <div class="w-12 h-12 rounded-2xl bg-slate-900 text-white flex items-center justify-center font-black text-lg flex-shrink-0 shadow-md">
+          4
+        </div>
+        <div class="space-y-2 flex-grow">
+          <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+            Penerbitan Sertifikat & Rapor Terpadu
+          </h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Setelah penilaian lengkap, sistem mengonversi skor ke skala TOEFL (310-677) atau IELTS Band (0-9.0) lengkap dengan klasifikasi CEFR (A1-C2). Sertifikat resmi berformat PDF dapat langsung diunduh dan diverifikasi secara global via QR Code.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Quick Action CTA -->
+    <div class="p-8 bg-gradient-to-r from-brand-900 to-slate-900 text-white rounded-3xl text-center space-y-4 shadow-xl">
+      <h3 class="text-xl font-bold">Siap Mengatur Asesmen Pertama Anda?</h3>
+      <p class="text-xs text-slate-300 max-w-md mx-auto">Masuk ke dashboard pengelola dan mulai jadwalkan ujian berstandar internasional sekarang juga.</p>
+      <div class="flex justify-center gap-3">
+        <a href="?page=admin-dashboard" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs px-6 py-3 rounded-xl shadow-lg transition-all">
+          Masuk ke Admin Dashboard
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>

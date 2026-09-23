@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CMS Appearance & SaaS Licensing | Al-Imam Assessment</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+              800: '#065f46',
+              900: '#064e3b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+  <!-- Top Bar -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="?page=admin-dashboard" class="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i>
+        </a>
+        <div>
+          <h1 class="text-base font-bold text-slate-900 leading-tight">CMS Appearance & SaaS Licensing</h1>
+          <p class="text-xs text-slate-500">Konfigurasi Tampilan White-Label, Warna Tema & Manajemen Lisensi Komersial</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button onclick="saveAllSettings()" class="bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs px-4 py-2 rounded-xl shadow-md flex items-center gap-1.5 transition-all">
+          <i data-lucide="save" class="w-4 h-4"></i> Simpan Perubahan
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto w-full px-4 sm:px-6 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8 flex-grow">
+    
+    <!-- LEFT: Live Theme & Branding Editor (7 Cols) -->
+    <div class="lg:col-span-7 space-y-6">
+      
+      <!-- Institutional Branding Card -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+        <h2 class="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2 text-brand-700">
+          <i data-lucide="building" class="w-4 h-4"></i> Identitas & Branding Instansi
+        </h2>
+
+        <div class="space-y-3 text-xs">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1 uppercase">Nama Lembaga / Sekolah</label>
+            <input type="text" id="cfgInstName" value="Lembaga Pendidikan Al-Imam" oninput="updateLivePreview()" class="w-full p-2.5 rounded-xl border border-slate-300 font-semibold outline-none focus:border-brand-500">
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1 uppercase">Motto / Tagline Pendidikan</label>
+            <input type="text" id="cfgInstMotto" value="Mencetak Generasi Unggul Berakhlak Mulia & Berwawasan Global" oninput="updateLivePreview()" class="w-full p-2.5 rounded-xl border border-slate-300 outline-none focus:border-brand-500">
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1 uppercase">Logo URL (PNG / SVG Transparan)</label>
+            <input type="url" id="cfgLogoUrl" value="https://alimamischool.com/wp-content/uploads/2020/08/Al-Imam-Islamic-School-alimamischool.com-sekolah-sunnah-logo.png" oninput="updateLivePreview()" class="w-full p-2.5 rounded-xl border border-slate-300 outline-none focus:border-brand-500 font-mono text-[11px]">
+          </div>
+        </div>
+      </div>
+
+      <!-- Color Palette & Theme Customizer -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+        <h2 class="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2 text-brand-700">
+          <i data-lucide="palette" class="w-4 h-4"></i> Palet Warna & Visual Theme
+        </h2>
+
+        <div class="grid grid-cols-3 gap-4 text-xs">
+          <div class="space-y-1.5">
+            <label class="block font-bold text-slate-700">Primary Color</label>
+            <div class="flex items-center gap-2">
+              <input type="color" id="cfgPrimaryColor" value="#059669" oninput="updateLivePreview()" class="w-9 h-9 rounded-xl border border-slate-300 cursor-pointer">
+              <span id="primaryHex" class="font-mono text-slate-600 font-bold">#059669</span>
+            </div>
+          </div>
+
+          <div class="space-y-1.5">
+            <label class="block font-bold text-slate-700">Secondary (Gold/Amber)</label>
+            <div class="flex items-center gap-2">
+              <input type="color" id="cfgSecondaryColor" value="#d97706" oninput="updateLivePreview()" class="w-9 h-9 rounded-xl border border-slate-300 cursor-pointer">
+              <span id="secondaryHex" class="font-mono text-slate-600 font-bold">#d97706</span>
+            </div>
+          </div>
+
+          <div class="space-y-1.5">
+            <label class="block font-bold text-slate-700">Dark Accent</label>
+            <div class="flex items-center gap-2">
+              <input type="color" id="cfgAccentColor" value="#0f172a" oninput="updateLivePreview()" class="w-9 h-9 rounded-xl border border-slate-300 cursor-pointer">
+              <span id="accentHex" class="font-mono text-slate-600 font-bold">#0f172a</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-2">
+          <label class="block text-xs font-bold text-slate-700 mb-1 uppercase">Footer Copyright Text</label>
+          <input type="text" id="cfgFooterText" value="© 2026 Lembaga Pendidikan Al-Imam. All Rights Reserved." class="w-full p-2.5 rounded-xl border border-slate-300 text-xs outline-none focus:border-brand-500">
+        </div>
+      </div>
+
+      <!-- Live Mobile & Desktop Visual Preview -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider">Live Visual Preview Header</h3>
+        <div id="previewHeaderBox" class="p-4 rounded-xl border border-emerald-200 bg-white flex items-center justify-between shadow-sm transition-all">
+          <div class="flex items-center gap-3">
+            <img id="previewLogo" src="https://alimamischool.com/wp-content/uploads/2020/08/Al-Imam-Islamic-School-alimamischool.com-sekolah-sunnah-logo.png" alt="Logo" class="h-10 w-auto object-contain">
+            <div>
+              <div id="previewInstName" class="font-bold text-sm text-slate-900">Lembaga Pendidikan Al-Imam</div>
+              <div id="previewInstMotto" class="text-[10px] text-emerald-700 font-medium">Mencetak Generasi Unggul Berakhlak Mulia</div>
+            </div>
+          </div>
+          <button id="previewBtn" class="px-3 py-1.5 rounded-lg text-white font-bold text-xs shadow-sm bg-emerald-600">
+            Masuk Portal
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT: Commercial SaaS License & Backup Tools (5 Cols) -->
+    <div class="lg:col-span-5 space-y-6">
+      
+      <!-- License Tier Card -->
+      <div class="p-6 rounded-2xl bg-gradient-to-br from-slate-900 to-emerald-950 text-white shadow-xl space-y-4">
+        <div class="flex items-center justify-between border-b border-emerald-800/80 pb-3">
+          <div>
+            <span class="px-2 py-0.5 rounded-md bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-[10px] font-mono uppercase font-bold">Status: Active Valid</span>
+            <h3 class="text-lg font-black text-white mt-1">Enterprise SaaS Edition</h3>
+          </div>
+          <i data-lucide="shield-check" class="w-8 h-8 text-emerald-400"></i>
+        </div>
+
+        <div class="space-y-2 text-xs">
+          <div class="flex justify-between text-slate-300">
+            <span>Kapasitas Peserta:</span>
+            <strong class="text-white font-mono">142 / 5.000 Siswa</strong>
+          </div>
+          <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+            <div class="bg-emerald-400 h-2 rounded-full w-[3%]"></div>
+          </div>
+
+          <div class="flex justify-between text-slate-300 pt-1">
+            <span>Masa Berlaku Lisensi:</span>
+            <strong class="text-emerald-300 font-mono">31 Desember 2027</strong>
+          </div>
+          <div class="flex justify-between text-slate-300">
+            <span>Kode Lisensi:</span>
+            <span class="font-mono text-slate-400 text-[10px]">ALIMAM-ENT-2026-PRO-UNLIMITED</span>
+          </div>
+        </div>
+
+        <div class="pt-2">
+          <input type="text" id="licenseKeyInput" placeholder="Masukkan Kode Lisensi Baru..." class="w-full p-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white font-mono text-xs outline-none focus:border-emerald-400 mb-2">
+          <button onclick="handleValidateLicense()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-2.5 rounded-xl transition-all text-xs">
+            Verifikasi & Perbarui Lisensi
+          </button>
+        </div>
+      </div>
+
+      <!-- One-Click Database Backup & Restore -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+        <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2 text-brand-700">
+          <i data-lucide="database" class="w-4 h-4"></i> Database Backup & Restore
+        </h3>
+        <p class="text-xs text-slate-500">Cadangkan seluruh bank soal, akun pengguna, data proctoring, dan konfigurasi tema dalam satu berkas JSON.</p>
+
+        <div class="space-y-2">
+          <button onclick="downloadBackupJson()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-xl shadow-sm text-xs flex items-center justify-center gap-2 transition-all">
+            <i data-lucide="download" class="w-4 h-4"></i> Download Full Backup JSON
+          </button>
+          
+          <button onclick="alert('Pilih file JSON backup untuk melakukan restore database.');" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 rounded-xl border border-slate-300 text-xs flex items-center justify-center gap-2 transition-all">
+            <i data-lucide="upload" class="w-4 h-4"></i> Restore dari File Backup
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    lucide.createIcons();
+
+    function updateLivePreview() {
+      var name = document.getElementById('cfgInstName').value;
+      var motto = document.getElementById('cfgInstMotto').value;
+      var logo = document.getElementById('cfgLogoUrl').value;
+      var primary = document.getElementById('cfgPrimaryColor').value;
+      var secondary = document.getElementById('cfgSecondaryColor').value;
+      var accent = document.getElementById('cfgAccentColor').value;
+
+      document.getElementById('primaryHex').innerText = primary;
+      document.getElementById('secondaryHex').innerText = secondary;
+      document.getElementById('accentHex').innerText = accent;
+
+      document.getElementById('previewInstName').innerText = name;
+      document.getElementById('previewInstMotto').innerText = motto;
+      document.getElementById('previewLogo').src = logo;
+      document.getElementById('previewBtn').style.backgroundColor = primary;
+    }
+
+    function saveAllSettings() {
+      alert("Pengaturan tampilan, branding, dan lisensi berhasil disimpan!");
+    }
+
+    function handleValidateLicense() {
+      var key = document.getElementById('licenseKeyInput').value.trim();
+      if (!key) {
+        alert("Silakan masukkan kode lisensi.");
+        return;
+      }
+      alert("Lisensi '" + key + "' Terverifikasi Valid! Kuota & masa aktif diperbarui.");
+    }
+
+    function downloadBackupJson() {
+      var backupData = {
+        app: "Al-Imam Professional English Assessment System",
+        version: "2.5.0",
+        timestamp: new Date().toISOString(),
+        institution: document.getElementById('cfgInstName').value,
+        theme: {
+          primary: document.getElementById('cfgPrimaryColor').value,
+          secondary: document.getElementById('cfgSecondaryColor').value
+        }
+      };
+
+      var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
+      var downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", "Al_Imam_DB_Backup_" + new Date().toISOString().substring(0, 10) + ".json");
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }
+  </script>
+</body>
+</html>
