@@ -10,7 +10,9 @@ var CONFIG = {
   // Institutional Branding
   APP_NAME: "Al-Imam English Assessment System",
   APP_VERSION: "2.5.0 Enterprise",
+  FOUNDATION_NAME: "Yayasan SAPIN Darussalam",
   INSTITUTION_NAME: "SMP Al-Imam Islamic School (AI IS)",
+  INSTITUTION_ADDRESS: "Limus Pratama Regency Jl. Blitar Blok E.12/7B RT 004/ RW 011, Ds./ Kel Limus Nunggal, Kec. Cileungsi, Kab. Bogor, Prop. Jawa Barat. 16820",
   INSTITUTION_MOTTO: "Berakidah, Berakhlak dan Berprestasi",
   DEVELOPER_CREDIT: "Development by Al-Imam EduTech",
   INSTITUTION_WEBSITE: "https://alimamischool.com",
