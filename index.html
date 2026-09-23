@@ -297,6 +297,8 @@
     // ================= ROUTING & VIEW CONTROLLER =================
     function navigateTo(page, params = {}) {
       AppState.currentPage = page;
+      if (params.code) AppState.activeExamCode = params.code;
+
       const url = new URL(window.location);
       url.searchParams.set("page", page);
       if (params.code) url.searchParams.set("code", params.code);
@@ -324,7 +326,28 @@
       }
 
       lucide.createIcons();
-      window.scrollTo(0, 0);
+
+      if (window.location.hash === "#portal" || params.scrollToPortal) {
+        setTimeout(() => {
+          const p = document.getElementById("portal");
+          if (p) p.scrollIntoView({ behavior: "smooth", block: "center" });
+        }, 120);
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+
+    function scrollToPortal() {
+      if (AppState.currentPage !== "landing") {
+        navigateTo("landing", { scrollToPortal: true });
+        return;
+      }
+      const portal = document.getElementById("portal");
+      if (portal) {
+        portal.scrollIntoView({ behavior: "smooth", block: "center" });
+        const input = document.getElementById("txtUsername");
+        if (input) input.focus();
+      }
     }
 
     // ================= VIEW 1: LANDING & AUTH PORTAL =================
@@ -343,12 +366,12 @@
               </div>
             </div>
             <div class="flex items-center gap-3">
-              <button onclick="navigateTo('guide')" class="text-xs sm:text-sm font-semibold text-slate-600 hover:text-brand-600 px-3 py-2 rounded-xl transition-colors flex items-center gap-1.5">
+              <button onclick="navigateTo('guide')" class="text-xs sm:text-sm font-semibold text-slate-600 hover:text-brand-600 px-3 py-2 rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer">
                 <i data-lucide="help-circle" class="w-4 h-4"></i> Panduan
               </button>
-              <a href="#portal" class="bg-brand-600 hover:bg-brand-700 text-white text-xs sm:text-sm font-bold px-4 sm:px-5 py-2.5 rounded-xl shadow-md hover:shadow-lg transition-all flex items-center gap-2">
+              <button onclick="scrollToPortal()" class="bg-brand-600 hover:bg-brand-700 text-white text-xs sm:text-sm font-bold px-4 sm:px-5 py-2.5 rounded-xl shadow-md hover:shadow-lg transition-all flex items-center gap-2 cursor-pointer">
                 <i data-lucide="log-in" class="w-4 h-4"></i> Masuk Portal
-              </a>
+              </button>
             </div>
           </div>
         </header>
@@ -396,8 +419,8 @@
                 <i data-lucide="key" class="w-4 h-4"></i> Masuk Ujian Cepat dengan Token
               </h2>
               <div class="flex flex-col sm:flex-row gap-3">
-                <input type="text" id="landingExamToken" placeholder="Contoh: TOEFL2026 atau IELTS2026" class="uppercase font-mono tracking-widest text-slate-900 px-4 py-3 rounded-2xl flex-grow focus:outline-none focus:ring-2 focus:ring-emerald-400 text-sm font-bold bg-white">
-                <button onclick="handleQuickTokenStart()" class="bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-black px-6 py-3 rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2 text-xs sm:text-sm whitespace-nowrap">
+                <input type="text" id="landingExamToken" value="${AppState.activeExamCode || 'TOEFL2026'}" placeholder="Contoh: TOEFL2026 atau IELTS2026" class="uppercase font-mono tracking-widest text-slate-900 px-4 py-3 rounded-2xl flex-grow focus:outline-none focus:ring-2 focus:ring-emerald-400 text-sm font-bold bg-white">
+                <button onclick="handleQuickTokenStart()" class="bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-black px-6 py-3 rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2 text-xs sm:text-sm whitespace-nowrap cursor-pointer">
                   Mulai Ujian <i data-lucide="arrow-right" class="w-4 h-4"></i>
                 </button>
               </div>
@@ -1804,6 +1827,11 @@
     }
 
     // Expose handlers globally to window
+    window.navigateTo = navigateTo;
+    window.scrollToPortal = scrollToPortal;
+    window.setCredentials = setCredentials;
+    window.handleLoginSubmit = handleLoginSubmit;
+    window.handleQuickTokenStart = handleQuickTokenStart;
     window.openAddQuestionSpaModal = openAddQuestionSpaModal;
     window.closeAddQuestionSpaModal = closeAddQuestionSpaModal;
     window.handleSectionTypeChange = handleSectionTypeChange;
