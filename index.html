@@ -2091,128 +2091,129 @@
                   <div class="text-[10px] text-slate-500">Yayasan SAPIN Darussalam</div>
                 </div>
               </div>
-          </div>
-
-          <!-- ADD / EDIT QUESTION MODAL (SPA) -->
-          <div id="addQuestionSpaModal" style="display: none;" class="fixed inset-0 z-[100] bg-slate-950/80 backdrop-blur-sm items-center justify-center p-4">
-            <div class="bg-white rounded-3xl max-w-2xl w-full p-6 space-y-4 shadow-2xl max-h-[92vh] overflow-y-auto custom-scrollbar">
-              <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-                <div>
-                  <h3 id="modalQuestionTitle" class="font-bold text-slate-900 text-base">Tambah Soal ke Bank Asesmen</h3>
-                  <p class="text-[11px] text-slate-500">Konfigurasi materi soal, pilihan ganda, atau rubrik evaluasi</p>
-                </div>
-                <button type="button" onclick="closeAddQuestionSpaModal()" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors">
-                  <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
-              </div>
-
-              <form id="spaAddQuestionForm" onsubmit="saveQuestionSpa(event)" class="space-y-4 text-xs">
-                <input type="hidden" id="modalEditingId" value="">
-                
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <div>
-                    <label class="block font-bold text-slate-700 uppercase mb-1">Modul Ujian</label>
-                    <select id="modalExamType" class="w-full p-2.5 rounded-xl border border-slate-300 font-semibold outline-none focus:border-brand-500 bg-slate-50">
-                      <option value="TOEFL_ITP">TOEFL ITP / PBT</option>
-                      <option value="IELTS_ACADEMIC">IELTS Academic</option>
-                      <option value="TOEIC">TOEIC Standard</option>
-                      <option value="EPT">Al-Imam EPT</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="block font-bold text-slate-700 uppercase mb-1">Section</label>
-                    <select id="modalSection" onchange="handleSectionTypeChange()" class="w-full p-2.5 rounded-xl border border-slate-300 font-semibold outline-none focus:border-brand-500 bg-slate-50">
-                      <option value="listening">Listening</option>
-                      <option value="structure">Structure & Written</option>
-                      <option value="reading">Reading Comprehension</option>
-                      <option value="writing">Writing</option>
-                      <option value="speaking">Speaking</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="block font-bold text-slate-700 uppercase mb-1">Tipe Soal</label>
-                    <select id="modalType" onchange="handleSectionTypeChange()" class="w-full p-2.5 rounded-xl border border-slate-300 font-semibold outline-none focus:border-brand-500 bg-slate-50">
-                      <option value="multiple_choice">Multiple Choice</option>
-                      <option value="error_identification">Error Identification</option>
-                      <option value="essay">Task Essay</option>
-                      <option value="speaking_record">Speaking Audio Record</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div id="fieldAudioUrl">
-                  <label class="block font-bold text-slate-700 uppercase mb-1">Audio URL (Khusus Listening / Speaking Prompt)</label>
-                  <div class="flex gap-2">
-                    <input type="url" id="modalAudioUrl" placeholder="https://actions.google.com/sounds/v1/speech/bell_ring.ogg" class="flex-grow p-2.5 rounded-xl border border-slate-300 outline-none font-mono text-[11px] focus:border-brand-500">
-                    <button type="button" onclick="testModalAudio()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl border border-slate-200 flex items-center gap-1">
-                      <i data-lucide="play" class="w-3.5 h-3.5"></i> Tes
-                    </button>
-                  </div>
-                </div>
-
-                <div>
-                  <label class="block font-bold text-slate-700 uppercase mb-1">Teks Bacaan / Passage (Opsional)</label>
-                  <textarea id="modalPassage" rows="3" placeholder="Teks bacaan pendukung atau petunjuk instruksi..." class="w-full p-2.5 rounded-xl border border-slate-300 outline-none focus:border-brand-500 leading-relaxed"></textarea>
-                </div>
-
-                <div>
-                  <label class="block font-bold text-slate-700 uppercase mb-1">Pertanyaan / Prompt Soal <span class="text-red-500">*</span></label>
-                  <textarea id="modalPrompt" rows="2" required placeholder="Tuliskan pertanyaan / instruksi soal di sini..." class="w-full p-2.5 rounded-xl border border-slate-300 outline-none focus:border-brand-500"></textarea>
-                </div>
-
-                <div id="fieldOptions" class="space-y-2">
-                  <label class="block font-bold text-slate-700 uppercase">Pilihan Jawaban (A, B, C, D)</label>
-                  <div class="grid grid-cols-1 gap-2">
-                    <div class="flex items-center gap-2">
-                      <span class="font-bold text-slate-500 w-5">A:</span>
-                      <input type="text" id="optA" placeholder="Teks Pilihan A" class="w-full p-2 rounded-lg border border-slate-300 outline-none focus:border-brand-500">
-                    </div>
-                    <div class="flex items-center gap-2">
-                      <span class="font-bold text-slate-500 w-5">B:</span>
-                      <input type="text" id="optB" placeholder="Teks Pilihan B" class="w-full p-2 rounded-lg border border-slate-300 outline-none focus:border-brand-500">
-                    </div>
-                    <div class="flex items-center gap-2">
-                      <span class="font-bold text-slate-500 w-5">C:</span>
-                      <input type="text" id="optC" placeholder="Teks Pilihan C" class="w-full p-2 rounded-lg border border-slate-300 outline-none focus:border-brand-500">
-                    </div>
-                    <div class="flex items-center gap-2">
-                      <span class="font-bold text-slate-500 w-5">D:</span>
-                      <input type="text" id="optD" placeholder="Teks Pilihan D" class="w-full p-2 rounded-lg border border-slate-300 outline-none focus:border-brand-500">
-                    </div>
-                  </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-3">
-                  <div>
-                    <label class="block font-bold text-slate-700 uppercase mb-1">Kunci Jawaban / Penilai</label>
-                    <select id="modalCorrect" class="w-full p-2.5 rounded-xl border border-slate-300 font-bold outline-none focus:border-brand-500 bg-slate-50">
-                      <option value="A">Pilihan A</option>
-                      <option value="B">Pilihan B</option>
-                      <option value="C">Pilihan C</option>
-                      <option value="D">Pilihan D</option>
-                      <option value="Standard Rubric">Standard Rubric (Esai/Writing)</option>
-                      <option value="Examiner Rubric">Examiner Rubric (Speaking)</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="block font-bold text-slate-700 uppercase mb-1">Bobot Nilai (Points)</label>
-                    <input type="number" id="modalPoints" value="1" min="1" max="100" class="w-full p-2.5 rounded-xl border border-slate-300 font-bold outline-none focus:border-brand-500">
-                  </div>
-                </div>
-
-                <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
-                  <button type="button" onclick="closeAddQuestionSpaModal()" class="px-4 py-2.5 rounded-xl border border-slate-300 text-slate-700 font-bold hover:bg-slate-50">
-                    Batal
-                  </button>
-                  <button type="submit" class="bg-brand-600 hover:bg-brand-700 text-white font-bold px-6 py-2.5 rounded-xl shadow-md transition-all flex items-center gap-1.5 cursor-pointer">
-                    <i data-lucide="save" class="w-4 h-4"></i> Simpan Soal
-                  </button>
-                </div>
-              </form>
             </div>
           </div>
 
         </main>
+
+        <!-- ADD / EDIT QUESTION MODAL (SPA) -->
+        <div id="addQuestionSpaModal" style="display: none;" onclick="if(event.target === this) closeAddQuestionSpaModal()" class="fixed inset-0 z-[100] bg-slate-950/80 backdrop-blur-sm items-center justify-center p-4">
+          <div class="bg-white rounded-3xl max-w-2xl w-full p-6 space-y-4 shadow-2xl max-h-[92vh] overflow-y-auto custom-scrollbar">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+              <div>
+                <h3 id="modalQuestionTitle" class="font-bold text-slate-900 text-base">Tambah Soal ke Bank Asesmen</h3>
+                <p class="text-[11px] text-slate-500">Konfigurasi materi soal, pilihan ganda, atau rubrik evaluasi</p>
+              </div>
+              <button type="button" onclick="closeAddQuestionSpaModal()" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors">
+                <i data-lucide="x" class="w-5 h-5"></i>
+              </button>
+            </div>
+
+            <form id="spaAddQuestionForm" onsubmit="saveQuestionSpa(event)" class="space-y-4 text-xs">
+              <input type="hidden" id="modalEditingId" value="">
+              
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                  <label class="block font-bold text-slate-700 uppercase mb-1">Modul Ujian</label>
+                  <select id="modalExamType" class="w-full p-2.5 rounded-xl border border-slate-300 font-semibold outline-none focus:border-brand-500 bg-slate-50">
+                    <option value="TOEFL_ITP">TOEFL ITP / PBT</option>
+                    <option value="IELTS_ACADEMIC">IELTS Academic</option>
+                    <option value="TOEIC">TOEIC Standard</option>
+                    <option value="EPT">Al-Imam EPT</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block font-bold text-slate-700 uppercase mb-1">Section</label>
+                  <select id="modalSection" onchange="handleSectionTypeChange()" class="w-full p-2.5 rounded-xl border border-slate-300 font-semibold outline-none focus:border-brand-500 bg-slate-50">
+                    <option value="listening">Listening</option>
+                    <option value="structure">Structure & Written</option>
+                    <option value="reading">Reading Comprehension</option>
+                    <option value="writing">Writing</option>
+                    <option value="speaking">Speaking</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block font-bold text-slate-700 uppercase mb-1">Tipe Soal</label>
+                  <select id="modalType" onchange="handleSectionTypeChange()" class="w-full p-2.5 rounded-xl border border-slate-300 font-semibold outline-none focus:border-brand-500 bg-slate-50">
+                    <option value="multiple_choice">Multiple Choice</option>
+                    <option value="error_identification">Error Identification</option>
+                    <option value="essay">Task Essay</option>
+                    <option value="speaking_record">Speaking Audio Record</option>
+                  </select>
+                </div>
+              </div>
+
+              <div id="fieldAudioUrl">
+                <label class="block font-bold text-slate-700 uppercase mb-1">Audio URL (Khusus Listening / Speaking Prompt)</label>
+                <div class="flex gap-2">
+                  <input type="url" id="modalAudioUrl" placeholder="https://actions.google.com/sounds/v1/speech/bell_ring.ogg" class="flex-grow p-2.5 rounded-xl border border-slate-300 outline-none font-mono text-[11px] focus:border-brand-500">
+                  <button type="button" onclick="testModalAudio()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl border border-slate-200 flex items-center gap-1">
+                    <i data-lucide="play" class="w-3.5 h-3.5"></i> Tes
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <label class="block font-bold text-slate-700 uppercase mb-1">Teks Bacaan / Passage (Opsional)</label>
+                <textarea id="modalPassage" rows="3" placeholder="Teks bacaan pendukung atau petunjuk instruksi..." class="w-full p-2.5 rounded-xl border border-slate-300 outline-none focus:border-brand-500 leading-relaxed"></textarea>
+              </div>
+
+              <div>
+                <label class="block font-bold text-slate-700 uppercase mb-1">Pertanyaan / Prompt Soal <span class="text-red-500">*</span></label>
+                <textarea id="modalPrompt" rows="2" required placeholder="Tuliskan pertanyaan / instruksi soal di sini..." class="w-full p-2.5 rounded-xl border border-slate-300 outline-none focus:border-brand-500"></textarea>
+              </div>
+
+              <div id="fieldOptions" class="space-y-2">
+                <label class="block font-bold text-slate-700 uppercase">Pilihan Jawaban (A, B, C, D)</label>
+                <div class="grid grid-cols-1 gap-2">
+                  <div class="flex items-center gap-2">
+                    <span class="font-bold text-slate-500 w-5">A:</span>
+                    <input type="text" id="optA" placeholder="Teks Pilihan A" class="w-full p-2 rounded-lg border border-slate-300 outline-none focus:border-brand-500">
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="font-bold text-slate-500 w-5">B:</span>
+                    <input type="text" id="optB" placeholder="Teks Pilihan B" class="w-full p-2 rounded-lg border border-slate-300 outline-none focus:border-brand-500">
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="font-bold text-slate-500 w-5">C:</span>
+                    <input type="text" id="optC" placeholder="Teks Pilihan C" class="w-full p-2 rounded-lg border border-slate-300 outline-none focus:border-brand-500">
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="font-bold text-slate-500 w-5">D:</span>
+                    <input type="text" id="optD" placeholder="Teks Pilihan D" class="w-full p-2 rounded-lg border border-slate-300 outline-none focus:border-brand-500">
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block font-bold text-slate-700 uppercase mb-1">Kunci Jawaban / Penilai</label>
+                  <select id="modalCorrect" class="w-full p-2.5 rounded-xl border border-slate-300 font-bold outline-none focus:border-brand-500 bg-slate-50">
+                    <option value="A">Pilihan A</option>
+                    <option value="B">Pilihan B</option>
+                    <option value="C">Pilihan C</option>
+                    <option value="D">Pilihan D</option>
+                    <option value="Standard Rubric">Standard Rubric (Esai/Writing)</option>
+                    <option value="Examiner Rubric">Examiner Rubric (Speaking)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block font-bold text-slate-700 uppercase mb-1">Bobot Nilai (Points)</label>
+                  <input type="number" id="modalPoints" value="1" min="1" max="100" class="w-full p-2.5 rounded-xl border border-slate-300 font-bold outline-none focus:border-brand-500">
+                </div>
+              </div>
+
+              <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
+                <button type="button" onclick="closeAddQuestionSpaModal()" class="px-4 py-2.5 rounded-xl border border-slate-300 text-slate-700 font-bold hover:bg-slate-50">
+                  Batal
+                </button>
+                <button type="submit" class="bg-brand-600 hover:bg-brand-700 text-white font-bold px-6 py-2.5 rounded-xl shadow-md transition-all flex items-center gap-1.5 cursor-pointer">
+                  <i data-lucide="save" class="w-4 h-4"></i> Simpan Soal
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       `;
 
       // Render cert QR Code and initialize table
@@ -2293,21 +2294,17 @@
           
           handleSectionTypeChange();
 
-          const optA = document.getElementById("optA");
-          const optB = document.getElementById("optB");
-          const optC = document.getElementById("optC");
-          const optD = document.getElementById("optD");
+          const getOptText = (opt) => {
+            if (!opt) return "";
+            if (typeof opt === "string") return opt;
+            return opt.text || "";
+          };
 
-          if (q.options && q.options.length >= 4) {
-            if (optA) optA.value = q.options[0].text || "";
-            if (optB) optB.value = q.options[1].text || "";
-            if (optC) optC.value = q.options[2].text || "";
-            if (optD) optD.value = q.options[3].text || "";
-          } else if (q.options && q.options.length > 0) {
-            if (optA) optA.value = (q.options[0] && q.options[0].text) || "";
-            if (optB) optB.value = (q.options[1] && q.options[1].text) || "";
-            if (optC) optC.value = (q.options[2] && q.options[2].text) || "";
-            if (optD) optD.value = (q.options[3] && q.options[3].text) || "";
+          if (q.options && q.options.length > 0) {
+            if (optA) optA.value = getOptText(q.options[0]);
+            if (optB) optB.value = getOptText(q.options[1]);
+            if (optC) optC.value = getOptText(q.options[2]);
+            if (optD) optD.value = getOptText(q.options[3]);
           } else {
             if (optA) optA.value = "";
             if (optB) optB.value = "";
@@ -2322,6 +2319,12 @@
         if (title) title.innerText = "Tambah Soal ke Bank Asesmen";
         if (editingInput) editingInput.value = "";
         if (form) form.reset();
+        const examTypeEl = document.getElementById("modalExamType");
+        if (examTypeEl) examTypeEl.value = "TOEFL_ITP";
+        const secEl = document.getElementById("modalSection");
+        if (secEl) secEl.value = "listening";
+        const typeEl = document.getElementById("modalType");
+        if (typeEl) typeEl.value = "multiple_choice";
         const pointsEl = document.getElementById("modalPoints");
         if (pointsEl) pointsEl.value = 1;
         const optA = document.getElementById("optA");
@@ -2332,6 +2335,8 @@
         if (optB) optB.value = "";
         if (optC) optC.value = "";
         if (optD) optD.value = "";
+        const correctEl = document.getElementById("modalCorrect");
+        if (correctEl) correctEl.value = "A";
         handleSectionTypeChange();
       }
       
