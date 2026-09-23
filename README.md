@@ -1,14 +1,14 @@
-# AL-IMAM PROFESSIONAL ENGLISH ASSESSMENT SYSTEM
+# SMP AL-IMAM ISLAMIC SCHOOL (AI IS) - ENGLISH ASSESSMENT SYSTEM
 
 > **Enterprise Standardized English Assessment & Proctoring Platform**  
-> *Mencetak Generasi Unggul Berakhlak Mulia & Berwawasan Global*  
-> **Lembaga Pendidikan Al-Imam | Version 2.5.0 Enterprise**
+> *Berakidah, Berakhlak dan Berprestasi*  
+> **SMP Al-Imam Islamic School (AI IS) | Development by Al-Imam EduTech**
 
 ---
 
 ## 1. TENTANG SISTEM (SYSTEM OVERVIEW)
 
-**Al-Imam Professional English Assessment System** adalah platform ujian Bahasa Inggris berskala enterprise yang dirancang khusus untuk memenuhi standar ujian internasional (**TOEFL ITP/PBT, IELTS Academic & General, TOEIC, dan Al-Imam EPT**).
+**SMP Al-Imam English Assessment System** adalah platform ujian Bahasa Inggris berskala enterprise yang dirancang khusus untuk SMP Al-Imam Islamic School (AI IS) guna memenuhi standar ujian internasional (**TOEFL ITP/PBT, IELTS Academic & General, TOEIC, dan Al-Imam EPT**).
 
 Sistem dibangun menggunakan pola arsitektur **MVC (Model-View-Controller)** yang sangat ringan, efisien, memiliki proctoring ketat (anti-curang), mengadopsi fleksibilitas pembobotan **App Rapor MBU**, serta **siap dikomersialkan / dijual sebagai produk SaaS atau On-Premise White-Label** dengan CMS Appearance Configurator lengkap.
 

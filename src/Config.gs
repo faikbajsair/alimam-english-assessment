@@ -10,8 +10,9 @@ var CONFIG = {
   // Institutional Branding
   APP_NAME: "Al-Imam English Assessment System",
   APP_VERSION: "2.5.0 Enterprise",
-  INSTITUTION_NAME: "Lembaga Pendidikan Al-Imam",
-  INSTITUTION_MOTTO: "Mencetak Generasi Unggul Berakhlak Mulia & Berwawasan Global",
+  INSTITUTION_NAME: "SMP Al-Imam Islamic School (AI IS)",
+  INSTITUTION_MOTTO: "Berakidah, Berakhlak dan Berprestasi",
+  DEVELOPER_CREDIT: "Development by Al-Imam EduTech",
   INSTITUTION_WEBSITE: "https://alimamischool.com",
   LOGO_URL: "https://alimamischool.com/wp-content/uploads/2020/08/Al-Imam-Islamic-School-alimamischool.com-sekolah-sunnah-logo.png",
   FAVICON_URL: "https://alimamischool.com/wp-content/uploads/2020/08/Al-Imam-Islamic-School-alimamischool.com-sekolah-sunnah-logo.png",
@@ -25,9 +26,9 @@ var CONFIG = {
     accentColor: "#4f46e5",       // Indigo 600
     fontFamily: "Plus Jakarta Sans, sans-serif",
     darkMode: false,
-    headerTitle: "Al-Imam English Assessment Center",
-    headerSubtitle: "Standardized Testing for Academic & Professional Excellence",
-    footerText: "© " + new Date().getFullYear() + " Lembaga Pendidikan Al-Imam. All Rights Reserved."
+    headerTitle: "SMP Al-Imam Assessment Center",
+    headerSubtitle: "Standardized Testing for Academic & Islamic Character Excellence",
+    footerText: "© " + new Date().getFullYear() + " SMP Al-Imam Islamic School (AI IS). Development by Al-Imam EduTech."
   },
 
   // Security & Anti-Cheating Settings

@@ -6,8 +6,8 @@
   <title>Al-Imam Professional English Assessment System</title>
   
   <!-- SEO Metadata -->
-  <meta name="description" content="Sistem Asesmen Bahasa Inggris Profesional Lembaga Pendidikan Al-Imam (TOEFL, IELTS, TOEIC, EPT) dengan Proctoring Anti-Curang, Konversi Nilai Rapor MBU, dan Sertifikat Digital QR.">
-  <meta name="author" content="Lembaga Pendidikan Al-Imam">
+  <meta name="description" content="Sistem Asesmen Bahasa Inggris Profesional SMP Al-Imam Islamic School (AI IS) - Berakidah, Berakhlak dan Berprestasi (TOEFL, IELTS, TOEIC, EPT). Development by Al-Imam EduTech.">
+  <meta name="author" content="SMP Al-Imam Islamic School (AI IS)">
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -125,8 +125,9 @@
     const APP_CONFIG = {
       name: "Al-Imam English Assessment System",
       version: "2.5.0 Enterprise",
-      institution: "Lembaga Pendidikan Al-Imam",
-      motto: "Mencetak Generasi Unggul Berakhlak Mulia & Berwawasan Global",
+      institution: "SMP Al-Imam Islamic School (AI IS)",
+      motto: "Berakidah, Berakhlak dan Berprestasi",
+      developerCredit: "Development by Al-Imam EduTech",
       logoUrl: "https://alimamischool.com/wp-content/uploads/2020/08/Al-Imam-Islamic-School-alimamischool.com-sekolah-sunnah-logo.png",
       website: "https://alimamischool.com",
       theme: {
@@ -334,7 +335,8 @@
               <img src="${APP_CONFIG.logoUrl}" alt="Logo" class="h-12 w-auto object-contain drop-shadow-sm">
               <div>
                 <h1 class="text-base sm:text-lg font-bold text-slate-900 leading-tight">${APP_CONFIG.institution}</h1>
-                <p class="text-xs text-brand-700 font-medium hidden sm:block">${APP_CONFIG.motto}</p>
+                <p class="text-xs text-brand-700 font-semibold hidden sm:block">${APP_CONFIG.motto}</p>
+                <p class="text-[10px] text-slate-400 font-mono hidden sm:block">${APP_CONFIG.developerCredit}</p>
               </div>
             </div>
             <div class="flex items-center gap-3">
@@ -362,7 +364,7 @@
             </h1>
 
             <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
-              Platform ujian Bahasa Inggris resmi <strong>Lembaga Pendidikan Al-Imam</strong> dengan standar internasional (<strong>TOEFL ITP/PBT, IELTS Academic, TOEIC, & EPT</strong>). Dilengkapi pengawasan kamera AI, sensor perpindahan tab, mikrofon audio speaking, dan konversi skor rapor MBU otomatis.
+              Platform ujian Bahasa Inggris resmi <strong>SMP Al-Imam Islamic School (AI IS)</strong> dengan standar internasional (<strong>TOEFL ITP/PBT, IELTS Academic, TOEIC, & EPT</strong>). Dilengkapi pengawasan kamera AI, sensor perpindahan tab, mikrofon audio speaking, dan konversi skor rapor MBU otomatis.
             </p>
 
             <!-- Key Badges -->
@@ -470,7 +472,7 @@
               <p class="font-bold text-slate-300">${APP_CONFIG.institution}</p>
               <p class="text-slate-500 text-[11px]">${APP_CONFIG.motto}</p>
             </div>
-            <p class="text-slate-500 text-[11px]">© ${new Date().getFullYear()} Lembaga Pendidikan Al-Imam. All Rights Reserved.</p>
+            <p class="text-slate-500 text-[11px]">© ${new Date().getFullYear()} SMP Al-Imam Islamic School (AI IS). Development by Al-Imam EduTech.</p>
           </div>
         </footer>
       `;
