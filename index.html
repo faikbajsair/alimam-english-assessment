@@ -288,6 +288,7 @@
         timerInterval: null,
         audioPlayCount: 0,
         maxAudioPlays: 2,
+        audioPlays: {}, // Map questionId -> play count
         isRecording: false,
         speakingAudioSaved: false,
         submitted: false
@@ -296,6 +297,9 @@
 
     // ================= ROUTING & VIEW CONTROLLER =================
     function navigateTo(page, params = {}) {
+      if (typeof ExamAudioManager !== 'undefined' && ExamAudioManager.stop) {
+        ExamAudioManager.stop();
+      }
       // Route Authentication Guard for protected pages
       if ((page === "admin" || page === "cms") && (!AppState.currentUser || (AppState.currentUser.role !== "admin" && AppState.currentUser.role !== "teacher"))) {
         showToast("Akses Dibatasi: Silakan login terlebih dahulu untuk mengakses Dashboard.");
@@ -643,27 +647,52 @@
               </div>
 
               <!-- Audio Player for Listening -->
-              ${q.section === 'listening' && q.audioUrl ? `
-                <div class="p-4 bg-emerald-950 text-white rounded-2xl shadow-inner space-y-3">
+              ${q.section === 'listening' ? `
+                <div id="examAudioContainer" class="p-4 sm:p-5 bg-gradient-to-br from-emerald-950 via-slate-950 to-emerald-950 text-white rounded-2xl shadow-inner space-y-3.5 border border-emerald-800/80">
                   <div class="flex items-center justify-between text-xs">
-                    <span class="font-bold text-emerald-400 flex items-center gap-1.5">
-                      <i data-lucide="volume-2" class="w-4 h-4"></i> Listening Audio Track
+                    <div class="flex items-center gap-2">
+                      <span class="font-bold text-emerald-400 flex items-center gap-1.5">
+                        <i data-lucide="volume-2" class="w-4 h-4"></i> Listening Audio Track
+                      </span>
+                      <span id="audioEngineBadge" class="px-2 py-0.5 rounded-md bg-emerald-900/90 border border-emerald-700/80 text-emerald-300 text-[10px] font-semibold flex items-center gap-1">
+                        ${q.audioUrl ? '<i data-lucide="music" class="w-3 h-3 text-emerald-400"></i> Audio Track' : '<i data-lucide="sparkles" class="w-3 h-3 text-amber-400"></i> AI Voice Synthesis'}
+                      </span>
+                    </div>
+                    <span id="audioPlayCounterBadge" class="px-2.5 py-0.5 rounded-full bg-emerald-900/90 border border-emerald-700 text-emerald-200 text-[11px] font-mono">
+                      Diputar: ${(AppState.examSession.audioPlays && AppState.examSession.audioPlays[q.id]) || 0} / ${AppState.examSession.maxAudioPlays} kali
                     </span>
-                    <span class="px-2 py-0.5 rounded bg-emerald-800 text-emerald-200 text-[10px] font-mono">Diputar: ${session.audioPlayCount} / ${session.maxAudioPlays} kali</span>
                   </div>
-                  <div class="flex items-center gap-3">
-                    <button onclick="playExamAudio('${q.audioUrl}')" class="w-10 h-10 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 flex items-center justify-center font-bold shadow-md">
-                      <i data-lucide="play" class="w-5 h-5 ml-0.5"></i>
+                  
+                  <div class="flex items-center gap-3.5">
+                    <button id="btnExamAudioPlay" onclick="toggleExamListeningAudio('${q.id}')" title="Putar / Jeda Audio Listening" class="w-11 h-11 rounded-2xl bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-slate-950 flex items-center justify-center font-bold shadow-lg shadow-emerald-950/40 transition-all cursor-pointer flex-shrink-0">
+                      <i id="btnExamAudioIcon" data-lucide="${(typeof ExamAudioManager !== 'undefined' && ExamAudioManager.isPlaying && ExamAudioManager.activeQId === q.id) ? 'pause' : 'play'}" class="w-5 h-5 ${(typeof ExamAudioManager !== 'undefined' && ExamAudioManager.isPlaying && ExamAudioManager.activeQId === q.id) ? '' : 'ml-0.5'}"></i>
                     </button>
-                    <div class="flex-grow">
-                      <div class="w-full bg-emerald-900 rounded-full h-2">
-                        <div class="bg-emerald-400 h-2 rounded-full w-1/3"></div>
+                    
+                    <div class="flex-grow space-y-1.5">
+                      <!-- Progress Bar -->
+                      <div class="w-full bg-emerald-950/90 border border-emerald-800/60 rounded-full h-2.5 overflow-hidden relative">
+                        <div id="examAudioProgressBar" class="bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-400 h-full rounded-full transition-all duration-150" style="width: ${(typeof ExamAudioManager !== 'undefined' && ExamAudioManager.activeQId === q.id) ? ExamAudioManager.progressPercent : 0}%"></div>
                       </div>
-                      <div class="flex justify-between text-[10px] text-emerald-300 font-mono mt-1">
-                        <span>00:15</span>
-                        <span>00:45</span>
+                      
+                      <div class="flex justify-between items-center text-[11px] text-emerald-300/90 font-mono">
+                        <span id="audioTimeCurrent">${(typeof ExamAudioManager !== 'undefined' && ExamAudioManager.activeQId === q.id) ? ExamAudioManager.formatTime(ExamAudioManager.currentSec) : '00:00'}</span>
+                        
+                        <!-- Mini Equalizer Waves -->
+                        <div id="audioVisualizerBars" class="flex items-center gap-1 ${(typeof ExamAudioManager !== 'undefined' && ExamAudioManager.isPlaying && ExamAudioManager.activeQId === q.id) ? 'opacity-100' : 'opacity-0'} transition-opacity">
+                          <span class="w-1 h-2.5 bg-emerald-400 rounded-full animate-pulse"></span>
+                          <span class="w-1 h-4 bg-teal-300 rounded-full animate-bounce"></span>
+                          <span class="w-1 h-2 bg-emerald-300 rounded-full animate-pulse"></span>
+                          <span class="w-1 h-3.5 bg-emerald-400 rounded-full animate-bounce"></span>
+                        </div>
+                        
+                        <span id="audioTimeTotal">${(typeof ExamAudioManager !== 'undefined' && ExamAudioManager.activeQId === q.id) ? ExamAudioManager.formatTime(ExamAudioManager.totalSec) : '00:20'}</span>
                       </div>
                     </div>
+                  </div>
+                  
+                  <div class="text-[11px] text-emerald-300/80 italic flex items-center justify-between pt-1 border-t border-emerald-900/60">
+                    <span class="line-clamp-1">${q.passage ? q.passage : 'Audio rekaman percakapan / narasi TOEFL'}</span>
+                    <span id="audioPlayStateLabel" class="text-[10px] font-semibold text-emerald-400 font-sans ml-2 flex-shrink-0">${(typeof ExamAudioManager !== 'undefined' && ExamAudioManager.isPlaying && ExamAudioManager.activeQId === q.id) ? '● Sedang Memutar Audio...' : 'Klik play untuk memutar'}</span>
                   </div>
                 </div>
               ` : ''}
@@ -914,6 +943,7 @@
     }
 
     function prevExamQuestion() {
+      if (typeof ExamAudioManager !== 'undefined') ExamAudioManager.stop();
       if (AppState.examSession.currentIndex > 0) {
         AppState.examSession.currentIndex--;
         renderExamPlayerView(document.getElementById("appRoot"));
@@ -922,6 +952,7 @@
     }
 
     function nextExamQuestion() {
+      if (typeof ExamAudioManager !== 'undefined') ExamAudioManager.stop();
       if (AppState.examSession.currentIndex < AppState.questions.length - 1) {
         AppState.examSession.currentIndex++;
         renderExamPlayerView(document.getElementById("appRoot"));
@@ -932,12 +963,14 @@
     }
 
     function jumpToExamQuestion(idx) {
+      if (typeof ExamAudioManager !== 'undefined') ExamAudioManager.stop();
       AppState.examSession.currentIndex = idx;
       renderExamPlayerView(document.getElementById("appRoot"));
       lucide.createIcons();
     }
 
     function switchExamSection(sec) {
+      if (typeof ExamAudioManager !== 'undefined') ExamAudioManager.stop();
       AppState.examSession.currentSection = sec;
       const idx = AppState.questions.findIndex(q => q.section === sec);
       if (idx !== -1) AppState.examSession.currentIndex = idx;
@@ -945,11 +978,332 @@
       lucide.createIcons();
     }
 
-    function playExamAudio(url) {
-      const audio = new Audio(url);
-      audio.play().catch(e => console.warn(e));
-      AppState.examSession.audioPlayCount++;
-      showToast("Memutar audio listening...");
+    // ================= DUAL-ENGINE LISTENING AUDIO MANAGER =================
+    const ExamAudioManager = {
+      activeQId: null,
+      isPlaying: false,
+      isSpeech: false,
+      html5Audio: null,
+      currentSec: 0,
+      totalSec: 20,
+      progressPercent: 0,
+      timerInterval: null,
+      speechUtterance: null,
+
+      formatTime(sec) {
+        const sInt = Math.max(0, Math.floor(sec || 0));
+        const m = Math.floor(sInt / 60).toString().padStart(2, '0');
+        const s = (sInt % 60).toString().padStart(2, '0');
+        return `${m}:${s}`;
+      },
+
+      getQuestionPlayCount(qId) {
+        if (!AppState.examSession.audioPlays) {
+          AppState.examSession.audioPlays = {};
+        }
+        return AppState.examSession.audioPlays[qId] || 0;
+      },
+
+      incrementPlayCount(qId) {
+        if (!AppState.examSession.audioPlays) {
+          AppState.examSession.audioPlays = {};
+        }
+        AppState.examSession.audioPlays[qId] = (AppState.examSession.audioPlays[qId] || 0) + 1;
+        this.updatePlayCounterUI(qId);
+      },
+
+      updatePlayCounterUI(qId) {
+        const badge = document.getElementById("audioPlayCounterBadge");
+        if (badge) {
+          const count = this.getQuestionPlayCount(qId);
+          badge.innerText = `Diputar: ${count} / ${AppState.examSession.maxAudioPlays} kali`;
+        }
+      },
+
+      updatePlayerUI(playing) {
+        this.isPlaying = playing;
+        const btnIcon = document.getElementById("btnExamAudioIcon");
+        const playStateLabel = document.getElementById("audioPlayStateLabel");
+        const visualizer = document.getElementById("audioVisualizerBars");
+
+        if (btnIcon) {
+          btnIcon.setAttribute("data-lucide", playing ? "pause" : "play");
+          if (!playing) btnIcon.classList.add("ml-0.5");
+          else btnIcon.classList.remove("ml-0.5");
+          lucide.createIcons();
+        }
+        if (playStateLabel) {
+          playStateLabel.innerText = playing ? "● Sedang Memutar Audio..." : (this.progressPercent >= 99 ? "Audio Selesai" : "Jeda");
+          playStateLabel.className = playing ? "text-[10px] font-semibold text-emerald-400 font-sans animate-pulse ml-2 flex-shrink-0" : "text-[10px] font-semibold text-slate-300 font-sans ml-2 flex-shrink-0";
+        }
+        if (visualizer) {
+          if (playing) visualizer.classList.remove("opacity-0");
+          else visualizer.classList.add("opacity-0");
+        }
+      },
+
+      updateProgressUI() {
+        const pBar = document.getElementById("examAudioProgressBar");
+        const tCur = document.getElementById("audioTimeCurrent");
+        const tTot = document.getElementById("audioTimeTotal");
+        if (pBar) pBar.style.width = `${this.progressPercent}%`;
+        if (tCur) tCur.innerText = this.formatTime(this.currentSec);
+        if (tTot) tTot.innerText = this.formatTime(this.totalSec);
+      },
+
+      stop() {
+        if (this.timerInterval) {
+          clearInterval(this.timerInterval);
+          this.timerInterval = null;
+        }
+        if (this.html5Audio) {
+          try {
+            this.html5Audio.pause();
+            this.html5Audio.currentTime = 0;
+          } catch(e) {}
+          this.html5Audio = null;
+        }
+        if ('speechSynthesis' in window) {
+          try {
+            window.speechSynthesis.cancel();
+          } catch(e) {}
+        }
+        this.isPlaying = false;
+        this.currentSec = 0;
+        this.progressPercent = 0;
+        this.updateProgressUI();
+        this.updatePlayerUI(false);
+      },
+
+      toggle(qId) {
+        const q = AppState.questions.find(item => item.id === qId);
+        if (!q) return;
+
+        // If currently playing the SAME question, toggle pause
+        if (this.activeQId === qId && this.isPlaying) {
+          this.pause();
+          return;
+        }
+
+        // If paused on the same question, resume
+        if (this.activeQId === qId && !this.isPlaying && this.currentSec > 0 && this.currentSec < this.totalSec) {
+          this.resume(q);
+          return;
+        }
+
+        // Check play limit (Max 2 times)
+        const plays = this.getQuestionPlayCount(qId);
+        if (plays >= AppState.examSession.maxAudioPlays) {
+          showToast(`Batas maksimal pemutaran (${AppState.examSession.maxAudioPlays}x) untuk soal ini telah tercapai.`);
+          return;
+        }
+
+        // Fresh playback
+        this.stop();
+        this.activeQId = qId;
+        this.incrementPlayCount(qId);
+        this.playQuestion(q);
+      },
+
+      pause() {
+        if (this.isSpeech) {
+          if ('speechSynthesis' in window) {
+            window.speechSynthesis.pause();
+          }
+        } else if (this.html5Audio) {
+          this.html5Audio.pause();
+        }
+        if (this.timerInterval) {
+          clearInterval(this.timerInterval);
+          this.timerInterval = null;
+        }
+        this.updatePlayerUI(false);
+      },
+
+      resume(q) {
+        if (this.isSpeech) {
+          if ('speechSynthesis' in window && window.speechSynthesis.paused) {
+            window.speechSynthesis.resume();
+            this.startTimer();
+            this.updatePlayerUI(true);
+          } else {
+            this.playWithSpeechSynthesis(q);
+          }
+        } else if (this.html5Audio) {
+          this.html5Audio.play().then(() => {
+            this.startTimer();
+            this.updatePlayerUI(true);
+          }).catch(() => {
+            this.playWithSpeechSynthesis(q);
+          });
+        }
+      },
+
+      playQuestion(q) {
+        // If question has an audio URL, attempt HTML5 playback with auto fallback to TTS
+        if (q.audioUrl && typeof q.audioUrl === 'string' && q.audioUrl.trim().length > 5) {
+          this.isSpeech = false;
+          const audio = new Audio();
+          audio.crossOrigin = "anonymous";
+          this.html5Audio = audio;
+
+          audio.addEventListener('loadedmetadata', () => {
+            if (audio.duration && !isNaN(audio.duration) && isFinite(audio.duration)) {
+              this.totalSec = Math.ceil(audio.duration);
+              this.updateProgressUI();
+            }
+          });
+
+          audio.addEventListener('timeupdate', () => {
+            if (audio.duration && !isNaN(audio.duration)) {
+              this.currentSec = Math.floor(audio.currentTime);
+              this.totalSec = Math.ceil(audio.duration);
+              this.progressPercent = Math.min(100, (audio.currentTime / audio.duration) * 100);
+              this.updateProgressUI();
+            }
+          });
+
+          audio.addEventListener('ended', () => {
+            this.onPlaybackEnded();
+          });
+
+          audio.addEventListener('error', (err) => {
+            console.warn("HTML5 audio playback failed, falling back to Web Speech Synthesis TTS:", err);
+            this.playWithSpeechSynthesis(q);
+          });
+
+          audio.src = q.audioUrl;
+          const playPromise = audio.play();
+          if (playPromise !== undefined) {
+            playPromise.then(() => {
+              this.updatePlayerUI(true);
+              this.startTimer();
+              showToast("Memutar audio listening...");
+              const badge = document.getElementById("audioEngineBadge");
+              if (badge) {
+                badge.innerHTML = '<i data-lucide="music" class="w-3 h-3 text-emerald-400"></i> Audio Track';
+                lucide.createIcons();
+              }
+            }).catch(err => {
+              console.warn("Audio autoplay blocked or format error, fallback to TTS:", err);
+              this.playWithSpeechSynthesis(q);
+            });
+          }
+        } else {
+          // Play directly using Speech Synthesis TTS
+          this.playWithSpeechSynthesis(q);
+        }
+      },
+
+      playWithSpeechSynthesis(q) {
+        this.isSpeech = true;
+        if (this.html5Audio) {
+          try { this.html5Audio.pause(); } catch(e){}
+          this.html5Audio = null;
+        }
+        if (!('speechSynthesis' in window)) {
+          showToast("Peramban Anda tidak mendukung pemutaran suara otomatis.");
+          return;
+        }
+
+        window.speechSynthesis.cancel();
+
+        // Extract speech text from passage or prompt
+        let textToSpeak = "";
+        if (q.passage && q.prompt) {
+          textToSpeak = `${q.passage}. \n\n ${q.prompt}`;
+        } else if (q.passage) {
+          textToSpeak = q.passage;
+        } else if (q.prompt) {
+          textToSpeak = q.prompt;
+        } else {
+          textToSpeak = "Listening comprehension assessment question.";
+        }
+
+        // Clean formatting symbols
+        textToSpeak = textToSpeak.replace(/[\*\#\_]/g, ' ');
+
+        // Estimate duration based on word count (~110 words/min)
+        const wordCount = textToSpeak.trim().split(/\s+/).length;
+        this.totalSec = Math.max(12, Math.ceil((wordCount / 110) * 60) + 2);
+        this.currentSec = 0;
+        this.progressPercent = 0;
+        this.updateProgressUI();
+
+        const utterance = new SpeechSynthesisUtterance(textToSpeak);
+        utterance.lang = "en-US";
+        utterance.rate = 0.90; // Natural TOEFL speaking pace
+        utterance.pitch = 1.0;
+
+        const voices = window.speechSynthesis.getVoices();
+        const englishVoice = voices.find(v => v.lang.startsWith('en') && (v.name.includes('Google') || v.name.includes('Natural') || v.name.includes('Samantha') || v.name.includes('Daniel') || v.name.includes('Karen') || v.name.includes('US') || v.name.includes('UK'))) || voices.find(v => v.lang.startsWith('en'));
+        if (englishVoice) utterance.voice = englishVoice;
+
+        utterance.onstart = () => {
+          this.updatePlayerUI(true);
+          this.startTimer();
+          showToast("Memutar narasi audio listening (Native English Voice)...");
+          const badge = document.getElementById("audioEngineBadge");
+          if (badge) {
+            badge.innerHTML = '<i data-lucide="sparkles" class="w-3 h-3 text-amber-400"></i> AI Voice Synthesis';
+            lucide.createIcons();
+          }
+        };
+
+        utterance.onend = () => {
+          this.onPlaybackEnded();
+        };
+
+        utterance.onerror = (e) => {
+          console.warn("TTS Error:", e);
+          this.onPlaybackEnded();
+        };
+
+        this.speechUtterance = utterance;
+        window.speechSynthesis.speak(utterance);
+      },
+
+      startTimer() {
+        if (this.timerInterval) clearInterval(this.timerInterval);
+        const startMs = Date.now() - (this.currentSec * 1000);
+        const durationMs = this.totalSec * 1000;
+
+        this.timerInterval = setInterval(() => {
+          const elapsed = Date.now() - startMs;
+          this.currentSec = Math.min(this.totalSec, Math.floor(elapsed / 1000));
+          this.progressPercent = Math.min(100, (elapsed / durationMs) * 100);
+          this.updateProgressUI();
+
+          if (this.currentSec >= this.totalSec) {
+            clearInterval(this.timerInterval);
+            this.timerInterval = null;
+          }
+        }, 200);
+      },
+
+      onPlaybackEnded() {
+        if (this.timerInterval) {
+          clearInterval(this.timerInterval);
+          this.timerInterval = null;
+        }
+        this.currentSec = this.totalSec;
+        this.progressPercent = 100;
+        this.updateProgressUI();
+        this.updatePlayerUI(false);
+        const playStateLabel = document.getElementById("audioPlayStateLabel");
+        if (playStateLabel) {
+          playStateLabel.innerText = "Audio selesai diputar";
+          playStateLabel.className = "text-[10px] font-semibold text-emerald-400 font-sans ml-2 flex-shrink-0";
+        }
+      }
+    };
+
+    function toggleExamListeningAudio(qId) {
+      ExamAudioManager.toggle(qId);
+    }
+
+    function stopExamListeningAudio() {
+      ExamAudioManager.stop();
     }
 
     function initSpaWebcam() {
@@ -996,6 +1350,7 @@
 
     function confirmExitExam() {
       if (confirm("Yakin ingin keluar dari ruang ujian? Progress akan tersimpan.")) {
+        if (typeof ExamAudioManager !== 'undefined') ExamAudioManager.stop();
         navigateTo("landing");
       }
     }
@@ -1003,11 +1358,13 @@
     function confirmFinishExam() {
       const answered = Object.keys(AppState.examSession.answers).length;
       if (confirm(`Anda telah menjawab ${answered} dari ${AppState.questions.length} soal. Selesaikan ujian sekarang?`)) {
+        if (typeof ExamAudioManager !== 'undefined') ExamAudioManager.stop();
         submitSpaExam();
       }
     }
 
     function submitSpaExam() {
+      if (typeof ExamAudioManager !== 'undefined') ExamAudioManager.stop();
       AppState.examSession.submitted = true;
       const modal = document.getElementById("spaResultModal");
       if (modal) modal.classList.remove("hidden");
@@ -1636,16 +1993,33 @@
 
     function testModalAudio() {
       const url = document.getElementById("modalAudioUrl").value;
-      if (!url) {
-        showToast("Masukkan URL audio terlebih dahulu.");
-        return;
+      const promptText = (document.getElementById("modalPrompt").value || "This is a sample audio listening test for English assessment.").replace(/[\*\#\_]/g, ' ');
+      if (url && url.trim().length > 5) {
+        const audio = new Audio(url);
+        audio.play().then(() => {
+          showToast("Audio URL berhasil diputar!");
+        }).catch(err => {
+          showToast("URL audio tidak merespons, memutar simulasi AI Voice Synthesis...");
+          if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utt = new SpeechSynthesisUtterance(promptText);
+            utt.lang = 'en-US';
+            utt.rate = 0.90;
+            window.speechSynthesis.speak(utt);
+          }
+        });
+      } else {
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+          const utt = new SpeechSynthesisUtterance(promptText);
+          utt.lang = 'en-US';
+          utt.rate = 0.90;
+          window.speechSynthesis.speak(utt);
+          showToast("Memutar simulasi AI Voice Synthesis...");
+        } else {
+          showToast("Masukkan URL audio terlebih dahulu.");
+        }
       }
-      const audio = new Audio(url);
-      audio.play().then(() => {
-        showToast("Audio berhasil diputar!");
-      }).catch(err => {
-        showToast("Gagal memutar audio: URL tidak valid.");
-      });
     }
 
     function saveQuestionSpa(e) {
