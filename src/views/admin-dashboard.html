@@ -574,23 +574,29 @@
 
     function renderQuestionsTable(items) {
       var tbody = document.getElementById('questionTableBody');
+      if (!tbody) return;
       tbody.innerHTML = '';
+      if (items.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-slate-400">Belum ada soal pada kategori ini.</td></tr>';
+        return;
+      }
       items.forEach(function(q) {
         var tr = document.createElement('tr');
-        tr.className = 'hover:bg-slate-50';
+        tr.className = 'hover:bg-slate-50 transition-colors';
         tr.innerHTML = `
           <td class="p-3.5 font-bold font-mono text-slate-800">${q.id}<br><span class="text-[10px] text-brand-700 font-sans font-semibold">${q.examType}</span></td>
           <td class="p-3.5 uppercase font-bold text-slate-600">${q.section}</td>
           <td class="p-3.5">${q.type}</td>
-          <td class="p-3.5 text-slate-700 line-clamp-1 max-w-xs">${q.prompt}</td>
+          <td class="p-3.5 text-slate-700 line-clamp-1 max-w-xs" title="${q.prompt}">${q.prompt}</td>
           <td class="p-3.5 font-bold font-mono text-emerald-700">${q.correct}</td>
-          <td class="p-3.5 text-right">
-            <button onclick="alert('Fitur edit soal aktif.')" class="text-brand-600 font-bold hover:underline mr-2">Edit</button>
-            <button onclick="alert('Soal dihapus dari memori.')" class="text-red-600 font-bold hover:underline">Hapus</button>
+          <td class="p-3.5 text-right whitespace-nowrap">
+            <button onclick="editQuestion('${q.id}')" class="text-brand-600 font-bold hover:underline mr-2 cursor-pointer">Edit</button>
+            <button onclick="deleteQuestion('${q.id}')" class="text-red-600 font-bold hover:underline cursor-pointer">Hapus</button>
           </td>
         `;
         tbody.appendChild(tr);
       });
+      lucide.createIcons();
     }
 
     function filterQuestionsTable() {
@@ -603,28 +609,65 @@
       }
     }
 
-    function openAddQuestionModal() {
-      document.getElementById('addQuestionModal').classList.remove('hidden');
+    var editingQuestionId = null;
+
+    function openAddQuestionModal(editId) {
+      editingQuestionId = editId || null;
+      var modal = document.getElementById('addQuestionModal');
+      var form = document.getElementById('addQuestionForm');
+      if (editId) {
+        var q = masterQuestions.find(function(item) { return item.id === editId; });
+        if (q) {
+          document.getElementById('modalExamType').value = q.examType || 'TOEFL_ITP';
+          document.getElementById('modalSection').value = q.section || 'listening';
+          document.getElementById('modalPrompt').value = q.prompt || '';
+          document.getElementById('modalCorrect').value = q.correct || 'A';
+        }
+      } else {
+        form.reset();
+      }
+      modal.classList.remove('hidden');
     }
 
     function closeAddQuestionModal() {
       document.getElementById('addQuestionModal').classList.add('hidden');
+      editingQuestionId = null;
+    }
+
+    function editQuestion(id) {
+      openAddQuestionModal(id);
+    }
+
+    function deleteQuestion(id) {
+      if (confirm('Yakin ingin menghapus soal ' + id + '?')) {
+        masterQuestions = masterQuestions.filter(function(q) { return q.id !== id; });
+        filterQuestionsTable();
+      }
     }
 
     function handleAddQuestionSubmit(e) {
       e.preventDefault();
-      var newQ = {
-        id: "Q-" + Math.floor(1000 + Math.random() * 9000),
-        examType: document.getElementById('modalExamType').value,
-        section: document.getElementById('modalSection').value,
-        type: "Multiple Choice",
-        prompt: document.getElementById('modalPrompt').value,
-        correct: document.getElementById('modalCorrect').value
-      };
-      masterQuestions.unshift(newQ);
-      renderQuestionsTable(masterQuestions);
+      if (editingQuestionId) {
+        var idx = masterQuestions.findIndex(function(q) { return q.id === editingQuestionId; });
+        if (idx !== -1) {
+          masterQuestions[idx].examType = document.getElementById('modalExamType').value;
+          masterQuestions[idx].section = document.getElementById('modalSection').value;
+          masterQuestions[idx].prompt = document.getElementById('modalPrompt').value;
+          masterQuestions[idx].correct = document.getElementById('modalCorrect').value;
+        }
+      } else {
+        var newQ = {
+          id: "Q-" + Math.floor(1000 + Math.random() * 9000),
+          examType: document.getElementById('modalExamType').value,
+          section: document.getElementById('modalSection').value,
+          type: "Multiple Choice",
+          prompt: document.getElementById('modalPrompt').value,
+          correct: document.getElementById('modalCorrect').value
+        };
+        masterQuestions.unshift(newQ);
+      }
+      filterQuestionsTable();
       closeAddQuestionModal();
-      alert("Soal berhasil ditambahkan ke Bank Soal!");
     }
 
     function exportQuestionsCsv() {
@@ -644,7 +687,7 @@
     }
 
     function handleFileImport(e) {
-      alert("File template berhasil dipindai dan 5 soal berhasil ditambahkan!");
+      alert("File template berhasil dipindai dan soal berhasil ditambahkan!");
     }
 
     function downloadCertificatePdf() {

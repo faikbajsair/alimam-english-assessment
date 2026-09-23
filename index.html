@@ -1065,12 +1065,35 @@
                 <p class="text-xs text-slate-500">Kelola soal Listening, Structure, Reading, Writing, & Speaking</p>
               </div>
               <div class="flex flex-wrap gap-2 text-xs font-bold">
-                <button onclick="showToast('Fitur tambah soal interaktif siap!')" class="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2.5 rounded-xl shadow-sm flex items-center gap-1.5">
+                <button onclick="openAddQuestionSpaModal()" class="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2.5 rounded-xl shadow-sm flex items-center gap-1.5 transition-all cursor-pointer">
                   <i data-lucide="plus" class="w-4 h-4"></i> Tambah Soal
                 </button>
-                <button onclick="exportSpaQuestionsCsv()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2.5 rounded-xl border border-slate-300 flex items-center gap-1.5">
+                <button onclick="exportSpaQuestionsCsv()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2.5 rounded-xl border border-slate-300 flex items-center gap-1.5 transition-all cursor-pointer">
                   <i data-lucide="download" class="w-4 h-4"></i> Export CSV
                 </button>
+                <button onclick="triggerSpaCsvImport()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2.5 rounded-xl border border-slate-300 flex items-center gap-1.5 transition-all cursor-pointer">
+                  <i data-lucide="upload" class="w-4 h-4"></i> Import CSV
+                </button>
+                <input type="file" id="spaCsvFileInput" class="hidden" accept=".csv,.json" onchange="handleSpaCsvImport(event)">
+              </div>
+            </div>
+
+            <!-- Filters & Search -->
+            <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 bg-white p-4 rounded-2xl border border-slate-200 text-xs">
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-slate-700 whitespace-nowrap">Filter Section:</span>
+                <select id="spaFilterSection" onchange="renderAdminQuestionsTable()" class="px-3 py-1.5 rounded-lg border border-slate-300 font-semibold outline-none bg-slate-50 text-slate-800">
+                  <option value="ALL">Semua Section (All)</option>
+                  <option value="listening">Listening</option>
+                  <option value="structure">Structure & Written Expression</option>
+                  <option value="reading">Reading Comprehension</option>
+                  <option value="writing">Writing Task</option>
+                  <option value="speaking">Speaking Test</option>
+                </select>
+              </div>
+              <div class="relative flex-grow sm:max-w-xs">
+                <input type="text" id="spaSearchQuestion" oninput="renderAdminQuestionsTable()" placeholder="Cari ID atau kata kunci..." class="w-full pl-8 pr-3 py-1.5 rounded-lg border border-slate-300 outline-none text-xs">
+                <i data-lucide="search" class="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-slate-400"></i>
               </div>
             </div>
 
@@ -1087,20 +1110,8 @@
                       <th class="p-3.5 text-right">Aksi</th>
                     </tr>
                   </thead>
-                  <tbody class="divide-y divide-slate-100">
-                    ${AppState.questions.map(q => `
-                      <tr class="hover:bg-slate-50">
-                        <td class="p-3.5 font-bold font-mono text-slate-800">${q.id}<br><span class="text-[10px] text-brand-700 font-sans font-semibold">${q.examType}</span></td>
-                        <td class="p-3.5 uppercase font-bold text-slate-600">${q.section}</td>
-                        <td class="p-3.5">${q.type.replace('_', ' ')}</td>
-                        <td class="p-3.5 text-slate-700 max-w-xs truncate">${q.prompt}</td>
-                        <td class="p-3.5 font-bold font-mono text-emerald-700">${q.correct}</td>
-                        <td class="p-3.5 text-right">
-                          <button onclick="showToast('Mode edit soal ${q.id}')" class="text-brand-600 font-bold hover:underline mr-2">Edit</button>
-                          <button onclick="showToast('Soal ${q.id} dilindungi master')" class="text-red-600 font-bold hover:underline">Hapus</button>
-                        </td>
-                      </tr>
-                    `).join('')}
+                  <tbody id="spaQuestionTableBody" class="divide-y divide-slate-100">
+                    <!-- Dynamic rendering by renderAdminQuestionsTable() -->
                   </tbody>
                 </table>
               </div>
@@ -1306,14 +1317,134 @@
                   <div class="text-[10px] text-slate-500">Yayasan SAPIN Darussalam</div>
                 </div>
               </div>
+          </div>
+
+          <!-- ADD / EDIT QUESTION MODAL (SPA) -->
+          <div id="addQuestionSpaModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+            <div class="bg-white rounded-3xl max-w-2xl w-full p-6 space-y-4 shadow-2xl max-h-[92vh] overflow-y-auto custom-scrollbar">
+              <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <div>
+                  <h3 id="modalQuestionTitle" class="font-bold text-slate-900 text-base">Tambah Soal ke Bank Asesmen</h3>
+                  <p class="text-[11px] text-slate-500">Konfigurasi materi soal, pilihan ganda, atau rubrik evaluasi</p>
+                </div>
+                <button type="button" onclick="closeAddQuestionSpaModal()" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors">
+                  <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+              </div>
+
+              <form id="spaAddQuestionForm" onsubmit="saveQuestionSpa(event)" class="space-y-4 text-xs">
+                <input type="hidden" id="modalEditingId" value="">
+                
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div>
+                    <label class="block font-bold text-slate-700 uppercase mb-1">Modul Ujian</label>
+                    <select id="modalExamType" class="w-full p-2.5 rounded-xl border border-slate-300 font-semibold outline-none focus:border-brand-500 bg-slate-50">
+                      <option value="TOEFL_ITP">TOEFL ITP / PBT</option>
+                      <option value="IELTS_ACADEMIC">IELTS Academic</option>
+                      <option value="TOEIC">TOEIC Standard</option>
+                      <option value="EPT">Al-Imam EPT</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block font-bold text-slate-700 uppercase mb-1">Section</label>
+                    <select id="modalSection" onchange="handleSectionTypeChange()" class="w-full p-2.5 rounded-xl border border-slate-300 font-semibold outline-none focus:border-brand-500 bg-slate-50">
+                      <option value="listening">Listening</option>
+                      <option value="structure">Structure & Written</option>
+                      <option value="reading">Reading Comprehension</option>
+                      <option value="writing">Writing</option>
+                      <option value="speaking">Speaking</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block font-bold text-slate-700 uppercase mb-1">Tipe Soal</label>
+                    <select id="modalType" onchange="handleSectionTypeChange()" class="w-full p-2.5 rounded-xl border border-slate-300 font-semibold outline-none focus:border-brand-500 bg-slate-50">
+                      <option value="multiple_choice">Multiple Choice</option>
+                      <option value="error_identification">Error Identification</option>
+                      <option value="essay">Task Essay</option>
+                      <option value="speaking_record">Speaking Audio Record</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div id="fieldAudioUrl">
+                  <label class="block font-bold text-slate-700 uppercase mb-1">Audio URL (Khusus Listening / Speaking Prompt)</label>
+                  <div class="flex gap-2">
+                    <input type="url" id="modalAudioUrl" placeholder="https://actions.google.com/sounds/v1/speech/bell_ring.ogg" class="flex-grow p-2.5 rounded-xl border border-slate-300 outline-none font-mono text-[11px] focus:border-brand-500">
+                    <button type="button" onclick="testModalAudio()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl border border-slate-200 flex items-center gap-1">
+                      <i data-lucide="play" class="w-3.5 h-3.5"></i> Tes
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block font-bold text-slate-700 uppercase mb-1">Teks Bacaan / Passage (Opsional)</label>
+                  <textarea id="modalPassage" rows="3" placeholder="Teks bacaan pendukung atau petunjuk instruksi..." class="w-full p-2.5 rounded-xl border border-slate-300 outline-none focus:border-brand-500 leading-relaxed"></textarea>
+                </div>
+
+                <div>
+                  <label class="block font-bold text-slate-700 uppercase mb-1">Pertanyaan / Prompt Soal <span class="text-red-500">*</span></label>
+                  <textarea id="modalPrompt" rows="2" required placeholder="Tuliskan pertanyaan / instruksi soal di sini..." class="w-full p-2.5 rounded-xl border border-slate-300 outline-none focus:border-brand-500"></textarea>
+                </div>
+
+                <div id="fieldOptions" class="space-y-2">
+                  <label class="block font-bold text-slate-700 uppercase">Pilihan Jawaban (A, B, C, D)</label>
+                  <div class="grid grid-cols-1 gap-2">
+                    <div class="flex items-center gap-2">
+                      <span class="font-bold text-slate-500 w-5">A:</span>
+                      <input type="text" id="optA" placeholder="Teks Pilihan A" class="w-full p-2 rounded-lg border border-slate-300 outline-none focus:border-brand-500">
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <span class="font-bold text-slate-500 w-5">B:</span>
+                      <input type="text" id="optB" placeholder="Teks Pilihan B" class="w-full p-2 rounded-lg border border-slate-300 outline-none focus:border-brand-500">
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <span class="font-bold text-slate-500 w-5">C:</span>
+                      <input type="text" id="optC" placeholder="Teks Pilihan C" class="w-full p-2 rounded-lg border border-slate-300 outline-none focus:border-brand-500">
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <span class="font-bold text-slate-500 w-5">D:</span>
+                      <input type="text" id="optD" placeholder="Teks Pilihan D" class="w-full p-2 rounded-lg border border-slate-300 outline-none focus:border-brand-500">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label class="block font-bold text-slate-700 uppercase mb-1">Kunci Jawaban / Penilai</label>
+                    <select id="modalCorrect" class="w-full p-2.5 rounded-xl border border-slate-300 font-bold outline-none focus:border-brand-500 bg-slate-50">
+                      <option value="A">Pilihan A</option>
+                      <option value="B">Pilihan B</option>
+                      <option value="C">Pilihan C</option>
+                      <option value="D">Pilihan D</option>
+                      <option value="Standard Rubric">Standard Rubric (Esai/Writing)</option>
+                      <option value="Examiner Rubric">Examiner Rubric (Speaking)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block font-bold text-slate-700 uppercase mb-1">Bobot Nilai (Points)</label>
+                    <input type="number" id="modalPoints" value="1" min="1" max="100" class="w-full p-2.5 rounded-xl border border-slate-300 font-bold outline-none focus:border-brand-500">
+                  </div>
+                </div>
+
+                <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
+                  <button type="button" onclick="closeAddQuestionSpaModal()" class="px-4 py-2.5 rounded-xl border border-slate-300 text-slate-700 font-bold hover:bg-slate-50">
+                    Batal
+                  </button>
+                  <button type="submit" class="bg-brand-600 hover:bg-brand-700 text-white font-bold px-6 py-2.5 rounded-xl shadow-md transition-all flex items-center gap-1.5 cursor-pointer">
+                    <i data-lucide="save" class="w-4 h-4"></i> Simpan Soal
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
 
         </main>
       `;
 
-      // Render cert QR Code
+      // Render cert QR Code and initialize table
       setTimeout(() => {
+        renderAdminQuestionsTable();
+
         const qrEl = document.getElementById("spaAdminCertQr");
         if (qrEl) {
           new QRious({
@@ -1322,7 +1453,8 @@
             size: 100
           });
         }
-      }, 100);
+        lucide.createIcons();
+      }, 50);
     }
 
     function switchAdminTab(tab) {
@@ -1338,6 +1470,7 @@
       if (tab === 'tests') {
         document.getElementById("adminTabTests").classList.remove("hidden");
         document.getElementById("btnTabTests").className = "px-4 py-2.5 rounded-xl bg-brand-600 text-white flex items-center gap-2 shadow-sm whitespace-nowrap";
+        renderAdminQuestionsTable();
       } else if (tab === 'proctoring') {
         document.getElementById("adminTabProctor").classList.remove("hidden");
         document.getElementById("btnTabProctor").className = "px-4 py-2.5 rounded-xl bg-brand-600 text-white flex items-center gap-2 shadow-sm whitespace-nowrap";
@@ -1350,6 +1483,287 @@
       }
 
       lucide.createIcons();
+    }
+
+    // Question Bank Interactive Handlers
+    function openAddQuestionSpaModal(editingId = null) {
+      const modal = document.getElementById("addQuestionSpaModal");
+      if (!modal) return;
+      
+      const form = document.getElementById("spaAddQuestionForm");
+      const title = document.getElementById("modalQuestionTitle");
+      const editingInput = document.getElementById("modalEditingId");
+      
+      if (editingId) {
+        const q = AppState.questions.find(item => item.id === editingId);
+        if (q) {
+          title.innerText = `Edit Soal (${q.id})`;
+          editingInput.value = q.id;
+          document.getElementById("modalExamType").value = q.examType || "TOEFL_ITP";
+          document.getElementById("modalSection").value = q.section || "listening";
+          document.getElementById("modalType").value = q.type || "multiple_choice";
+          document.getElementById("modalAudioUrl").value = q.audioUrl || "";
+          document.getElementById("modalPassage").value = q.passage || "";
+          document.getElementById("modalPrompt").value = q.prompt || "";
+          document.getElementById("modalPoints").value = q.points || 1;
+          
+          if (q.options && q.options.length >= 4) {
+            document.getElementById("optA").value = q.options[0].text || "";
+            document.getElementById("optB").value = q.options[1].text || "";
+            document.getElementById("optC").value = q.options[2].text || "";
+            document.getElementById("optD").value = q.options[3].text || "";
+          } else {
+            document.getElementById("optA").value = "";
+            document.getElementById("optB").value = "";
+            document.getElementById("optC").value = "";
+            document.getElementById("optD").value = "";
+          }
+          
+          document.getElementById("modalCorrect").value = q.correct || "A";
+        }
+      } else {
+        title.innerText = "Tambah Soal ke Bank Asesmen";
+        editingInput.value = "";
+        form.reset();
+        document.getElementById("modalPoints").value = 1;
+      }
+      
+      handleSectionTypeChange();
+      modal.classList.remove("hidden");
+      lucide.createIcons();
+    }
+
+    function closeAddQuestionSpaModal() {
+      const modal = document.getElementById("addQuestionSpaModal");
+      if (modal) modal.classList.add("hidden");
+    }
+
+    function handleSectionTypeChange() {
+      const secEl = document.getElementById("modalSection");
+      const typeEl = document.getElementById("modalType");
+      if (!secEl || !typeEl) return;
+
+      const sec = secEl.value;
+      const type = typeEl.value;
+      const fieldOptions = document.getElementById("fieldOptions");
+      const fieldAudio = document.getElementById("fieldAudioUrl");
+      const correctSelect = document.getElementById("modalCorrect");
+      const pointsInput = document.getElementById("modalPoints");
+
+      if (sec === "writing" || type === "essay") {
+        if (fieldOptions) fieldOptions.classList.add("hidden");
+        if (fieldAudio) fieldAudio.classList.add("hidden");
+        if (correctSelect) correctSelect.value = "Standard Rubric";
+        if (pointsInput && pointsInput.value === "1") pointsInput.value = "100";
+      } else if (sec === "speaking" || type === "speaking_record") {
+        if (fieldOptions) fieldOptions.classList.add("hidden");
+        if (fieldAudio) fieldAudio.classList.remove("hidden");
+        if (correctSelect) correctSelect.value = "Examiner Rubric";
+        if (pointsInput && pointsInput.value === "1") pointsInput.value = "100";
+      } else {
+        if (fieldOptions) fieldOptions.classList.remove("hidden");
+        if (sec === "listening") {
+          if (fieldAudio) fieldAudio.classList.remove("hidden");
+        } else {
+          if (fieldAudio) fieldAudio.classList.add("hidden");
+        }
+        if (correctSelect && (correctSelect.value === "Standard Rubric" || correctSelect.value === "Examiner Rubric")) {
+          correctSelect.value = "A";
+        }
+        if (pointsInput && pointsInput.value === "100") pointsInput.value = "1";
+      }
+    }
+
+    function testModalAudio() {
+      const url = document.getElementById("modalAudioUrl").value;
+      if (!url) {
+        showToast("Masukkan URL audio terlebih dahulu.");
+        return;
+      }
+      const audio = new Audio(url);
+      audio.play().then(() => {
+        showToast("Audio berhasil diputar!");
+      }).catch(err => {
+        showToast("Gagal memutar audio: URL tidak valid.");
+      });
+    }
+
+    function saveQuestionSpa(e) {
+      e.preventDefault();
+      const editingId = document.getElementById("modalEditingId").value;
+      const examType = document.getElementById("modalExamType").value;
+      const section = document.getElementById("modalSection").value;
+      const type = document.getElementById("modalType").value;
+      const audioUrl = document.getElementById("modalAudioUrl").value;
+      const passage = document.getElementById("modalPassage").value;
+      const prompt = document.getElementById("modalPrompt").value;
+      const correct = document.getElementById("modalCorrect").value;
+      const points = parseInt(document.getElementById("modalPoints").value, 10) || 1;
+
+      let options = [];
+      if (type === "multiple_choice" || type === "error_identification") {
+        options = [
+          { key: "A", text: document.getElementById("optA").value || "Pilihan A" },
+          { key: "B", text: document.getElementById("optB").value || "Pilihan B" },
+          { key: "C", text: document.getElementById("optC").value || "Pilihan C" },
+          { key: "D", text: document.getElementById("optD").value || "Pilihan D" }
+        ];
+      }
+
+      if (editingId) {
+        const idx = AppState.questions.findIndex(q => q.id === editingId);
+        if (idx !== -1) {
+          AppState.questions[idx] = {
+            id: editingId,
+            examType,
+            section,
+            type,
+            passage,
+            prompt,
+            audioUrl,
+            options,
+            correct,
+            points
+          };
+          showToast(`Soal ${editingId} berhasil diperbarui!`);
+        }
+      } else {
+        const secPrefix = section === "listening" ? "LIST" : section === "structure" ? "STRUC" : section === "reading" ? "READ" : section === "writing" ? "WRIT" : "SPK";
+        const newId = `Q-${secPrefix}-${Math.floor(100 + Math.random() * 900)}`;
+        AppState.questions.unshift({
+          id: newId,
+          examType,
+          section,
+          type,
+          passage,
+          prompt,
+          audioUrl,
+          options,
+          correct,
+          points
+        });
+        showToast(`Soal baru ${newId} berhasil ditambahkan!`);
+      }
+
+      closeAddQuestionSpaModal();
+      renderAdminQuestionsTable();
+    }
+
+    function editQuestionSpa(id) {
+      openAddQuestionSpaModal(id);
+    }
+
+    function deleteQuestionSpa(id) {
+      if (confirm(`Yakin ingin menghapus soal ${id} dari bank soal?`)) {
+        AppState.questions = AppState.questions.filter(q => q.id !== id);
+        showToast(`Soal ${id} telah dihapus.`);
+        renderAdminQuestionsTable();
+      }
+    }
+
+    function renderAdminQuestionsTable() {
+      const tbody = document.getElementById("spaQuestionTableBody");
+      if (!tbody) return;
+      
+      const filterSec = document.getElementById("spaFilterSection") ? document.getElementById("spaFilterSection").value : "ALL";
+      const searchKeyword = document.getElementById("spaSearchQuestion") ? document.getElementById("spaSearchQuestion").value.toLowerCase().trim() : "";
+
+      let items = AppState.questions;
+      if (filterSec !== "ALL") {
+        items = items.filter(q => q.section === filterSec);
+      }
+      if (searchKeyword) {
+        items = items.filter(q => 
+          q.id.toLowerCase().includes(searchKeyword) || 
+          (q.prompt && q.prompt.toLowerCase().includes(searchKeyword)) ||
+          (q.examType && q.examType.toLowerCase().includes(searchKeyword))
+        );
+      }
+
+      if (items.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" class="p-8 text-center text-slate-400">
+              <i data-lucide="help-circle" class="w-8 h-8 mx-auto mb-2 text-slate-300"></i>
+              Tidak ada soal yang sesuai dengan filter atau kata kunci.
+            </td>
+          </tr>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      tbody.innerHTML = items.map(q => `
+        <tr class="hover:bg-slate-50 transition-colors">
+          <td class="p-3.5 font-bold font-mono text-slate-800">
+            ${q.id}<br><span class="text-[10px] text-brand-700 font-sans font-semibold">${q.examType || 'TOEFL_ITP'}</span>
+          </td>
+          <td class="p-3.5 uppercase font-bold text-slate-600">${q.section}</td>
+          <td class="p-3.5 text-slate-700">${(q.type || 'multiple_choice').replace('_', ' ')}</td>
+          <td class="p-3.5 text-slate-700 max-w-xs truncate" title="${q.prompt}">${q.prompt}</td>
+          <td class="p-3.5 font-bold font-mono text-emerald-700">${q.correct}</td>
+          <td class="p-3.5 text-right whitespace-nowrap">
+            <button onclick="editQuestionSpa('${q.id}')" class="text-brand-600 font-bold hover:underline mr-2.5 cursor-pointer">Edit</button>
+            <button onclick="deleteQuestionSpa('${q.id}')" class="text-red-600 font-bold hover:underline cursor-pointer">Hapus</button>
+          </td>
+        </tr>
+      `).join('');
+
+      lucide.createIcons();
+    }
+
+    function triggerSpaCsvImport() {
+      const fileInput = document.getElementById("spaCsvFileInput");
+      if (fileInput) fileInput.click();
+    }
+
+    function handleSpaCsvImport(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const text = e.target.result;
+          if (file.name.endsWith(".json")) {
+            const data = JSON.parse(text);
+            if (Array.isArray(data)) {
+              AppState.questions = [...data, ...AppState.questions];
+              showToast(`${data.length} soal berhasil diimpor dari file JSON.`);
+            }
+          } else {
+            const lines = text.split("\n").filter(l => l.trim().length > 0);
+            let importedCount = 0;
+            const startIndex = lines[0].toLowerCase().includes("prompt") ? 1 : 0;
+            for (let i = startIndex; i < lines.length; i++) {
+              const parts = lines[i].split(",").map(p => p.replace(/^"|"$/g, '').trim());
+              if (parts.length >= 4) {
+                AppState.questions.unshift({
+                  id: parts[0] || `Q-IMP-${Math.floor(100 + Math.random() * 900)}`,
+                  examType: parts[1] || "TOEFL_ITP",
+                  section: parts[2] || "structure",
+                  type: parts[3] || "multiple_choice",
+                  prompt: parts[4] || "Imported Question Prompt",
+                  correct: parts[5] || "A",
+                  options: [
+                    { key: "A", text: "Option A" },
+                    { key: "B", text: "Option B" },
+                    { key: "C", text: "Option C" },
+                    { key: "D", text: "Option D" }
+                  ],
+                  points: 1
+                });
+                importedCount++;
+              }
+            }
+            showToast(`${importedCount} soal berhasil diimpor dari CSV.`);
+          }
+          renderAdminQuestionsTable();
+        } catch (err) {
+          showToast("Gagal memproses file template: Format tidak valid.");
+        }
+      };
+      reader.readAsText(file);
     }
 
     function exportSpaQuestionsCsv() {
