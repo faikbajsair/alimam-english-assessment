@@ -495,7 +495,7 @@
   </main>
 
   <!-- ================= ADD QUESTION MODAL ================= -->
-  <div id="addQuestionModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+  <div id="addQuestionModal" style="display: none;" class="fixed inset-0 z-[100] bg-slate-950/80 backdrop-blur-sm items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-2xl w-full p-6 space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto custom-scrollbar">
       <div class="flex justify-between items-center border-b border-slate-100 pb-3">
         <h3 class="font-bold text-slate-900 text-sm">Tambah Soal ke Bank Asesmen</h3>
@@ -862,6 +862,7 @@
     function openAddQuestionModal(editId) {
       editingQuestionId = editId || null;
       var modal = document.getElementById('addQuestionModal');
+      if (!modal) return;
       var form = document.getElementById('addQuestionForm');
       if (editId) {
         var q = masterQuestions.find(function(item) { return item.id === editId; });
@@ -872,19 +873,29 @@
           document.getElementById('modalCorrect').value = q.correct || 'A';
           document.getElementById('modalAudioUrl').value = q.audioUrl || '';
           document.getElementById('modalPassage').value = q.passage || '';
-          document.getElementById('optA').value = (q.options && q.options[0] && q.options[0].text) || '';
-          document.getElementById('optB').value = (q.options && q.options[1] && q.options[1].text) || '';
-          document.getElementById('optC').value = (q.options && q.options[2] && q.options[2].text) || '';
-          document.getElementById('optD').value = (q.options && q.options[3] && q.options[3].text) || '';
+          var optA = document.getElementById('optA');
+          var optB = document.getElementById('optB');
+          var optC = document.getElementById('optC');
+          var optD = document.getElementById('optD');
+          if (optA) optA.value = (q.options && q.options[0] && q.options[0].text) || '';
+          if (optB) optB.value = (q.options && q.options[1] && q.options[1].text) || '';
+          if (optC) optC.value = (q.options && q.options[2] && q.options[2].text) || '';
+          if (optD) optD.value = (q.options && q.options[3] && q.options[3].text) || '';
         }
       } else {
         if (form) form.reset();
       }
+      modal.style.display = 'flex';
       modal.classList.remove('hidden');
+      lucide.createIcons();
     }
 
     function closeAddQuestionModal() {
-      document.getElementById('addQuestionModal').classList.add('hidden');
+      var modal = document.getElementById('addQuestionModal');
+      if (modal) {
+        modal.style.display = 'none';
+        modal.classList.add('hidden');
+      }
       editingQuestionId = null;
     }
 

@@ -2094,7 +2094,7 @@
           </div>
 
           <!-- ADD / EDIT QUESTION MODAL (SPA) -->
-          <div id="addQuestionSpaModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+          <div id="addQuestionSpaModal" style="display: none;" class="fixed inset-0 z-[100] bg-slate-950/80 backdrop-blur-sm items-center justify-center p-4">
             <div class="bg-white rounded-3xl max-w-2xl w-full p-6 space-y-4 shadow-2xl max-h-[92vh] overflow-y-auto custom-scrollbar">
               <div class="flex justify-between items-center border-b border-slate-100 pb-3">
                 <div>
@@ -2274,56 +2274,78 @@
       if (editingId) {
         const q = AppState.questions.find(item => item.id === editingId);
         if (q) {
-          title.innerText = "Edit Soal (" + q.id + ")";
-          editingInput.value = q.id;
-          document.getElementById("modalExamType").value = q.examType || "TOEFL_ITP";
-          document.getElementById("modalSection").value = q.section || "listening";
-          document.getElementById("modalType").value = q.type || "multiple_choice";
-          document.getElementById("modalAudioUrl").value = q.audioUrl || "";
-          document.getElementById("modalPassage").value = q.passage || "";
-          document.getElementById("modalPrompt").value = q.prompt || "";
-          document.getElementById("modalPoints").value = q.points !== undefined ? q.points : 1;
+          if (title) title.innerText = "Edit Soal (" + q.id + ")";
+          if (editingInput) editingInput.value = q.id;
+          const examTypeEl = document.getElementById("modalExamType");
+          if (examTypeEl) examTypeEl.value = q.examType || "TOEFL_ITP";
+          const secEl = document.getElementById("modalSection");
+          if (secEl) secEl.value = q.section || "listening";
+          const typeEl = document.getElementById("modalType");
+          if (typeEl) typeEl.value = q.type || "multiple_choice";
+          const audioUrlEl = document.getElementById("modalAudioUrl");
+          if (audioUrlEl) audioUrlEl.value = q.audioUrl || "";
+          const passageEl = document.getElementById("modalPassage");
+          if (passageEl) passageEl.value = q.passage || "";
+          const promptEl = document.getElementById("modalPrompt");
+          if (promptEl) promptEl.value = q.prompt || "";
+          const pointsEl = document.getElementById("modalPoints");
+          if (pointsEl) pointsEl.value = q.points !== undefined ? q.points : 1;
           
           handleSectionTypeChange();
 
+          const optA = document.getElementById("optA");
+          const optB = document.getElementById("optB");
+          const optC = document.getElementById("optC");
+          const optD = document.getElementById("optD");
+
           if (q.options && q.options.length >= 4) {
-            document.getElementById("optA").value = q.options[0].text || "";
-            document.getElementById("optB").value = q.options[1].text || "";
-            document.getElementById("optC").value = q.options[2].text || "";
-            document.getElementById("optD").value = q.options[3].text || "";
+            if (optA) optA.value = q.options[0].text || "";
+            if (optB) optB.value = q.options[1].text || "";
+            if (optC) optC.value = q.options[2].text || "";
+            if (optD) optD.value = q.options[3].text || "";
           } else if (q.options && q.options.length > 0) {
-            document.getElementById("optA").value = (q.options[0] && q.options[0].text) || "";
-            document.getElementById("optB").value = (q.options[1] && q.options[1].text) || "";
-            document.getElementById("optC").value = (q.options[2] && q.options[2].text) || "";
-            document.getElementById("optD").value = (q.options[3] && q.options[3].text) || "";
+            if (optA) optA.value = (q.options[0] && q.options[0].text) || "";
+            if (optB) optB.value = (q.options[1] && q.options[1].text) || "";
+            if (optC) optC.value = (q.options[2] && q.options[2].text) || "";
+            if (optD) optD.value = (q.options[3] && q.options[3].text) || "";
           } else {
-            document.getElementById("optA").value = "";
-            document.getElementById("optB").value = "";
-            document.getElementById("optC").value = "";
-            document.getElementById("optD").value = "";
+            if (optA) optA.value = "";
+            if (optB) optB.value = "";
+            if (optC) optC.value = "";
+            if (optD) optD.value = "";
           }
           
-          document.getElementById("modalCorrect").value = q.correct || "A";
+          const correctEl = document.getElementById("modalCorrect");
+          if (correctEl) correctEl.value = q.correct || "A";
         }
       } else {
-        title.innerText = "Tambah Soal ke Bank Asesmen";
-        editingInput.value = "";
+        if (title) title.innerText = "Tambah Soal ke Bank Asesmen";
+        if (editingInput) editingInput.value = "";
         if (form) form.reset();
-        document.getElementById("modalPoints").value = 1;
-        document.getElementById("optA").value = "";
-        document.getElementById("optB").value = "";
-        document.getElementById("optC").value = "";
-        document.getElementById("optD").value = "";
+        const pointsEl = document.getElementById("modalPoints");
+        if (pointsEl) pointsEl.value = 1;
+        const optA = document.getElementById("optA");
+        const optB = document.getElementById("optB");
+        const optC = document.getElementById("optC");
+        const optD = document.getElementById("optD");
+        if (optA) optA.value = "";
+        if (optB) optB.value = "";
+        if (optC) optC.value = "";
+        if (optD) optD.value = "";
         handleSectionTypeChange();
       }
       
+      modal.style.display = "flex";
       modal.classList.remove("hidden");
       lucide.createIcons();
     }
 
     function closeAddQuestionSpaModal() {
       const modal = document.getElementById("addQuestionSpaModal");
-      if (modal) modal.classList.add("hidden");
+      if (modal) {
+        modal.style.display = "none";
+        modal.classList.add("hidden");
+      }
     }
 
     function handleSectionTypeChange() {
