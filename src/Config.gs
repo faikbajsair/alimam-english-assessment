@@ -18,9 +18,9 @@ var CONFIG = {
   INSTITUTION_WEBSITE: "https://alimamischool.com",
   LOGO_URL: "https://alimamischool.com/wp-content/uploads/2020/08/Al-Imam-Islamic-School-alimamischool.com-sekolah-sunnah-logo.png",
   FAVICON_URL: "https://alimamischool.com/wp-content/uploads/2020/08/Al-Imam-Islamic-School-alimamischool.com-sekolah-sunnah-logo.png",
-  SIGNATURE_1_TITLE: "Kepala Sekolah",
+  SIGNATURE_1_TITLE: "Principal",
   SIGNATURE_1_ORG: "SMP Al-Imam Islamic School (AI IS)",
-  SIGNATURE_2_TITLE: "Ketua Yayasan",
+  SIGNATURE_2_TITLE: "Chairman of Foundation",
   SIGNATURE_2_ORG: "Yayasan SAPIN Darussalam",
 
   // Theme & Appearance Defaults
@@ -53,8 +53,8 @@ var CONFIG = {
 
   // Commercial Licensing & Quota Tiers
   LICENSE_TIERS: {
-    STARTER: { name: "Starter", maxStudents: 100, maxExams: 10, price: "Rp 1.500.000 / bln" },
-    PRO: { name: "Professional", maxStudents: 500, maxExams: 50, price: "Rp 3.500.000 / bln" },
+    STARTER: { name: "Starter", maxStudents: 100, maxExams: 10, price: "$99 / month" },
+    PRO: { name: "Professional", maxStudents: 500, maxExams: 50, price: "$199 / month" },
     ENTERPRISE: { name: "Enterprise SaaS", maxStudents: 5000, maxExams: 999, price: "Custom / On-Premise" }
   },
 

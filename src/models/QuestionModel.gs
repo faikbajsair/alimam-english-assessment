@@ -19,7 +19,7 @@ var QuestionModel = (function () {
       sheet = ss.insertSheet(CONFIG.SHEETS.QUESTIONS);
       var headers = [
         "id", "examType", "section", "type", "passage", "prompt",
-        "audioUrl", "imageUrl", "optionsJson", "correctAnswer",
+        "audioUrl", "imageUrl", "videoUrl", "optionsJson", "correctAnswer",
         "rubricJson", "points", "tags", "createdAt"
       ];
       sheet.appendRow(headers);
@@ -88,6 +88,7 @@ var QuestionModel = (function () {
       qData.prompt || "",
       qData.audioUrl || "",
       qData.imageUrl || "",
+      qData.videoUrl || "",
       typeof qData.options === "string" ? qData.options : JSON.stringify(qData.options || []),
       qData.correctAnswer || "",
       typeof qData.rubric === "string" ? qData.rubric : JSON.stringify(qData.rubric || {}),

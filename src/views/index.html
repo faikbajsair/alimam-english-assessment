@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -61,7 +61,7 @@
   <header class="w-full glassmorphism sticky top-0 z-50 shadow-sm transition-all border-b border-emerald-100">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
       <div class="flex items-center gap-4">
-        <img src="<?= config.LOGO_URL ?>" alt="Logo Al-Imam" class="h-12 w-auto object-contain drop-shadow-sm">
+        <img src="<?= config.LOGO_URL ?>" alt="Al-Imam Logo" class="h-12 w-auto object-contain drop-shadow-sm">
         <div>
           <h1 class="text-base sm:text-lg font-bold text-slate-900 leading-tight"><?= config.INSTITUTION_NAME ?></h1>
           <p class="text-xs text-brand-700 font-semibold hidden sm:block"><?= config.INSTITUTION_MOTTO ?></p>
@@ -70,10 +70,10 @@
       </div>
       <div class="flex items-center gap-3">
         <a href="?page=guide" class="text-xs sm:text-sm font-semibold text-slate-600 hover:text-brand-600 px-3 py-2 rounded-lg transition-colors flex items-center gap-1.5">
-          <i data-lucide="help-circle" class="w-4 h-4"></i> Panduan
+          <i data-lucide="help-circle" class="w-4 h-4"></i> Guide
         </a>
         <button onclick="document.getElementById('portal').scrollIntoView({ behavior: 'smooth', block: 'center' }); document.getElementById('txtUsername').focus();" class="bg-brand-600 hover:bg-brand-700 text-white text-xs sm:text-sm font-semibold px-5 py-2.5 rounded-xl shadow-md hover:shadow-lg transition-all flex items-center gap-2 cursor-pointer">
-          <i data-lucide="log-in" class="w-4 h-4"></i> Masuk Portal
+          <i data-lucide="log-in" class="w-4 h-4"></i> Enter Portal
         </button>
       </div>
     </div>
@@ -90,11 +90,11 @@
       </div>
 
       <h1 class="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
-        Sistem Asesmen Bahasa Inggris Terstandarisasi & <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-teal-500">Anti-Curang</span>
+        Standardized & <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-teal-500">Anti-Cheat</span> English Assessment System
       </h1>
 
       <p class="text-slate-600 text-base sm:text-lg leading-relaxed">
-        Dirancang khusus untuk <strong>SMP Al-Imam Islamic School (AI IS)</strong> dengan standar internasional (<strong>TOEFL ITP/PBT, IELTS Academic, TOEIC, & EPT</strong>). Dilengkapi pengawasan kamera real-time, sensor perpindahan tab, dan konversi skor asesmen internasional otomatis.
+        Engineered specifically for <strong>SMP Al-Imam Islamic School (AI IS)</strong> following rigorous international standards (<strong>TOEFL ITP/PBT, IELTS Academic, TOEIC, & EPT</strong>). Equipped with real-time camera proctoring, tab-switch strike sensors, and automated international score conversion.
       </p>
 
       <!-- Key Badges -->
@@ -120,12 +120,12 @@
       <!-- Quick Exam Code Box -->
       <div class="p-6 bg-gradient-to-br from-brand-900 to-slate-900 rounded-2xl text-white shadow-xl">
         <h2 class="text-sm font-bold text-emerald-400 uppercase tracking-wider mb-2 flex items-center gap-2">
-          <i data-lucide="key" class="w-4 h-4"></i> Masuk Ujian Cepat dengan Token
+          <i data-lucide="key" class="w-4 h-4"></i> Quick Exam Entry with Access Code
         </h2>
         <div class="flex flex-col sm:flex-row gap-3">
-          <input type="text" id="quickExamCode" placeholder="Contoh: TOEFL2026 atau IELTS2026" class="uppercase font-mono tracking-widest text-slate-900 px-4 py-3 rounded-xl flex-grow focus:outline-none focus:ring-2 focus:ring-emerald-400 text-sm font-semibold">
-          <button onclick="startQuickExam()" class="bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-900 font-bold px-6 py-3 rounded-xl shadow-md transition-all flex items-center justify-center gap-2 text-sm whitespace-nowrap">
-            Mulai Ujian <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          <input type="text" id="quickExamCode" placeholder="Example: TOEFL2026 or IELTS2026" class="uppercase font-mono tracking-widest text-slate-900 px-4 py-3 rounded-xl flex-grow focus:outline-none focus:ring-2 focus:ring-emerald-400 text-sm font-semibold">
+          <button onclick="startQuickExam()" class="bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-900 font-bold px-6 py-3 rounded-xl shadow-md transition-all flex items-center justify-center gap-2 text-sm whitespace-nowrap cursor-pointer">
+            Start Exam <i data-lucide="arrow-right" class="w-4 h-4"></i>
           </button>
         </div>
       </div>
@@ -138,13 +138,13 @@
           <div class="w-14 h-14 mx-auto rounded-2xl bg-brand-100 flex items-center justify-center text-brand-600 shadow-inner mb-3">
             <i data-lucide="shield-check" class="w-7 h-7"></i>
           </div>
-          <h2 class="text-2xl font-bold text-slate-900">Portal Masuk Terpadu</h2>
-          <p class="text-xs text-slate-500">Pilih peran atau masukkan kredensial akun Anda</p>
+          <h2 class="text-2xl font-bold text-slate-900">Unified Assessment Portal</h2>
+          <p class="text-xs text-slate-500">Select a demo role or enter your account credentials</p>
         </div>
 
         <!-- Role Quick Switcher Pills for Testing -->
         <div class="mb-4">
-          <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Login Cepat / Akun Demo:</label>
+          <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Quick Login / Demo Accounts:</label>
           <div class="grid grid-cols-2 gap-2 text-xs">
             <button onclick="setCredentials('superadmin', 'admin123')" class="p-2 rounded-lg border border-slate-200 bg-white hover:border-brand-500 hover:bg-brand-50 font-medium text-left flex items-center gap-2">
               <span class="w-2 h-2 rounded-full bg-purple-500"></span> Super Admin
@@ -167,12 +167,12 @@
             <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Username / Email</label>
             <div class="relative">
               <i data-lucide="user" class="w-5 h-5 text-slate-400 absolute left-3.5 top-3"></i>
-              <input type="text" id="loginUsername" required placeholder="Masukkan username atau email" class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 text-sm outline-none transition-all">
+              <input type="text" id="loginUsername" required placeholder="Enter username or email" class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 text-sm outline-none transition-all">
             </div>
           </div>
 
           <div>
-            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Kata Sandi (Password)</label>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Password</label>
             <div class="relative">
               <i data-lucide="lock" class="w-5 h-5 text-slate-400 absolute left-3.5 top-3"></i>
               <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 text-sm outline-none transition-all">
@@ -181,19 +181,19 @@
 
           <div id="loginAlert" class="hidden p-3 rounded-xl text-xs font-semibold"></div>
 
-          <button type="submit" id="btnSubmitLogin" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 text-sm">
-            <span>Masuk ke Dashboard</span>
+          <button type="submit" id="btnSubmitLogin" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 text-sm cursor-pointer">
+            <span>Sign In to Dashboard</span>
             <i data-lucide="arrow-right" class="w-4 h-4"></i>
           </button>
         </form>
 
         <!-- Direct Views Navigation -->
         <div class="mt-6 pt-5 border-t border-slate-200 text-center">
-          <p class="text-xs text-slate-500 mb-2">Navigasi Langsung Modul:</p>
+          <p class="text-xs text-slate-500 mb-2">Direct Module Navigation:</p>
           <div class="flex flex-wrap justify-center gap-2 text-xs">
-            <a href="?page=student-exam" class="text-brand-700 hover:underline font-semibold">Lembar Ujian</a> •
+            <a href="?page=student-exam" class="text-brand-700 hover:underline font-semibold">Exam Sheet</a> •
             <a href="?page=admin-dashboard" class="text-brand-700 hover:underline font-semibold">Admin & Examiner</a> •
-            <a href="?page=cms-appearance" class="text-brand-700 hover:underline font-semibold">Appearance & Lisensi</a>
+            <a href="?page=cms-appearance" class="text-brand-700 hover:underline font-semibold">Appearance & Licensing</a>
           </div>
         </div>
       </div>
@@ -224,7 +224,7 @@
     function startQuickExam() {
       var code = document.getElementById('quickExamCode').value.trim();
       if (!code) {
-        alert("Silakan masukkan kode ujian terlebih dahulu.");
+        alert("Please enter the exam access code first.");
         return;
       }
       sessionStorage.setItem('active_exam_code', code);
@@ -239,13 +239,13 @@
       var btn = document.getElementById('btnSubmitLogin');
 
       btn.disabled = true;
-      btn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Memverifikasi...';
+      btn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Verifying...';
       lucide.createIcons();
 
       // Role redirect logic
       setTimeout(function() {
         if (u === 'superadmin' || u === 'admincms') {
-          sessionStorage.setItem('current_user', JSON.stringify({ username: u, role: u === 'superadmin' ? 'superadmin' : 'admin', fullName: 'Administrator Al-Imam' }));
+          sessionStorage.setItem('current_user', JSON.stringify({ username: u, role: u === 'superadmin' ? 'superadmin' : 'admin', fullName: 'Al-Imam Administrator' }));
           window.location.href = '?page=admin-dashboard';
         } else if (u === 'teacher') {
           sessionStorage.setItem('current_user', JSON.stringify({ username: u, role: 'teacher', fullName: 'Ustazah Sarah Jenkins, M.Ed' }));

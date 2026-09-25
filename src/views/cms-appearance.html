@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -43,12 +43,12 @@
         </a>
         <div>
           <h1 class="text-base font-bold text-slate-900 leading-tight">CMS Appearance & SaaS Licensing</h1>
-          <p class="text-xs text-slate-500">Konfigurasi Tampilan White-Label, Warna Tema & Manajemen Lisensi Komersial</p>
+          <p class="text-xs text-slate-500">White-Label Branding Configuration, Theme Colors & Commercial License Management</p>
         </div>
       </div>
       <div class="flex items-center gap-2">
-        <button onclick="saveAllSettings()" class="bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs px-4 py-2 rounded-xl shadow-md flex items-center gap-1.5 transition-all">
-          <i data-lucide="save" class="w-4 h-4"></i> Simpan Perubahan
+        <button onclick="saveAllSettings()" class="bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs px-4 py-2 rounded-xl shadow-md flex items-center gap-1.5 transition-all cursor-pointer">
+          <i data-lucide="save" class="w-4 h-4"></i> Save Changes
         </button>
       </div>
     </div>
@@ -62,22 +62,22 @@
       <!-- Institutional Branding Card -->
       <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
         <h2 class="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2 text-brand-700">
-          <i data-lucide="building" class="w-4 h-4"></i> Identitas & Branding Instansi
+          <i data-lucide="building" class="w-4 h-4"></i> Institutional Identity & Branding
         </h2>
 
         <div class="space-y-3 text-xs">
           <div>
-            <label class="block font-bold text-slate-700 mb-1 uppercase">Nama Lembaga / Sekolah</label>
+            <label class="block font-bold text-slate-700 mb-1 uppercase">Institution / School Name</label>
             <input type="text" id="cfgInstName" value="SMP Al-Imam Islamic School (AI IS)" oninput="updateLivePreview()" class="w-full p-2.5 rounded-xl border border-slate-300 font-semibold outline-none focus:border-brand-500">
           </div>
 
           <div>
-            <label class="block font-bold text-slate-700 mb-1 uppercase">Motto / Tagline Pendidikan</label>
-            <input type="text" id="cfgInstMotto" value="Berakidah, Berakhlak dan Berprestasi" oninput="updateLivePreview()" class="w-full p-2.5 rounded-xl border border-slate-300 outline-none focus:border-brand-500">
+            <label class="block font-bold text-slate-700 mb-1 uppercase">Educational Motto / Tagline</label>
+            <input type="text" id="cfgInstMotto" value="Faithful, Noble-Charactered, and High-Achieving" oninput="updateLivePreview()" class="w-full p-2.5 rounded-xl border border-slate-300 outline-none focus:border-brand-500">
           </div>
 
           <div>
-            <label class="block font-bold text-slate-700 mb-1 uppercase">Logo URL (PNG / SVG Transparan)</label>
+            <label class="block font-bold text-slate-700 mb-1 uppercase">Logo URL (Transparent PNG / SVG)</label>
             <input type="url" id="cfgLogoUrl" value="https://alimamischool.com/wp-content/uploads/2020/08/Al-Imam-Islamic-School-alimamischool.com-sekolah-sunnah-logo.png" oninput="updateLivePreview()" class="w-full p-2.5 rounded-xl border border-slate-300 outline-none focus:border-brand-500 font-mono text-[11px]">
           </div>
         </div>
@@ -86,7 +86,7 @@
       <!-- Color Palette & Theme Customizer -->
       <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
         <h2 class="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2 text-brand-700">
-          <i data-lucide="palette" class="w-4 h-4"></i> Palet Warna & Visual Theme
+          <i data-lucide="palette" class="w-4 h-4"></i> Color Palette & Visual Theme
         </h2>
 
         <div class="grid grid-cols-3 gap-4 text-xs">
@@ -123,17 +123,17 @@
 
       <!-- Live Mobile & Desktop Visual Preview -->
       <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
-        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider">Live Visual Preview Header</h3>
+        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider">Live Visual Header Preview</h3>
         <div id="previewHeaderBox" class="p-4 rounded-xl border border-emerald-200 bg-white flex items-center justify-between shadow-sm transition-all">
           <div class="flex items-center gap-3">
             <img id="previewLogo" src="https://alimamischool.com/wp-content/uploads/2020/08/Al-Imam-Islamic-School-alimamischool.com-sekolah-sunnah-logo.png" alt="Logo" class="h-10 w-auto object-contain">
             <div>
               <div id="previewInstName" class="font-bold text-sm text-slate-900">SMP Al-Imam Islamic School (AI IS)</div>
-              <div id="previewInstMotto" class="text-[10px] text-emerald-700 font-medium">Berakidah, Berakhlak dan Berprestasi • Dev by Al-Imam EduTech</div>
+              <div id="previewInstMotto" class="text-[10px] text-emerald-700 font-medium">Faithful, Noble-Charactered, and High-Achieving • Dev by Al-Imam EduTech</div>
             </div>
           </div>
           <button id="previewBtn" class="px-3 py-1.5 rounded-lg text-white font-bold text-xs shadow-sm bg-emerald-600">
-            Masuk Portal
+            Enter Portal
           </button>
         </div>
       </div>
@@ -155,27 +155,27 @@
 
         <div class="space-y-2 text-xs">
           <div class="flex justify-between text-slate-300">
-            <span>Kapasitas Peserta:</span>
-            <strong class="text-white font-mono">142 / 5.000 Siswa</strong>
+            <span>Candidate Capacity:</span>
+            <strong class="text-white font-mono">142 / 5,000 Students</strong>
           </div>
           <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
             <div class="bg-emerald-400 h-2 rounded-full w-[3%]"></div>
           </div>
 
           <div class="flex justify-between text-slate-300 pt-1">
-            <span>Masa Berlaku Lisensi:</span>
-            <strong class="text-emerald-300 font-mono">31 Desember 2027</strong>
+            <span>License Validity:</span>
+            <strong class="text-emerald-300 font-mono">December 31, 2027</strong>
           </div>
           <div class="flex justify-between text-slate-300">
-            <span>Kode Lisensi:</span>
+            <span>License Key:</span>
             <span class="font-mono text-slate-400 text-[10px]">ALIMAM-ENT-2026-PRO-UNLIMITED</span>
           </div>
         </div>
 
         <div class="pt-2">
-          <input type="text" id="licenseKeyInput" placeholder="Masukkan Kode Lisensi Baru..." class="w-full p-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white font-mono text-xs outline-none focus:border-emerald-400 mb-2">
-          <button onclick="handleValidateLicense()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-2.5 rounded-xl transition-all text-xs">
-            Verifikasi & Perbarui Lisensi
+          <input type="text" id="licenseKeyInput" placeholder="Enter new license key..." class="w-full p-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white font-mono text-xs outline-none focus:border-emerald-400 mb-2">
+          <button onclick="handleValidateLicense()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-2.5 rounded-xl transition-all text-xs cursor-pointer">
+            Verify & Update License
           </button>
         </div>
       </div>
@@ -185,15 +185,15 @@
         <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2 text-brand-700">
           <i data-lucide="database" class="w-4 h-4"></i> Database Backup & Restore
         </h3>
-        <p class="text-xs text-slate-500">Cadangkan seluruh bank soal, akun pengguna, data proctoring, dan konfigurasi tema dalam satu berkas JSON.</p>
+        <p class="text-xs text-slate-500">Backup the entire question bank, user accounts, proctoring logs, and theme settings into a single JSON file.</p>
 
         <div class="space-y-2">
-          <button onclick="downloadBackupJson()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-xl shadow-sm text-xs flex items-center justify-center gap-2 transition-all">
+          <button onclick="downloadBackupJson()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-xl shadow-sm text-xs flex items-center justify-center gap-2 transition-all cursor-pointer">
             <i data-lucide="download" class="w-4 h-4"></i> Download Full Backup JSON
           </button>
           
-          <button onclick="alert('Pilih file JSON backup untuk melakukan restore database.');" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 rounded-xl border border-slate-300 text-xs flex items-center justify-center gap-2 transition-all">
-            <i data-lucide="upload" class="w-4 h-4"></i> Restore dari File Backup
+          <button onclick="alert('Please select a JSON backup file to restore database.');" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 rounded-xl border border-slate-300 text-xs flex items-center justify-center gap-2 transition-all cursor-pointer">
+            <i data-lucide="upload" class="w-4 h-4"></i> Restore from Backup File
           </button>
         </div>
       </div>
@@ -224,16 +224,16 @@
     }
 
     function saveAllSettings() {
-      alert("Pengaturan tampilan, branding, dan lisensi berhasil disimpan!");
+      alert("Appearance, branding, and license settings saved successfully!");
     }
 
     function handleValidateLicense() {
       var key = document.getElementById('licenseKeyInput').value.trim();
       if (!key) {
-        alert("Silakan masukkan kode lisensi.");
+        alert("Please enter a license key.");
         return;
       }
-      alert("Lisensi '" + key + "' Terverifikasi Valid! Kuota & masa aktif diperbarui.");
+      alert("License '" + key + "' Verified Valid! Quota & validity period updated.");
     }
 
     function downloadBackupJson() {

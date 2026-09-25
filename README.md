@@ -1,124 +1,124 @@
 # SMP AL-IMAM ISLAMIC SCHOOL (AI IS) - ENGLISH ASSESSMENT SYSTEM
 
 > **Enterprise Standardized English Assessment & Proctoring Platform**  
-> *Berakidah, Berakhlak dan Berprestasi*  
+> *Committed to Faith, Character, and Excellence*  
 > **SMP Al-Imam Islamic School (AI IS) | Development by Al-Imam EduTech**
 
 ---
 
-## 1. TENTANG SISTEM (SYSTEM OVERVIEW)
+## 1. SYSTEM OVERVIEW
 
-**SMP Al-Imam English Assessment System** adalah platform ujian Bahasa Inggris berskala enterprise yang dirancang khusus untuk SMP Al-Imam Islamic School (AI IS) guna memenuhi standar ujian internasional (**TOEFL ITP/PBT, IELTS Academic & General, TOEIC, dan Al-Imam EPT**).
+The **SMP Al-Imam English Assessment System** is an enterprise-scale English examination platform designed specifically for SMP Al-Imam Islamic School (AI IS) to meet international testing standards (**TOEFL ITP/PBT, IELTS Academic & General, TOEIC, and Al-Imam EPT**).
 
-Sistem dibangun menggunakan pola arsitektur **MVC (Model-View-Controller)** yang sangat ringan, efisien, memiliki proctoring ketat (anti-curang), sistem penilaian rubrik terstandarisasi, serta **siap dikomersialkan / digunakan sebagai produk SaaS atau On-Premise White-Label** dengan CMS Appearance Configurator lengkap.
+The system is built using a lightweight, high-performance **MVC (Model-View-Controller)** architectural pattern. It features strict proctoring (anti-cheating), standardized rubric grading, and is **commercial SaaS / White-Label ready** with a comprehensive CMS Appearance Configurator.
 
 ---
 
-## 2. FITUR UTAMA & SPESIFIKASI
+## 2. KEY FEATURES & SPECIFICATIONS
 
-### A. Fitur Pembuatan Soal (Interactive Test Builder)
+### A. Interactive Test Builder
 - **Multi-Format Question Types**:
-  - **Listening Section**: Multiple choice dengan custom audio player, batas putar audio, dan visual progress.
-  - **Structure & Written Expression**: Pilihan ganda & analisis kesalahan (*error identification*).
-  - **Reading Comprehension**: Split-screen passage viewer dengan penyorot teks (*highlighter*).
-  - **Writing Section (Task 2 Essay)**: Editor esai dengan penghitung kata (*live word counter*) dan panduan rubrik.
-  - **Speaking Section (Part 2 Audio)**: Perekaman suara langsung dari browser peserta via Web Audio / `MediaRecorder` API.
-  - **Drag and Drop / Matching Pairs**: Pencocokan kolokasi dan pasangan gramatikal.
-- **Bulk Import & Export**: Dukungan ekspor dan impor template soal berbasis CSV, Excel, dan Google Sheets.
-- **Onboarding Tutorial Wizard**: Panduan interaktif langkah-demi-langkah bagi guru dan pembuat soal pemula.
+  - **Listening Section**: Multiple choice with custom audio player, play count limits, and visual progress tracking.
+  - **Structure & Written Expression**: Multiple choice and error identification.
+  - **Reading Comprehension**: Split-screen passage viewer with interactive text highlighter.
+  - **Writing Section (Task 2 Essay)**: Rich essay editor with live word count and rubric grading guidance.
+  - **Speaking Section (Part 2 Audio)**: Direct in-browser voice recording via Web Audio / `MediaRecorder` API.
+  - **Drag and Drop / Matching Pairs**: Collocation matching and grammatical pairs.
+- **Bulk Import & Export**: Full support for importing and exporting question templates via CSV, Excel, and Google Sheets.
+- **Onboarding Tutorial Wizard**: Interactive step-by-step guide for teachers and examiners.
 
-### B. Fitur Anti-Curang (Strict Proctoring Engine)
-- **Full-Screen Enforcement**: Mengunci tampilan peserta selama ujian berlangsung.
-- **Tab Switching & Blur Detector**: Mengunci lembar jawaban dan memberikan peringatan **maksimal 3 kali (3 Strikes)** sebelum otomatis dikumpulkan (*auto-submit*).
-- **Copy-Paste & Right-Click Ban**: Mematikan klik kanan, seleksi teks bebas, serta shortcut tombol (`Ctrl+C`, `Ctrl+V`, `F12`, `Alt+Tab`).
-- **AI Camera Proctoring**: Snapshot berkala webcam peserta untuk memastikan integritas ujian.
-- **Randomization Engine**: Pengacakan urutan nomor soal dan opsi jawaban secara otomatis.
+### B. Strict Proctoring Engine (Anti-Cheating)
+- **Full-Screen Enforcement**: Locks candidate viewport during the active test session.
+- **Tab Switching & Blur Detector**: Temporarily locks the answer sheet and issues warnings up to **3 Strikes** before automatic submission.
+- **Copy-Paste & Right-Click Prevention**: Disables right-click context menu, free text selection, and shortcut keys (`Ctrl+C`, `Ctrl+V`, `F12`, `Alt+Tab`).
+- **AI Camera Proctoring**: Periodic webcam snapshot stream to verify student test integrity.
+- **Randomization Engine**: Automated question order and option shuffling.
 
-### C. Penilaian & Konversi Skor Internasional
-- **Konversi Skor Otomatis**:
-  - Konversi otomatis nilai mentah (*raw score*) ke skala **TOEFL (310–677)**.
-  - Konversi skor ke **IELTS Band (0–9.0)** dengan pembulatan resmi.
-  - Pemetaan standar kecakapan **CEFR (A1, A2, B1, B2, C1, C2)**.
-- **Rubrik Penilaian Standar**: Antrean penilaian esai dan audio respon untuk dewan penguji (*Examiner*) dengan 4 kriteria analitik dan catatan adab/akhlak santri.
-- **Generator Sertifikat & Laporan Hasil Asesmen**: Penerbitan sertifikat digital resmi lengkap dengan QR code verifikasi keaslian dan tanda tangan digital dewan penguji.
+### C. Standardized Grading & International Score Conversion
+- **Automated Score Conversion**:
+  - Automatic raw score conversion to the **TOEFL scale (310–677)**.
+  - Score conversion to **IELTS Band (0–9.0)** with official rounding.
+  - Standardized proficiency mapping to the **CEFR framework (A1, A2, B1, B2, C1, C2)**.
+- **Standardized Rubric Grading**: Dedicated grading queue for examiners to evaluate essay and speaking recordings across 4 analytical criteria with student character & conduct notes.
+- **Certificate & Assessment Report Generator**: Official digital certificate issuance with QR code authenticity verification and digital examiner signature.
 
 ### D. CMS Appearance & SaaS Licensing Configurator
-- **Theme & Branding Customizer**: Pengaturan instan warna utama (*Primary/Secondary/Accent*), logo instansi, motto/tagline, dan footer.
-- **Manajemen Lisensi Komersial**:
-  - Tingkatan lisensi: *Starter* (100 Siswa), *Professional* (500 Siswa), *Enterprise* (5.000 Siswa / Unlimited).
-  - Generator & validator lisensi serial key.
-- **1-Click Backup & Restore**: Unduh seluruh isi database dalam format JSON terenkripsi dan pulihkan kapan saja.
+- **Theme & Branding Customizer**: Instant configuration of primary/secondary/accent colors, institution logo, motto/tagline, and footer.
+- **Commercial License Management**:
+  - Tiered licensing: *Starter* (100 Students), *Professional* (500 Students), *Enterprise* (5,000 Students / Unlimited).
+  - Serial key license generator & validator.
+- **1-Click Backup & Restore**: Download entire database in encrypted JSON format and restore at any time.
 
 ---
 
-## 3. STRUKTUR ARSITEKTUR KODE (MVC PATTERN)
+## 3. ARCHITECTURE & CODE STRUCTURE (MVC PATTERN)
 
 ```text
 ├── src/
 │   ├── models/
-│   │   ├── UserModel.gs          # Kelola Auth, Role, Student Data & Quota
-│   │   ├── QuestionModel.gs     # Kelola Bank Soal TOEFL/IELTS/EPT & Audio URL
-│   │   ├── ExaminationModel.gs  # Kelola Sesi Ujian, Timer, Heartbeat & Pelanggaran
-│   │   └── GradeModel.gs        # Konversi Skor Skala TOEFL/IELTS & Logik Nilai
+│   │   ├── UserModel.gs          # Authentication, Roles, Student Data & Quotas
+│   │   ├── QuestionModel.gs      # Question Bank (TOEFL/IELTS/EPT) & Audio URLs
+│   │   ├── ExaminationModel.gs   # Exam Sessions, Timers, Heartbeats & Violation Tracking
+│   │   └── GradeModel.gs         # TOEFL/IELTS Score Conversion & Evaluation Logic
 │   ├── controllers/
-│   │   ├── AuthController.gs    # Handler Login, Token Session & Otorisasi Role
-│   │   ├── ExamController.gs    # Logic Anti-Curang, Submit, Audio & Auto-Save
-│   │   ├── CmsController.gs     # Pengaturan Tampilan, White-Label & Lisensi
-│   │   └── ReportController.gs  # Generator Sertifikat PDF, QR Code & Analitik
+│   │   ├── AuthController.gs     # Login Handlers, Session Tokens & Role Authorization
+│   │   ├── ExamController.gs     # Anti-Cheating Logic, Submissions, Audio & Auto-Save
+│   │   ├── CmsController.gs      # Appearance Customizer, White-Label & Licensing
+│   │   └── ReportController.gs   # PDF Certificate Generator, QR Codes & Analytics
 │   ├── views/
-│   │   ├── index.html           # Landing Page & Portal Masuk Terpadu
-│   │   ├── student-exam.html    # Player Soal Ujian (Interaktif & Proctoring)
-│   │   ├── admin-dashboard.html # Dashboard Pengelola, Test Builder & Examiner
-│   │   ├── cms-appearance.html  # Customizer Tampilan Aplikasi & SaaS License
-│   │   └── onboarding-guide.html# Panduan Penggunaan Interaktif Pembuat Soal
-│   ├── Config.gs                # Konfigurasi Global, Logo URL, DB ID, Scoring Table
-│   └── Code.gs                  # Main Entrypoint Google Apps Script Router
-├── index.html                   # Master Single Page App (Vercel & Standalone Mode)
-├── vercel.json                  # Konfigurasi Routing Serverless Hosting Vercel
-├── appsscript.json              # Manifest Runtime V8 Google Apps Script
-└── README.md                    # Dokumentasi Instalasi, Panduan & Komersial
+│   │   ├── index.html            # Unified Landing Page & Login Portal
+│   │   ├── student-exam.html     # Interactive Exam Player & Proctoring Suite
+│   │   ├── admin-dashboard.html  # Admin Management Dashboard, Test Builder & Examiner Queue
+│   │   ├── cms-appearance.html   # White-Label Appearance Customizer & SaaS Licensing
+│   │   └── onboarding-guide.html # Interactive User Guide & Onboarding Wizard
+│   ├── Config.gs                 # Global Configuration, Logo URLs, DB IDs, Scoring Tables
+│   └── Code.gs                   # Main Entrypoint Google Apps Script Router
+├── index.html                    # Master Single Page Application (Vercel & Standalone Mode)
+├── vercel.json                   # Serverless Routing Configuration for Vercel
+├── appsscript.json               # Google Apps Script V8 Runtime Manifest
+└── README.md                     # Documentation, Installation Guide & Commercial Information
 ```
 
 ---
 
-## 4. PANDUAN DEPLOYMENT & INSTALASI
+## 4. DEPLOYMENT & INSTALLATION GUIDE
 
-### A. Deploy ke Google Apps Script (GAS)
-1. Buat Spreadsheet baru di Google Drive (misal: `DB_AlImam_English_Assessment`).
-2. Buka menu **Extensions > Apps Script**.
-3. Salin seluruh file dari folder `src/` ke dalam Apps Script editor:
-   - Buat file `.gs` untuk setiap file di `src/models/`, `src/controllers/`, `src/Config.gs`, dan `src/Code.gs`.
-   - Buat file HTML untuk setiap file di `src/views/`.
-4. Ganti isi `appsscript.json` dengan file `appsscript.json` yang ada di repository ini.
-5. Jalankan fungsi `initialSetupDatabase()` di `src/Code.gs` untuk menginisialisasi tabel-tabel sheet otomatis (*Users, Exams, Questions, Submissions, Settings*).
-6. Klik **Deploy > New Deployment**:
-   - Tipe: **Web App**
+### A. Deploy to Google Apps Script (GAS)
+1. Create a new Google Spreadsheet in Google Drive (e.g., `DB_AlImam_English_Assessment`).
+2. Open **Extensions > Apps Script**.
+3. Copy all files from the `src/` directory into the Apps Script editor:
+   - Create `.gs` files for each file under `src/models/`, `src/controllers/`, `src/Config.gs`, and `src/Code.gs`.
+   - Create HTML files for each file under `src/views/`.
+4. Replace the contents of `appsscript.json` with the project's `appsscript.json`.
+5. Run the `initialSetupDatabase()` function in `src/Code.gs` to automatically initialize required database sheets (*Users, Exams, Questions, Submissions, Settings*).
+6. Click **Deploy > New Deployment**:
+   - Deployment Type: **Web App**
    - Execute as: **Me**
    - Who has access: **Anyone**
-7. Simpan URL Web App yang dihasilkan.
+7. Save the generated Web App URL.
 
-### B. Deploy ke Vercel (Frontend Hosting)
-1. Push repository ini ke akun **GitHub**.
-2. Buka [Vercel Dashboard](https://vercel.com) dan pilih **Add New Project**.
-3. Impor repository GitHub ini.
-4. Framework Preset: **Other** (Root Directory: `./`).
-5. Klik **Deploy**.
-6. Web app akan langsung aktif secara global dengan performa serverless instan!
+### B. Deploy to Vercel (Frontend Hosting)
+1. Push this repository to your **GitHub** account.
+2. Go to the [Vercel Dashboard](https://vercel.com) and select **Add New Project**.
+3. Import this GitHub repository.
+4. Set Framework Preset to **Other** (Root Directory: `./`).
+5. Click **Deploy**.
+6. The web app is now live globally with instantaneous serverless edge performance!
 
 ---
 
-## 5. KREDENSIAL AKUN DEMO
+## 5. DEMO ACCOUNT CREDENTIALS
 
-| Peran (Role) | Username | Password | Deskripsi Hak Akses |
+| Role | Username | Password | Permissions & Access Description |
 |---|---|---|---|
-| **Super Admin** | `superadmin` | `admin123` | Akses penuh, manajemen lisensi & backup database |
-| **Admin CMS** | `admincms` | `admin123` | Kustomisasi tampilan white-label & jadwal ujian |
-| **Teacher / Examiner** | `teacher` | `teacher123` | Pembuat bank soal & penilai esai/audio respon |
-| **Student / Candidate** | `candidate1` | `student123` | Peserta ujian, pengerjaan soal & unduh sertifikat |
+| **Super Admin** | `superadmin` | `admin123` | Full system access, license management & database backup |
+| **Admin CMS** | `admincms` | `admin123` | White-label appearance customization & exam scheduling |
+| **Teacher / Examiner** | `teacher` | `teacher123` | Question bank authoring & essay/speaking rubric grading |
+| **Student / Candidate** | `candidate1` | `student123` | Student test taker, interactive exam player & certificate download |
 
 ---
 
-## 6. LISENSI & HAK CIPTA
+## 6. LICENSE & COPYRIGHT
 
-Dikembangkan oleh **Al-Imam EduTech** untuk **SMP Al-Imam Islamic School (AI IS)**.  
-Hak Cipta Dilindungi Undang-Undang © 2026.
+Developed by **Al-Imam EduTech** for **SMP Al-Imam Islamic School (AI IS)**.  
+All Rights Reserved © 2026.

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Lembar Ujian Terpadu | Al-Imam Assessment System</title>
+  <title>Integrated Examination Sheet | Al-Imam Assessment System</title>
   
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -83,16 +83,16 @@
       <!-- Center Countdown Timer -->
       <div class="flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-xl bg-slate-800 border border-slate-700 shadow-inner">
         <i data-lucide="clock" class="w-4 h-4 text-amber-400 animate-pulse"></i>
-        <span class="text-[10px] uppercase font-bold text-slate-400 hidden sm:inline">Sisa Waktu:</span>
+        <span class="text-[10px] uppercase font-bold text-slate-400 hidden sm:inline">Time Remaining:</span>
         <span id="examTimer" class="font-mono text-sm sm:text-base font-extrabold text-amber-400 tracking-wider">01:54:20</span>
       </div>
 
       <!-- Right Proctoring & Action Tools -->
       <div class="flex items-center gap-2 sm:gap-3">
         <!-- Strike Indicator Badge -->
-        <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-red-950/60 border border-red-800/80 text-red-300 text-xs font-bold" title="Peringatan Pindah Tab / Blur">
+        <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-red-950/60 border border-red-800/80 text-red-300 text-xs font-bold" title="Tab Switch / Blur Warnings">
           <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-red-400"></i>
-          <span class="hidden sm:inline">Peringatan:</span>
+          <span class="hidden sm:inline">Warnings:</span>
           <span id="strikeBadge" class="text-red-400 font-mono">0 / 3</span>
         </div>
 
@@ -100,9 +100,9 @@
           <i data-lucide="layout-grid" class="w-5 h-5"></i>
         </button>
 
-        <button onclick="confirmFinishExam()" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs sm:text-sm px-4 py-2 rounded-xl shadow-md flex items-center gap-1.5 transition-all">
+        <button onclick="confirmFinishExam()" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs sm:text-sm px-4 py-2 rounded-xl shadow-md flex items-center gap-1.5 transition-all cursor-pointer">
           <i data-lucide="check-circle" class="w-4 h-4"></i>
-          <span>Kumpulkan</span>
+          <span>Submit Exam</span>
         </button>
       </div>
 
@@ -140,12 +140,12 @@
         <!-- Question Meta & Font Size Tool -->
         <div class="flex items-center justify-between pb-4 border-b border-slate-100">
           <div class="flex items-center gap-2">
-            <span id="questionNumberBadge" class="px-3 py-1 rounded-xl bg-emerald-100 text-brand-800 font-extrabold text-xs sm:text-sm">Soal #1</span>
-            <span id="questionTypeBadge" class="px-2.5 py-0.5 rounded-lg bg-slate-100 text-slate-600 font-medium text-xs">Pilihan Ganda</span>
+            <span id="questionNumberBadge" class="px-3 py-1 rounded-xl bg-emerald-100 text-brand-800 font-extrabold text-xs sm:text-sm">Question #1</span>
+            <span id="questionTypeBadge" class="px-2.5 py-0.5 rounded-lg bg-slate-100 text-slate-600 font-medium text-xs">Multiple Choice</span>
           </div>
           <div class="flex items-center gap-1.5">
-            <button onclick="toggleFlag()" id="btnFlag" class="text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-slate-200 hover:border-amber-400 hover:text-amber-600 text-slate-500 flex items-center gap-1 transition-all">
-              <i data-lucide="bookmark" class="w-3.5 h-3.5"></i> Ragu-Ragu
+            <button onclick="toggleFlag()" id="btnFlag" class="text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-slate-200 hover:border-amber-400 hover:text-amber-600 text-slate-500 flex items-center gap-1 transition-all cursor-pointer">
+              <i data-lucide="bookmark" class="w-3.5 h-3.5"></i> Flag Question
             </button>
           </div>
         </div>
@@ -161,10 +161,10 @@
                 <i data-lucide="sparkles" class="w-3 h-3 text-amber-400"></i> AI Voice Synthesis
               </span>
             </div>
-            <span id="playCounterBadge" class="px-2.5 py-0.5 rounded-full bg-emerald-900/90 border border-emerald-700 text-emerald-200 text-[11px] font-mono">Diputar: 0 / 2 kali</span>
+            <span id="playCounterBadge" class="px-2.5 py-0.5 rounded-full bg-emerald-900/90 border border-emerald-700 text-emerald-200 text-[11px] font-mono">Played: 0 / 2 times</span>
           </div>
           <div class="flex items-center gap-3.5">
-            <button onclick="toggleAudioPlay()" id="btnPlayAudio" title="Putar / Jeda Audio Listening" class="w-11 h-11 rounded-2xl bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-slate-950 flex items-center justify-center shadow-lg shadow-emerald-950/40 transition-all cursor-pointer flex-shrink-0">
+            <button onclick="toggleAudioPlay()" id="btnPlayAudio" title="Play / Pause Listening Audio" class="w-11 h-11 rounded-2xl bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-slate-950 flex items-center justify-center shadow-lg shadow-emerald-950/40 transition-all cursor-pointer flex-shrink-0">
               <i data-lucide="play" id="audioIcon" class="w-5 h-5 ml-0.5"></i>
             </button>
             <div class="flex-grow space-y-1.5">
@@ -184,8 +184,8 @@
             </div>
           </div>
           <div class="text-[11px] text-emerald-300/80 italic flex items-center justify-between pt-1 border-t border-emerald-900/60">
-            <span id="audioPassagePreview" class="line-clamp-1">Audio rekaman percakapan / narasi TOEFL</span>
-            <span id="audioPlayStateLabel" class="text-[10px] font-semibold text-emerald-400 font-sans ml-2 flex-shrink-0">Klik play untuk memutar</span>
+            <span id="audioPassagePreview" class="line-clamp-1">TOEFL conversation / lecture audio recording</span>
+            <span id="audioPlayStateLabel" class="text-[10px] font-semibold text-emerald-400 font-sans ml-2 flex-shrink-0">Click play to listen</span>
           </div>
         </div>
 
@@ -194,14 +194,19 @@
           <!-- Text rendered dynamically -->
         </div>
 
-        <!-- Question Prompt Text -->
+        <!-- Question Prompt Text & Visual Media -->
         <div class="space-y-3">
+          <div id="specimenVideoContainer" class="hidden aspect-video w-full rounded-2xl overflow-hidden shadow-sm bg-black border border-slate-700">
+            <!-- Dynamic Video Embed / Player -->
+          </div>
+
+          <div id="specimenImageContainer" class="hidden text-center bg-slate-50 p-3 rounded-2xl border border-slate-200">
+            <img id="specimenImage" src="" alt="Specimen" class="max-h-72 rounded-xl border border-slate-200 shadow-sm mx-auto object-contain bg-white cursor-zoom-in" onclick="window.open(this.src, '_blank')">
+          </div>
+
           <h2 id="questionPrompt" class="text-sm sm:text-base font-bold text-slate-900 leading-snug">
             Loading prompt...
           </h2>
-          <div id="specimenImageContainer" class="hidden">
-            <img id="specimenImage" src="" alt="Specimen" class="max-h-64 rounded-xl border border-slate-200 shadow-sm mx-auto">
-          </div>
         </div>
 
         <!-- Answer Options / Input Arena -->
@@ -211,14 +216,14 @@
 
         <!-- Navigation Buttons -->
         <div class="flex items-center justify-between pt-6 border-t border-slate-100">
-          <button onclick="prevQuestion()" id="btnPrev" class="px-4 py-2.5 rounded-xl border border-slate-300 hover:bg-slate-100 text-slate-700 text-xs sm:text-sm font-bold flex items-center gap-1.5 transition-all">
-            <i data-lucide="chevron-left" class="w-4 h-4"></i> Sebelumnya
+          <button onclick="prevQuestion()" id="btnPrev" class="px-4 py-2.5 rounded-xl border border-slate-300 hover:bg-slate-100 text-slate-700 text-xs sm:text-sm font-bold flex items-center gap-1.5 transition-all cursor-pointer">
+            <i data-lucide="chevron-left" class="w-4 h-4"></i> Previous
           </button>
           
-          <span class="text-xs text-slate-400 font-mono" id="progressIndicator">Soal 1 dari 10</span>
+          <span class="text-xs text-slate-400 font-mono" id="progressIndicator">Question 1 of 10</span>
 
-          <button onclick="nextQuestion()" id="btnNext" class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-bold flex items-center gap-1.5 transition-all shadow-md">
-            <span>Selanjutnya</span> <i data-lucide="chevron-right" class="w-4 h-4"></i>
+          <button onclick="nextQuestion()" id="btnNext" class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-bold flex items-center gap-1.5 transition-all shadow-md cursor-pointer">
+            <span>Next</span> <i data-lucide="chevron-right" class="w-4 h-4"></i>
           </button>
         </div>
 
@@ -263,12 +268,12 @@
       <div id="paletteCard" class="bg-white rounded-3xl shadow-sm border border-slate-200/80 p-5 space-y-4">
         <div class="flex items-center justify-between pb-3 border-b border-slate-100">
           <h2 class="text-xs font-bold text-slate-800 uppercase flex items-center gap-1.5">
-            <i data-lucide="grid" class="w-4 h-4 text-brand-600"></i> Nomor Soal
+            <i data-lucide="grid" class="w-4 h-4 text-brand-600"></i> Question Navigation
           </h2>
           <div class="flex items-center gap-2 text-[10px] font-medium text-slate-500">
-            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded bg-brand-600"></span> Dijawab</span>
-            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded bg-amber-400"></span> Ragu</span>
-            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded bg-slate-200"></span> Kosong</span>
+            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded bg-brand-600"></span> Answered</span>
+            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded bg-amber-400"></span> Flagged</span>
+            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded bg-slate-200"></span> Empty</span>
           </div>
         </div>
 
@@ -277,8 +282,8 @@
         </div>
 
         <div class="pt-2 text-center">
-          <button onclick="confirmFinishExam()" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs py-3 rounded-xl shadow-md transition-all flex items-center justify-center gap-1.5">
-            <i data-lucide="send" class="w-4 h-4"></i> Selesaikan Ujian Sekarang
+          <button onclick="confirmFinishExam()" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs py-3 rounded-xl shadow-md transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+            <i data-lucide="send" class="w-4 h-4"></i> Submit Exam Now
           </button>
         </div>
       </div>
@@ -293,21 +298,21 @@
       <div class="w-16 h-16 mx-auto rounded-2xl bg-red-100 text-red-600 flex items-center justify-center">
         <i data-lucide="alert-triangle" class="w-9 h-9"></i>
       </div>
-      <h2 class="text-xl font-black text-slate-900">PERINGATAN INTEGRITAS UJIAN!</h2>
+      <h2 class="text-xl font-black text-slate-900">EXAMINATION INTEGRITY WARNING!</h2>
       <p class="text-xs text-slate-600 leading-relaxed">
-        Sistem mendeteksi Anda <strong>berpindah tab, keluar dari mode layar penuh (fullscreen), atau membuka aplikasi lain</strong>.
+        The system detected that you <strong>switched tabs, exited full-screen mode, or opened another application</strong>.
       </p>
       
       <div class="p-3 bg-red-50 rounded-2xl border border-red-200 text-red-800 text-xs font-bold font-mono">
-        Status Pelanggaran: <span id="modalStrikeCount">1</span> / 3 Peringatan
+        Violation Status: <span id="modalStrikeCount">1</span> / 3 Warnings
       </div>
 
       <p class="text-[11px] text-slate-500">
-        Jika mencapai <strong>3 kali pelanggaran</strong>, lembar jawaban Anda akan otomatis dikumpulkan dan status dilaporkan ke Dewan Penguji.
+        If you reach <strong>3 warnings</strong>, your exam will be automatically submitted and flagged to the Examiner Board.
       </p>
 
-      <button onclick="dismissViolationModal()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl shadow-lg transition-all text-sm">
-        Saya Mengerti & Kembali ke Ujian
+      <button onclick="dismissViolationModal()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl shadow-lg transition-all text-sm cursor-pointer">
+        I Understand & Return to Exam
       </button>
     </div>
   </div>
@@ -320,15 +325,15 @@
         <div class="w-16 h-16 mx-auto rounded-2xl bg-emerald-100 text-brand-600 flex items-center justify-center">
           <i data-lucide="award" class="w-9 h-9"></i>
         </div>
-        <h2 class="text-2xl font-black text-slate-900">Ujian Telah Selesai!</h2>
-        <p class="text-xs text-slate-500">Hasil asesmen telah dihitung otomatis menggunakan standar internasional</p>
+        <h2 class="text-2xl font-black text-slate-900">Exam Completed Successfully!</h2>
+        <p class="text-xs text-slate-500">Assessment results have been calculated automatically using standardized international scales.</p>
       </div>
 
       <!-- Score Summary Card -->
       <div class="p-6 bg-gradient-to-br from-emerald-900 to-slate-900 text-white rounded-2xl shadow-xl space-y-4">
         <div class="flex items-center justify-between border-b border-emerald-800 pb-3">
           <div>
-            <div class="text-xs text-emerald-400 font-bold uppercase">Prediksi Skor Terkonversi</div>
+            <div class="text-xs text-emerald-400 font-bold uppercase">Converted Scaled Score</div>
             <div class="text-3xl font-black text-white" id="modalFinalScore">577 / 677 (TOEFL Scale)</div>
           </div>
           <div class="text-right">
@@ -357,18 +362,18 @@
       <div class="flex items-center gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-200">
         <canvas id="qrCanvas" class="w-20 h-20 bg-white p-1 rounded-xl shadow-sm"></canvas>
         <div class="text-xs space-y-1">
-          <div class="font-bold text-slate-800">Sertifikat Digital Al-Imam Resmi</div>
-          <p class="text-slate-500 text-[11px]">Telah diverifikasi dengan kode integritas proctoring dan tanda tangan digital dewan penguji.</p>
+          <div class="font-bold text-slate-800">Official Al-Imam Digital Certificate</div>
+          <p class="text-slate-500 text-[11px]">Verified with proctoring integrity hashing and digital examiner signatures.</p>
           <div class="text-brand-700 font-semibold font-mono text-[10px]" id="certNumberDisplay">CERT/AL-IMAM/2026/SUB-001</div>
         </div>
       </div>
 
       <div class="flex flex-col sm:flex-row gap-3">
         <a href="?page=admin-dashboard&tab=cert" class="flex-1 bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 rounded-xl shadow-md transition-all text-xs sm:text-sm text-center flex items-center justify-center gap-2">
-          <i data-lucide="printer" class="w-4 h-4"></i> Cetak / Download Sertifikat
+          <i data-lucide="printer" class="w-4 h-4"></i> Print / Download Certificate
         </a>
         <a href="?page=index" class="px-5 py-3 rounded-xl border border-slate-300 hover:bg-slate-100 text-slate-700 font-bold text-xs sm:text-sm text-center">
-          Kembali ke Beranda
+          Return to Home
         </a>
       </div>
 
@@ -564,7 +569,7 @@
 
       if (state.strikes >= state.maxStrikes) {
         setTimeout(function() {
-          alert("Batas maksimal pelanggaran (3x) telah tercapai. Lembar ujian Anda otomatis dikumpulkan oleh sistem.");
+          alert("Maximum strike limit (3x) reached. Your exam has been automatically submitted by the system.");
           submitExamNow();
         }, 1500);
       }
@@ -597,7 +602,7 @@
       state.timerInterval = setInterval(function() {
         if (state.timerSeconds <= 0) {
           clearInterval(state.timerInterval);
-          alert("Waktu ujian telah habis. Lembar ujian Anda sedang dikumpulkan...");
+          alert("Examination time has expired. Your test is being submitted...");
           submitExamNow();
           return;
         }
@@ -616,8 +621,8 @@
       if (!q) return;
 
       // Update Header Badges
-      document.getElementById('questionNumberBadge').innerText = 'Soal #' + (state.currentIndex + 1);
-      document.getElementById('progressIndicator').innerText = 'Soal ' + (state.currentIndex + 1) + ' dari ' + state.questions.length;
+      document.getElementById('questionNumberBadge').innerText = 'Question #' + (state.currentIndex + 1);
+      document.getElementById('progressIndicator').innerText = 'Question ' + (state.currentIndex + 1) + ' of ' + state.questions.length;
       document.getElementById('questionTypeBadge').innerText = q.type.replace('_', ' ').toUpperCase();
 
       // Flag Button Status
@@ -633,14 +638,14 @@
       if (q.section === 'listening') {
         audioBox.classList.remove('hidden');
         var playCount = (state.audioPlays && state.audioPlays[q.id]) || 0;
-        document.getElementById('playCounterBadge').innerText = 'Diputar: ' + playCount + ' / ' + state.maxAudioPlays + ' kali';
+        document.getElementById('playCounterBadge').innerText = 'Played: ' + playCount + ' / ' + state.maxAudioPlays + ' times';
         var engineBadge = document.getElementById('audioEngineBadge');
         if (engineBadge) {
           engineBadge.innerHTML = q.audioUrl ? '<i data-lucide="music" class="w-3 h-3 text-emerald-400"></i> Audio Track' : '<i data-lucide="sparkles" class="w-3 h-3 text-amber-400"></i> AI Voice Synthesis';
         }
         var preview = document.getElementById('audioPassagePreview');
         if (preview) {
-          preview.innerText = q.passage ? q.passage : 'Audio rekaman percakapan / narasi TOEFL';
+          preview.innerText = q.passage ? q.passage : 'TOEFL conversation / lecture audio recording';
         }
       } else {
         audioBox.classList.add('hidden');
@@ -651,13 +656,44 @@
       var passageBox = document.getElementById('passageContainer');
       if (q.passage && q.passage.trim().length > 0) {
         passageBox.classList.remove('hidden');
-        passageBox.innerHTML = '<div class="font-bold text-slate-800 mb-1">Teks / Petunjuk Soal:</div>' + q.passage.replace(/\n/g, '<br>');
+        passageBox.innerHTML = '<div class="font-bold text-slate-800 mb-1">Passage / Question Context:</div>' + q.passage.replace(/\n/g, '<br>');
       } else {
         passageBox.classList.add('hidden');
       }
 
       // Prompt
       document.getElementById('questionPrompt').innerHTML = q.prompt.replace(/\n/g, '<br>');
+
+      // Visual Media Image
+      var imgBox = document.getElementById('specimenImageContainer');
+      var img = document.getElementById('specimenImage');
+      if (imgBox && img) {
+        if (q.imageUrl && q.imageUrl.trim().length > 0) {
+          img.src = q.imageUrl;
+          imgBox.classList.remove('hidden');
+        } else {
+          img.src = '';
+          imgBox.classList.add('hidden');
+        }
+      }
+
+      // Visual Media Video
+      var vidBox = document.getElementById('specimenVideoContainer');
+      if (vidBox) {
+        if (q.videoUrl && q.videoUrl.trim().length > 0) {
+          var vUrl = q.videoUrl.trim();
+          var ytMatch = vUrl.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
+          if (ytMatch && ytMatch[1]) {
+            vidBox.innerHTML = '<iframe class="w-full h-full" src="https://www.youtube.com/embed/' + ytMatch[1] + '?rel=0" frameborder="0" allowfullscreen></iframe>';
+          } else {
+            vidBox.innerHTML = '<video controls playsinline class="w-full h-full object-contain"><source src="' + vUrl + '">Your browser does not support HTML5 video.</video>';
+          }
+          vidBox.classList.remove('hidden');
+        } else {
+          vidBox.innerHTML = '';
+          vidBox.classList.add('hidden');
+        }
+      }
 
       // Answer Arena Generation
       var arena = document.getElementById('answerOptionsArena');
@@ -684,10 +720,10 @@
         var words = val.trim() ? val.trim().split(/\s+/).length : 0;
         arena.innerHTML = `
           <div class="space-y-2">
-            <textarea id="essayInput" oninput="handleEssayInput('${q.id}', this)" rows="8" placeholder="Tuliskan esai akademik Anda di sini..." class="w-full p-4 rounded-2xl border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 text-sm outline-none font-sans leading-relaxed custom-scrollbar">${val}</textarea>
+            <textarea id="essayInput" oninput="handleEssayInput('${q.id}', this)" rows="8" placeholder="Write your academic essay here..." class="w-full p-4 rounded-2xl border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 text-sm outline-none font-sans leading-relaxed custom-scrollbar">${val}</textarea>
             <div class="flex justify-between items-center text-xs text-slate-500">
-              <span>Target Minimal: 250 kata</span>
-              <span id="wordCounterBadge" class="font-mono font-bold text-brand-700">${words} Kata</span>
+              <span>Minimum Requirement: 250 words</span>
+              <span id="wordCounterBadge" class="font-mono font-bold text-brand-700">${words} Words</span>
             </div>
           </div>
         `;
@@ -700,23 +736,23 @@
             </div>
             
             <div class="flex justify-center gap-3">
-              <button onclick="toggleSpeakingRecord('${q.id}')" id="btnRecordSpeaking" class="px-6 py-3 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-2 shadow-lg transition-all ${
+              <button onclick="toggleSpeakingRecord('${q.id}')" id="btnRecordSpeaking" class="px-6 py-3 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-2 shadow-lg transition-all cursor-pointer ${
                 state.isRecording ? 'bg-red-600 hover:bg-red-700 text-white' : 'bg-brand-600 hover:bg-brand-500 text-white'
               }">
                 <i data-lucide="${state.isRecording ? 'square' : 'mic'}" class="w-4 h-4"></i>
-                <span>${state.isRecording ? 'Hentikan Rekaman' : 'Mulai Rekam Suara'}</span>
+                <span>${state.isRecording ? 'Stop Recording' : 'Start Voice Recording'}</span>
               </button>
             </div>
 
-            <p class="text-[11px] text-slate-400">Pastikan mikrofon aktif dan berbicara dengan intonasi jelas serta artikulasi tepat.</p>
-            ${state.answers[q.id] ? '<div class="text-xs text-emerald-400 font-bold flex items-center justify-center gap-1"><i data-lucide="check-circle" class="w-4 h-4"></i> Audio respon telah tersimpan!</div>' : ''}
+            <p class="text-[11px] text-slate-400">Ensure your microphone is active and speak clearly with proper intonation and articulation.</p>
+            ${state.answers[q.id] ? '<div class="text-xs text-emerald-400 font-bold flex items-center justify-center gap-1"><i data-lucide="check-circle" class="w-4 h-4"></i> Audio response recorded successfully!</div>' : ''}
           </div>
         `;
       }
 
       // Prev / Next button states
       document.getElementById('btnPrev').disabled = state.currentIndex === 0;
-      document.getElementById('btnNext').innerHTML = (state.currentIndex === state.questions.length - 1) ? '<span>Selesai</span> <i data-lucide="check" class="w-4 h-4"></i>' : '<span>Selanjutnya</span> <i data-lucide="chevron-right" class="w-4 h-4"></i>';
+      document.getElementById('btnNext').innerHTML = (state.currentIndex === state.questions.length - 1) ? '<span>Finish & Submit</span> <i data-lucide="check" class="w-4 h-4"></i>' : '<span>Next</span> <i data-lucide="chevron-right" class="w-4 h-4"></i>';
 
       lucide.createIcons();
       renderPalette();
@@ -732,7 +768,7 @@
       state.answers[qId] = el.value;
       var words = el.value.trim() ? el.value.trim().split(/\s+/).length : 0;
       var counter = document.getElementById('wordCounterBadge');
-      if (counter) counter.innerText = words + ' Kata';
+      if (counter) counter.innerText = words + ' Words';
       renderPalette();
     }
 
@@ -845,7 +881,7 @@
         var badge = document.getElementById('playCounterBadge');
         if (badge) {
           var count = this.getQuestionPlayCount(qId);
-          badge.innerText = 'Diputar: ' + count + ' / ' + state.maxAudioPlays + ' kali';
+          badge.innerText = 'Played: ' + count + ' / ' + state.maxAudioPlays + ' times';
         }
       },
 
@@ -862,7 +898,7 @@
           lucide.createIcons();
         }
         if (playStateLabel) {
-          playStateLabel.innerText = playing ? '● Sedang Memutar Audio...' : (this.progressPercent >= 99 ? 'Audio Selesai' : 'Jeda');
+          playStateLabel.innerText = playing ? '● Playing Audio...' : (this.progressPercent >= 99 ? 'Audio Completed' : 'Paused');
           playStateLabel.className = playing ? 'text-[10px] font-semibold text-emerald-400 font-sans animate-pulse ml-2 flex-shrink-0' : 'text-[10px] font-semibold text-slate-300 font-sans ml-2 flex-shrink-0';
         }
         if (visualizer) {
@@ -920,7 +956,7 @@
 
         var plays = this.getQuestionPlayCount(qId);
         if (plays >= state.maxAudioPlays) {
-          alert('Batas maksimal pemutaran (' + state.maxAudioPlays + 'x) untuk soal ini telah tercapai.');
+          alert('Maximum playback limit (' + state.maxAudioPlays + 'x) for this question has been reached.');
           return;
         }
 
@@ -1027,7 +1063,7 @@
           this.html5Audio = null;
         }
         if (!('speechSynthesis' in window)) {
-          alert("Peramban Anda tidak mendukung pemutaran suara otomatis.");
+          alert("Your browser does not support audio speech synthesis playback.");
           return;
         }
 
@@ -1116,7 +1152,7 @@
         this.updatePlayerUI(false);
         var playStateLabel = document.getElementById('audioPlayStateLabel');
         if (playStateLabel) {
-          playStateLabel.innerText = "Audio selesai diputar";
+          playStateLabel.innerText = "Audio playback completed";
           playStateLabel.className = "text-[10px] font-semibold text-emerald-400 font-sans ml-2 flex-shrink-0";
         }
       }
@@ -1134,7 +1170,7 @@
     function confirmFinishExam() {
       var answeredCount = Object.keys(state.answers).length;
       var total = state.questions.length;
-      if (confirm(`Anda telah menjawab ${answeredCount} dari ${total} soal. Yakin ingin mengumpulkan lembar ujian?`)) {
+      if (confirm(`You have answered ${answeredCount} of ${total} questions. Are you sure you want to submit your exam sheet?`)) {
         if (typeof ExamAudioManager !== 'undefined') ExamAudioManager.stop();
         submitExamNow();
       }

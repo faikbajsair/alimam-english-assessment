@@ -21,7 +21,7 @@ var ReportController = (function () {
       assessment: {
         title: "Al-Imam Standardized TOEFL ITP Full Diagnostic",
         type: "TOEFL_ITP",
-        testDate: "23 September 2026",
+        testDate: "September 23, 2026",
         scoreScaled: 577,
         cefrLevel: "B2",
         cefrDescriptor: "Vantage / Upper Intermediate",
@@ -34,7 +34,7 @@ var ReportController = (function () {
       assessmentEvaluation: {
         strengths: "Excellent mastery of complex grammatical clauses, high listening accuracy for academic dialogue.",
         recommendations: "Practice rapid reading for main ideas and idiomatic phrasal verbs.",
-        islamicCharacterAdab: "Sangat Beradab, Jujur, dan Menjaga Integritas Ujian Digital secara Istiqomah (Nilai Akhlak: A)."
+        islamicCharacterAdab: "Exemplary Character, Honest, and Steadfastly Upholds Digital Assessment Integrity (Character Rating: A)."
       },
       qrCodeData: JSON.stringify({
         verificationUrl: CONFIG.INSTITUTION_WEBSITE + "/verify?id=" + (submissionId || "SUB-2026-001"),
@@ -67,10 +67,10 @@ var ReportController = (function () {
         { level: "A1 / A2 (Elementary)", count: 12, percentage: 8.4 }
       ],
       recentSubmissions: [
-        { id: "SUB-01", candidate: "Muhammad Rayhan Al-Fatih", exam: "TOEFL ITP Diagnostic", score: "577 / 677", cefr: "B2", status: "PASSED", date: "Hari Ini" },
-        { id: "SUB-02", candidate: "Aisha Zahra Nurhaliza", exam: "IELTS Academic Simulation", score: "7.5 / 9.0", cefr: "C1", status: "PASSED", date: "Hari Ini" },
-        { id: "SUB-03", candidate: "Fathir Ahmad Pratama", exam: "Al-Imam EPT", score: "520 / 677", cefr: "B2", status: "PASSED", date: "Kemarin" },
-        { id: "SUB-04", candidate: "Khadijah Maryam", exam: "TOEFL ITP Diagnostic", score: "610 / 677", cefr: "C1", status: "PASSED", date: "Kemarin" }
+        { id: "SUB-01", candidate: "Muhammad Rayhan Al-Fatih", exam: "TOEFL ITP Diagnostic", score: "577 / 677", cefr: "B2", status: "PASSED", date: "Today" },
+        { id: "SUB-02", candidate: "Aisha Zahra Nurhaliza", exam: "IELTS Academic Simulation", score: "7.5 / 9.0", cefr: "C1", status: "PASSED", date: "Today" },
+        { id: "SUB-03", candidate: "Fathir Ahmad Pratama", exam: "Al-Imam EPT", score: "520 / 677", cefr: "B2", status: "PASSED", date: "Yesterday" },
+        { id: "SUB-04", candidate: "Khadijah Maryam", exam: "TOEFL ITP Diagnostic", score: "610 / 677", cefr: "C1", status: "PASSED", date: "Yesterday" }
       ]
     };
   }

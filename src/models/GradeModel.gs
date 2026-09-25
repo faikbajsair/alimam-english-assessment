@@ -31,7 +31,7 @@ var GradeModel = (function () {
       maxScore: 677,
       minScore: 310,
       cefr: cefr,
-      gradeStatus: totalScore >= 500 ? "PASSED (Memenuhi Syarat)" : "NEEDS IMPROVEMENT (Perlu Pengayaan)"
+      gradeStatus: totalScore >= 500 ? "PASSED (Meets Requirement)" : "NEEDS IMPROVEMENT (Further Study Recommended)"
     };
   }
 
@@ -86,7 +86,7 @@ var GradeModel = (function () {
       overallBand: overall.toFixed(1),
       maxBand: "9.0",
       cefr: cefr,
-      gradeStatus: overall >= 6.5 ? "PASSED (Memenuhi Syarat)" : "NEEDS IMPROVEMENT (Perlu Pengayaan)"
+      gradeStatus: overall >= 6.5 ? "PASSED (Meets Requirement)" : "NEEDS IMPROVEMENT (Further Study Recommended)"
     };
   }
 
@@ -112,7 +112,7 @@ var GradeModel = (function () {
    */
   function generateCertificateData(submission, user, exam) {
     var certNumber = "CERT/AL-IMAM/" + new Date().getFullYear() + "/" + (submission.id || "001");
-    var issueDate = new Date().toLocaleDateString("id-ID", {
+    var issueDate = new Date().toLocaleDateString("en-US", {
       day: "numeric",
       month: "long",
       year: "numeric"
@@ -148,9 +148,9 @@ var GradeModel = (function () {
       cefrBadge: submission.cefr || { level: "B2", name: "Vantage / Upper Intermediate", color: "#2563eb" },
       qualitativeAnalysis: qualitativeAnalysis,
       qrVerificationPayload: qrPayload,
-      leadExaminer: "Kepala Sekolah",
+      leadExaminer: "Principal",
       leadExaminerSub: "SMP Al-Imam Islamic School (AI IS)",
-      headOfSchool: "Ketua Yayasan",
+      headOfSchool: "Chairman of Foundation",
       headOfSchoolSub: "Yayasan SAPIN Darussalam"
     };
   }
@@ -169,7 +169,7 @@ var GradeModel = (function () {
         "Enhance listening response speed on fast-paced idiomatic colloquial expressions.",
         "Broaden academic transitions and cohesive conjunctions in long-form argumentative essays."
       ],
-      islamicCharacterNote: "Peserta menunjukkan kejujuran, ketekunan, dan adab thalabul 'ilmi yang sangat baik selama pelaksanaan asesmen digital."
+      islamicCharacterNote: "The candidate demonstrated exemplary honesty, diligence, and noble academic manners (adab thalabul 'ilmi) throughout the digital assessment."
     };
   }
 
