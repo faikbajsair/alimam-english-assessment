@@ -140,205 +140,244 @@
       gasApiUrl: "" // Optional Google Apps Script Exec URL
     };
 
+    // Default Master Question Bank Template
+    const DEFAULT_QUESTIONS = [
+      {
+        id: "Q-LIST-01",
+        examType: "TOEFL_ITP",
+        section: "listening",
+        type: "multiple_choice",
+        passage: "Short Dialogue: University Campus Academic Inquiry",
+        prompt: "Man: 'Are you going to the international symposium on renewable energy this Friday?'\nWoman: 'I wouldn't miss it for the world!'\nNarrator: 'What does the woman mean?'",
+        audioUrl: "https://actions.google.com/sounds/v1/speech/announcement_chime.ogg",
+        imageUrl: "",
+        videoUrl: "",
+        options: [
+          { key: "A", text: "She definitely plans on attending the symposium." },
+          { key: "B", text: "She is not interested in renewable energy." },
+          { key: "C", text: "She will travel around the world on Friday." },
+          { key: "D", text: "She missed the registration deadline." }
+        ],
+        correct: "A",
+        points: 1
+      },
+      {
+        id: "Q-LIST-02",
+        examType: "TOEFL_ITP",
+        section: "listening",
+        type: "multiple_choice",
+        passage: "Academic Lecture: Classical Islamic Astronomy in Baghdad",
+        prompt: "Based on the audio lecture and visual reference, which historical instrument was perfected in 9th century Baghdad for calculating celestial coordinates and prayer times?",
+        audioUrl: "https://actions.google.com/sounds/v1/speech/bell_ring.ogg",
+        imageUrl: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80",
+        videoUrl: "",
+        options: [
+          { key: "A", text: "The Astrolabe" },
+          { key: "B", text: "The Optical Microscope" },
+          { key: "C", text: "The Magnetic Barometer" },
+          { key: "D", text: "The Digital Chronometer" }
+        ],
+        correct: "A",
+        points: 1
+      },
+      {
+        id: "Q-STRUC-01",
+        examType: "TOEFL_ITP",
+        section: "structure",
+        type: "multiple_choice",
+        passage: "",
+        prompt: "Not only _______ the fundamental laws of optics, but Ibn al-Haytham also established the foundation for the modern empirical scientific method.",
+        audioUrl: "",
+        imageUrl: "",
+        videoUrl: "",
+        options: [
+          { key: "A", text: "he formulated" },
+          { key: "B", text: "did he formulate" },
+          { key: "C", text: "he did formulate" },
+          { key: "D", text: "was formulating" }
+        ],
+        correct: "B",
+        points: 1
+      },
+      {
+        id: "Q-STRUC-02",
+        examType: "TOEFL_ITP",
+        section: "structure",
+        type: "multiple_choice",
+        passage: "Written Expression Error Analysis (Identify the incorrect underlined section):",
+        prompt: "The Al-Imam (A)[faculty members] has (B)[unanimously] agreed that every student must (C)[submit their] research proposal (D)[before deadline].",
+        audioUrl: "",
+        imageUrl: "",
+        videoUrl: "",
+        options: [
+          { key: "A", text: "faculty members" },
+          { key: "B", text: "unanimously" },
+          { key: "C", text: "has -> have (Subject-Verb Agreement error)" },
+          { key: "D", text: "before deadline" }
+        ],
+        correct: "C",
+        points: 1
+      },
+      {
+        id: "Q-VOCAB-01",
+        examType: "TOEFL_ITP",
+        section: "structure",
+        type: "sentence_blank",
+        passage: "",
+        prompt: "The rookie's __________________ celebration after his first goal went on so long the referee had to walk over and remind him the game wasn't over, him sprinting the length of the field, arms out, before sliding on his knees into the corner flag.",
+        audioUrl: "",
+        imageUrl: "",
+        videoUrl: "",
+        options: [
+          { key: "A", text: "exuberant" },
+          { key: "B", text: "aggressive" },
+          { key: "C", text: "competitive" },
+          { key: "D", text: "nervous" }
+        ],
+        correct: "A",
+        points: 1,
+        hints: [
+          "Hint 1: Look for an adjective that describes unrestrained, enthusiastic energy and joyful excitement.",
+          "Hint 2: The sentence describes sprinting the length of the field and sliding on knees out of pure happiness.",
+          "Hint 3: The correct word is synonymous with 'ebullient' or 'high-spirited'."
+        ]
+      },
+      {
+        id: "Q-VOCAB-02",
+        examType: "TOEFL_ITP",
+        section: "structure",
+        type: "sentence_blank",
+        passage: "",
+        prompt: "Despite facing harsh desert conditions, the ancient botanists developed __________________ irrigation techniques that allowed date palms and citrus groves to thrive across arid oases.",
+        audioUrl: "",
+        imageUrl: "",
+        videoUrl: "",
+        options: [
+          { key: "A", text: "ingenious" },
+          { key: "B", text: "negligent" },
+          { key: "C", text: "fragile" },
+          { key: "D", text: "obsolete" }
+        ],
+        correct: "A",
+        points: 1,
+        hints: [
+          "Hint 1: The context highlights remarkable innovation ('allowed date palms to thrive in arid oases').",
+          "Hint 2: It means clever, brilliantly inventive, or resourceful.",
+          "Hint 3: Originates from the Latin root related to 'genius'."
+        ]
+      },
+      {
+        id: "Q-READ-01",
+        examType: "TOEFL_ITP",
+        section: "reading",
+        type: "multiple_choice",
+        passage: "Passage 1: The House of Wisdom (Bayt al-Hikmah)\n\nEstablished in Baghdad in the early 9th century during the Abbasid Caliphate, the House of Wisdom served as an unrivaled epicenter of intellectual translation, astronomical research, and mathematical discovery. Scholars from diverse backgrounds congregated to translate ancient Hellenistic, Persian, and Indian treatises into Arabic. This scholarly movement not only preserved classical knowledge that might otherwise have vanished, but also catalyzed revolutionary advancements in algebra, medicine, optics, and philosophy that subsequently ignited the European Renaissance.",
+        prompt: "The word 'catalyzed' in the passage is closest in meaning to which of the following?",
+        audioUrl: "",
+        imageUrl: "https://images.unsplash.com/photo-1532012164546-f432f2e3777f?auto=format&fit=crop&w=800&q=80",
+        videoUrl: "",
+        options: [
+          { key: "A", text: "Accelerated or triggered" },
+          { key: "B", text: "Delayed significantly" },
+          { key: "C", text: "Replaced entirely" },
+          { key: "D", text: "Contradicted" }
+        ],
+        correct: "A",
+        points: 1
+      },
+      {
+        id: "Q-READ-02",
+        examType: "TOEFL_ITP",
+        section: "reading",
+        type: "multiple_choice",
+        passage: "Passage 1: The House of Wisdom (Bayt al-Hikmah)\n\nEstablished in Baghdad in the early 9th century during the Abbasid Caliphate, the House of Wisdom served as an unrivaled epicenter of intellectual translation, astronomical research, and mathematical discovery.",
+        prompt: "According to the passage, what was a primary accomplishment of the scholars at the House of Wisdom?",
+        audioUrl: "",
+        imageUrl: "",
+        videoUrl: "",
+        options: [
+          { key: "A", text: "They translated and synthesized major works from Hellenistic, Persian, and Indian traditions into Arabic." },
+          { key: "B", text: "They restricted philosophical discourse strictly to local dialects." },
+          { key: "C", text: "They built maritime navigation fleets for trans-Atlantic expeditions." },
+          { key: "D", text: "They replaced mathematical arithmetic with symbolic alchemy." }
+        ],
+        correct: "A",
+        points: 1
+      },
+      {
+        id: "Q-WRIT-01",
+        examType: "IELTS_ACADEMIC",
+        section: "writing",
+        type: "essay",
+        passage: "IELTS Task 2 Academic Essay Prompt",
+        prompt: "In the era of rapid artificial intelligence adoption, some educators argue that foundational ethics and human empathy must become the core focus of academic institutions rather than pure technical specialization. To what extent do you agree or disagree? (Write at least 250 words)",
+        audioUrl: "",
+        imageUrl: "",
+        videoUrl: "",
+        options: [],
+        correct: "Standard Rubric",
+        points: 100
+      },
+      {
+        id: "Q-SPK-01",
+        examType: "IELTS_ACADEMIC",
+        section: "speaking",
+        type: "speaking_record",
+        passage: "IELTS Speaking Part 2: Long Turn Presentation (Visual Cue Card)",
+        prompt: "Describe an inspiring leader, teacher, or visionary scholar whose principles have significantly shaped your worldview.\n\nYou should state:\n- Who this person is\n- What key values or achievements they exemplify\n- How their guidance influenced your personal aspirations\n- And explain why their legacy remains profoundly impactful.",
+        audioUrl: "https://actions.google.com/sounds/v1/speech/bell_ring.ogg",
+        imageUrl: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&q=80",
+        videoUrl: "",
+        options: [],
+        correct: "Examiner Rubric",
+        points: 100
+      }
+    ];
+
+    // Persistence Helpers for Questions Storage
+    const STORAGE_KEY_QUESTIONS = "alimam_assessment_questions_v1";
+
+    function loadPersistedQuestions() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY_QUESTIONS);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            return parsed;
+          }
+        }
+      } catch (e) {
+        console.warn("Failed to read questions from localStorage:", e);
+      }
+      return JSON.parse(JSON.stringify(DEFAULT_QUESTIONS));
+    }
+
+    function persistQuestions(questions) {
+      try {
+        const toSave = questions || AppState.questions;
+        localStorage.setItem(STORAGE_KEY_QUESTIONS, JSON.stringify(toSave));
+      } catch (e) {
+        console.warn("Failed to persist questions to localStorage:", e);
+      }
+    }
+
+    function resetDefaultQuestionsSpa() {
+      if (confirm("Are you sure you want to reset the Question Bank to the default standard questions? Any custom uploaded or edited questions will be restored.")) {
+        AppState.questions = JSON.parse(JSON.stringify(DEFAULT_QUESTIONS));
+        persistQuestions(AppState.questions);
+        renderAdminQuestionsTable();
+        showToast("Question Bank has been reset to default standard questions.");
+      }
+    }
+
     // Global Reactive Application State
     const AppState = {
       currentPage: "landing", // 'landing', 'exam', 'admin', 'cms', 'guide'
       currentUser: null,
       activeExamCode: "TOEFL2026",
       
-      // Question Bank
-      questions: [
-        {
-          id: "Q-LIST-01",
-          examType: "TOEFL_ITP",
-          section: "listening",
-          type: "multiple_choice",
-          passage: "Short Dialogue: University Campus Academic Inquiry",
-          prompt: "Man: 'Are you going to the international symposium on renewable energy this Friday?'\nWoman: 'I wouldn't miss it for the world!'\nNarrator: 'What does the woman mean?'",
-          audioUrl: "https://actions.google.com/sounds/v1/speech/announcement_chime.ogg",
-          imageUrl: "",
-          videoUrl: "",
-          options: [
-            { key: "A", text: "She definitely plans on attending the symposium." },
-            { key: "B", text: "She is not interested in renewable energy." },
-            { key: "C", text: "She will travel around the world on Friday." },
-            { key: "D", text: "She missed the registration deadline." }
-          ],
-          correct: "A",
-          points: 1
-        },
-        {
-          id: "Q-LIST-02",
-          examType: "TOEFL_ITP",
-          section: "listening",
-          type: "multiple_choice",
-          passage: "Academic Lecture: Classical Islamic Astronomy in Baghdad",
-          prompt: "Based on the audio lecture and visual reference, which historical instrument was perfected in 9th century Baghdad for calculating celestial coordinates and prayer times?",
-          audioUrl: "https://actions.google.com/sounds/v1/speech/bell_ring.ogg",
-          imageUrl: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80",
-          videoUrl: "",
-          options: [
-            { key: "A", text: "The Astrolabe" },
-            { key: "B", text: "The Optical Microscope" },
-            { key: "C", text: "The Magnetic Barometer" },
-            { key: "D", text: "The Digital Chronometer" }
-          ],
-          correct: "A",
-          points: 1
-        },
-        {
-          id: "Q-STRUC-01",
-          examType: "TOEFL_ITP",
-          section: "structure",
-          type: "multiple_choice",
-          passage: "",
-          prompt: "Not only _______ the fundamental laws of optics, but Ibn al-Haytham also established the foundation for the modern empirical scientific method.",
-          audioUrl: "",
-          imageUrl: "",
-          videoUrl: "",
-          options: [
-            { key: "A", text: "he formulated" },
-            { key: "B", text: "did he formulate" },
-            { key: "C", text: "he did formulate" },
-            { key: "D", text: "was formulating" }
-          ],
-          correct: "B",
-          points: 1
-        },
-        {
-          id: "Q-STRUC-02",
-          examType: "TOEFL_ITP",
-          section: "structure",
-          type: "multiple_choice",
-          passage: "Written Expression Error Analysis (Identify the incorrect underlined section):",
-          prompt: "The Al-Imam (A)[faculty members] has (B)[unanimously] agreed that every student must (C)[submit their] research proposal (D)[before deadline].",
-          audioUrl: "",
-          imageUrl: "",
-          videoUrl: "",
-          options: [
-            { key: "A", text: "faculty members" },
-            { key: "B", text: "unanimously" },
-            { key: "C", text: "has -> have (Subject-Verb Agreement error)" },
-            { key: "D", text: "before deadline" }
-          ],
-          correct: "C",
-          points: 1
-        },
-        {
-          id: "Q-VOCAB-01",
-          examType: "TOEFL_ITP",
-          section: "structure",
-          type: "sentence_blank",
-          passage: "",
-          prompt: "The rookie's __________________ celebration after his first goal went on so long the referee had to walk over and remind him the game wasn't over, him sprinting the length of the field, arms out, before sliding on his knees into the corner flag.",
-          audioUrl: "",
-          imageUrl: "",
-          videoUrl: "",
-          options: [
-            { key: "A", text: "exuberant" },
-            { key: "B", text: "aggressive" },
-            { key: "C", text: "competitive" },
-            { key: "D", text: "nervous" }
-          ],
-          correct: "A",
-          points: 1,
-          hints: [
-            "Hint 1: Look for an adjective that describes unrestrained, enthusiastic energy and joyful excitement.",
-            "Hint 2: The sentence describes sprinting the length of the field and sliding on knees out of pure happiness.",
-            "Hint 3: The correct word is synonymous with 'ebullient' or 'high-spirited'."
-          ]
-        },
-        {
-          id: "Q-VOCAB-02",
-          examType: "TOEFL_ITP",
-          section: "structure",
-          type: "sentence_blank",
-          passage: "",
-          prompt: "Despite facing harsh desert conditions, the ancient botanists developed __________________ irrigation techniques that allowed date palms and citrus groves to thrive across arid oases.",
-          audioUrl: "",
-          imageUrl: "",
-          videoUrl: "",
-          options: [
-            { key: "A", text: "ingenious" },
-            { key: "B", text: "negligent" },
-            { key: "C", text: "fragile" },
-            { key: "D", text: "obsolete" }
-          ],
-          correct: "A",
-          points: 1,
-          hints: [
-            "Hint 1: The context highlights remarkable innovation ('allowed date palms to thrive in arid oases').",
-            "Hint 2: It means clever, brilliantly inventive, or resourceful.",
-            "Hint 3: Originates from the Latin root related to 'genius'."
-          ]
-        },
-        {
-          id: "Q-READ-01",
-          examType: "TOEFL_ITP",
-          section: "reading",
-          type: "multiple_choice",
-          passage: "Passage 1: The House of Wisdom (Bayt al-Hikmah)\n\nEstablished in Baghdad in the early 9th century during the Abbasid Caliphate, the House of Wisdom served as an unrivaled epicenter of intellectual translation, astronomical research, and mathematical discovery. Scholars from diverse backgrounds congregated to translate ancient Hellenistic, Persian, and Indian treatises into Arabic. This scholarly movement not only preserved classical knowledge that might otherwise have vanished, but also catalyzed revolutionary advancements in algebra, medicine, optics, and philosophy that subsequently ignited the European Renaissance.",
-          prompt: "The word 'catalyzed' in the passage is closest in meaning to which of the following?",
-          audioUrl: "",
-          imageUrl: "https://images.unsplash.com/photo-1532012164546-f432f2e3777f?auto=format&fit=crop&w=800&q=80",
-          videoUrl: "",
-          options: [
-            { key: "A", text: "Accelerated or triggered" },
-            { key: "B", text: "Delayed significantly" },
-            { key: "C", text: "Replaced entirely" },
-            { key: "D", text: "Contradicted" }
-          ],
-          correct: "A",
-          points: 1
-        },
-        {
-          id: "Q-READ-02",
-          examType: "TOEFL_ITP",
-          section: "reading",
-          type: "multiple_choice",
-          passage: "Passage 1: The House of Wisdom (Bayt al-Hikmah)\n\nEstablished in Baghdad in the early 9th century during the Abbasid Caliphate, the House of Wisdom served as an unrivaled epicenter of intellectual translation, astronomical research, and mathematical discovery.",
-          prompt: "According to the passage, what was a primary accomplishment of the scholars at the House of Wisdom?",
-          audioUrl: "",
-          imageUrl: "",
-          videoUrl: "",
-          options: [
-            { key: "A", text: "They translated and synthesized major works from Hellenistic, Persian, and Indian traditions into Arabic." },
-            { key: "B", text: "They restricted philosophical discourse strictly to local dialects." },
-            { key: "C", text: "They built maritime navigation fleets for trans-Atlantic expeditions." },
-            { key: "D", text: "They replaced mathematical arithmetic with symbolic alchemy." }
-          ],
-          correct: "A",
-          points: 1
-        },
-        {
-          id: "Q-WRIT-01",
-          examType: "IELTS_ACADEMIC",
-          section: "writing",
-          type: "essay",
-          passage: "IELTS Task 2 Academic Essay Prompt",
-          prompt: "In the era of rapid artificial intelligence adoption, some educators argue that foundational ethics and human empathy must become the core focus of academic institutions rather than pure technical specialization. To what extent do you agree or disagree? (Write at least 250 words)",
-          audioUrl: "",
-          imageUrl: "",
-          videoUrl: "",
-          options: [],
-          correct: "Standard Rubric",
-          points: 100
-        },
-        {
-          id: "Q-SPK-01",
-          examType: "IELTS_ACADEMIC",
-          section: "speaking",
-          type: "speaking_record",
-          passage: "IELTS Speaking Part 2: Long Turn Presentation (Visual Cue Card)",
-          prompt: "Describe an inspiring leader, teacher, or visionary scholar whose principles have significantly shaped your worldview.\n\nYou should state:\n- Who this person is\n- What key values or achievements they exemplify\n- How their guidance influenced your personal aspirations\n- And explain why their legacy remains profoundly impactful.",
-          audioUrl: "https://actions.google.com/sounds/v1/speech/bell_ring.ogg",
-          imageUrl: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&q=80",
-          videoUrl: "",
-          options: [],
-          correct: "Examiner Rubric",
-          points: 100
-        }
-      ],
+      // Question Bank (loaded from localStorage or template defaults)
+      questions: loadPersistedQuestions(),
 
       // Exam Player Live State
       examSession: {
@@ -2200,6 +2239,9 @@
                 <button onclick="triggerSpaCsvImport()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2.5 rounded-xl border border-slate-300 flex items-center gap-1.5 transition-all cursor-pointer">
                   <i data-lucide="upload" class="w-4 h-4"></i> Import CSV
                 </button>
+                <button onclick="resetDefaultQuestionsSpa()" title="Reset bank to default questions" class="bg-rose-50 hover:bg-rose-100 text-rose-700 px-3.5 py-2.5 rounded-xl border border-rose-200 flex items-center gap-1.5 transition-all cursor-pointer">
+                  <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Reset Bank
+                </button>
                 <input type="file" id="spaCsvFileInput" class="hidden" accept=".csv,.json" onchange="handleSpaCsvImport(event)">
               </div>
             </div>
@@ -3339,6 +3381,7 @@
         showToast(`New question ${newId} added successfully!`);
       }
 
+      persistQuestions();
       closeAddQuestionSpaModal();
       renderAdminQuestionsTable();
     }
@@ -3350,6 +3393,7 @@
     function deleteQuestionSpa(id) {
       if (confirm(`Are you sure you want to delete question ${id} from the question bank?`)) {
         AppState.questions = AppState.questions.filter(q => q.id !== id);
+        persistQuestions();
         showToast(`Question ${id} has been deleted.`);
         renderAdminQuestionsTable();
       }
@@ -3855,6 +3899,7 @@
             const data = JSON.parse(text);
             if (Array.isArray(data)) {
               AppState.questions = [...data, ...AppState.questions];
+              persistQuestions();
               showToast(`${data.length} questions successfully imported from JSON file.`);
             }
           } else {
@@ -3882,6 +3927,7 @@
                 importedCount++;
               }
             }
+            persistQuestions();
             showToast(`${importedCount} questions successfully imported from CSV.`);
           }
           renderAdminQuestionsTable();
@@ -3943,6 +3989,8 @@
     window.saveQuestionSpa = saveQuestionSpa;
     window.editQuestionSpa = editQuestionSpa;
     window.deleteQuestionSpa = deleteQuestionSpa;
+    window.resetDefaultQuestionsSpa = resetDefaultQuestionsSpa;
+    window.persistQuestions = persistQuestions;
     window.renderAdminQuestionsTable = renderAdminQuestionsTable;
     window.triggerSpaCsvImport = triggerSpaCsvImport;
     window.handleSpaCsvImport = handleSpaCsvImport;

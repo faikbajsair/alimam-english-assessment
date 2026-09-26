@@ -153,6 +153,9 @@
           <button onclick="triggerImportCsv()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 flex items-center gap-1.5 transition-all cursor-pointer">
             <i data-lucide="upload" class="w-4 h-4"></i> Import Template
           </button>
+          <button onclick="resetDefaultQuestionsAdmin()" title="Reset bank to default standard questions" class="bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-xs px-3.5 py-2.5 rounded-xl border border-rose-200 flex items-center gap-1.5 transition-all cursor-pointer">
+            <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Reset Bank
+          </button>
           <input type="file" id="csvFileInput" class="hidden" accept=".csv,.json" onchange="handleFileImport(event)">
         </div>
       </div>
@@ -669,7 +672,7 @@
 
   <!-- ================= SCRIPTS ================= -->
   <script>
-    var masterQuestions = [
+    var DEFAULT_MASTER_QUESTIONS = [
       {
         id: "Q-LIST-01",
         examType: "TOEFL_ITP",
@@ -813,6 +816,43 @@
         points: 10
       }
     ];
+
+    var STORAGE_KEY_QUESTIONS_ADMIN = 'alimam_assessment_questions_v1';
+
+    function loadMasterQuestions() {
+      try {
+        var raw = localStorage.getItem(STORAGE_KEY_QUESTIONS_ADMIN);
+        if (raw) {
+          var parsed = JSON.parse(raw);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            return parsed;
+          }
+        }
+      } catch(e) {
+        console.warn("Failed to load questions from localStorage:", e);
+      }
+      return JSON.parse(JSON.stringify(DEFAULT_MASTER_QUESTIONS));
+    }
+
+    function persistMasterQuestions(questions) {
+      try {
+        var toSave = questions || masterQuestions;
+        localStorage.setItem(STORAGE_KEY_QUESTIONS_ADMIN, JSON.stringify(toSave));
+      } catch(e) {
+        console.warn("Failed to persist questions to localStorage:", e);
+      }
+    }
+
+    function resetDefaultQuestionsAdmin() {
+      if (confirm("Are you sure you want to reset the Question Bank to standard default questions? Any custom uploaded or edited questions will be restored.")) {
+        masterQuestions = JSON.parse(JSON.stringify(DEFAULT_MASTER_QUESTIONS));
+        persistMasterQuestions(masterQuestions);
+        filterQuestionsTable();
+        alert("Question Bank has been reset to default questions.");
+      }
+    }
+
+    var masterQuestions = loadMasterQuestions();
 
     window.addEventListener('DOMContentLoaded', function() {
       lucide.createIcons();
@@ -1781,6 +1821,7 @@
     function deleteQuestion(id) {
       if (confirm('Are you sure you want to delete question ' + id + '?')) {
         masterQuestions = masterQuestions.filter(function(q) { return q.id !== id; });
+        persistMasterQuestions();
         filterQuestionsTable();
       }
     }
@@ -1838,6 +1879,7 @@
         };
         masterQuestions.unshift(newQ);
       }
+      persistMasterQuestions();
       filterQuestionsTable();
       closeAddQuestionModal();
     }
@@ -1859,9 +1901,9 @@
     window.stopAllAudioAndMedia = stopAllAudioAndMedia;
     window.testDashboardAudio = testDashboardAudio;
     window.editQuestion = editQuestion;
-    window.updatePreviewEssayCount = updatePreviewEssayCount;
-    window.editQuestion = editQuestion;
     window.deleteQuestion = deleteQuestion;
+    window.resetDefaultQuestionsAdmin = resetDefaultQuestionsAdmin;
+    window.persistMasterQuestions = persistMasterQuestions;
     window.handleAddQuestionSubmit = handleAddQuestionSubmit;
     window.filterQuestionsTable = filterQuestionsTable;
     window.renderQuestionsTable = renderQuestionsTable;
