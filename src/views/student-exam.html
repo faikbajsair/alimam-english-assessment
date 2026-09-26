@@ -847,6 +847,32 @@
       });
     }
 
+    // ================= AUDIO PROCESSING & NORMALIZATION UTILITIES =================
+    function normalizeAudioUrl(url) {
+      if (!url || typeof url !== 'string') return '';
+      var u = url.trim();
+      // Google Drive file link: convert to direct streamable uc export link
+      var gdMatch = u.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?id=)([a-zA-Z0-9_-]+)/i);
+      if (gdMatch && gdMatch[1]) {
+        return 'https://docs.google.com/uc?export=download&id=' + gdMatch[1];
+      }
+      // Dropbox shared link: convert dl=0 to raw=1
+      if (u.includes('dropbox.com')) {
+        return u.replace('dl=0', 'raw=1').replace('?dl=1', '?raw=1');
+      }
+      return u;
+    }
+
+    function isSoundCloudUrl(url) {
+      if (!url || typeof url !== 'string') return false;
+      return /soundcloud\.com|on\.soundcloud\.com/i.test(url.trim());
+    }
+
+    function getSoundCloudEmbedUrl(url) {
+      var cleanUrl = url.trim();
+      return 'https://w.soundcloud.com/player/?url=' + encodeURIComponent(cleanUrl) + '&color=%23059669&auto_play=true&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false';
+    }
+
     // ================= DUAL-ENGINE LISTENING AUDIO MANAGER =================
     var ExamAudioManager = {
       activeQId: null,
@@ -1003,7 +1029,40 @@
 
       playQuestion: function(q) {
         var self = this;
-        if (q.audioUrl && typeof q.audioUrl === 'string' && q.audioUrl.trim().length > 5) {
+        if (q.audioUrl && isSoundCloudUrl(q.audioUrl)) {
+          this.isSpeech = false;
+          var container = document.getElementById('audioPlayerContainer');
+          if (container) {
+            container.innerHTML = `
+              <div class="space-y-2.5">
+                <div class="flex items-center justify-between text-xs">
+                  <div class="flex items-center gap-2">
+                    <span class="font-bold text-emerald-400 flex items-center gap-1.5">
+                      <i data-lucide="music" class="w-4 h-4"></i> SoundCloud Listening Track
+                    </span>
+                    <span class="px-2 py-0.5 rounded-md bg-emerald-900/90 border border-emerald-700/80 text-emerald-300 text-[10px] font-semibold">
+                      SoundCloud Stream
+                    </span>
+                  </div>
+                  <span id="playCounterBadge" class="px-2.5 py-0.5 rounded-full bg-emerald-900/90 border border-emerald-700 text-emerald-200 text-[11px] font-mono">
+                    Played: ` + this.getQuestionPlayCount(q.id) + ` / ` + state.maxAudioPlays + ` times
+                  </span>
+                </div>
+                <div class="rounded-xl overflow-hidden shadow-inner bg-slate-900 border border-emerald-800/80">
+                  <iframe width="100%" height="120" scrolling="no" frameborder="no" allow="autoplay" src="` + getSoundCloudEmbedUrl(q.audioUrl) + `"></iframe>
+                </div>
+                <div class="text-[11px] text-emerald-300/80 italic line-clamp-1">
+                  ` + (q.passage ? q.passage : 'SoundCloud Listening Comprehension') + `
+                </div>
+              </div>
+            `;
+            lucide.createIcons();
+          }
+          return;
+        }
+
+        var normAudioUrl = normalizeAudioUrl(q.audioUrl);
+        if (normAudioUrl && typeof normAudioUrl === 'string' && normAudioUrl.trim().length > 5) {
           this.isSpeech = false;
           var audio = new Audio();
           audio.crossOrigin = "anonymous";
@@ -1034,7 +1093,7 @@
             self.playWithSpeechSynthesis(q);
           });
 
-          audio.src = q.audioUrl;
+          audio.src = normAudioUrl;
           var playPromise = audio.play();
           if (playPromise !== undefined) {
             playPromise.then(function() {
