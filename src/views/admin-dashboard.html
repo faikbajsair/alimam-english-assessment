@@ -1478,8 +1478,9 @@
 
     // Audio upload and preview handlers for Dashboard
     var activeDashboardAudio = null;
+    var activePreviewAudio = null;
 
-    function stopDashboardAudio() {
+    function stopAllAudioAndMedia() {
       if (activeDashboardAudio) {
         try {
           activeDashboardAudio.pause();
@@ -1487,9 +1488,40 @@
         } catch(e) {}
         activeDashboardAudio = null;
       }
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
+      if (activePreviewAudio) {
+        try {
+          activePreviewAudio.pause();
+          activePreviewAudio.currentTime = 0;
+        } catch(e) {}
+        activePreviewAudio = null;
       }
+      if ('speechSynthesis' in window) {
+        try { window.speechSynthesis.cancel(); } catch(e) {}
+      }
+      document.querySelectorAll('video').forEach(function(v) {
+        try { v.pause(); v.currentTime = 0; } catch(e) {}
+      });
+      document.querySelectorAll('audio').forEach(function(a) {
+        try { a.pause(); a.currentTime = 0; } catch(e) {}
+      });
+      document.querySelectorAll('#modalDashboardAudioPreviewContainer iframe, #modalDashboardVideoPreviewFrame iframe, #previewSimulationArena iframe, iframe[src*="soundcloud"], iframe[src*="youtube"]').forEach(function(f) {
+        try { f.src = 'about:blank'; } catch(e) {}
+      });
+      var icon = document.getElementById("btnPreviewAudioIcon");
+      var label = document.getElementById("btnPreviewAudioLabel");
+      var bar = document.getElementById("previewAudioProgressBar");
+      if (icon) icon.setAttribute("data-lucide", "play");
+      if (label) label.innerText = "Play Audio Track";
+      if (bar) bar.style.width = "0%";
+      lucide.createIcons();
+    }
+
+    function stopDashboardAudio() {
+      stopAllAudioAndMedia();
+    }
+
+    function stopPreviewMedia() {
+      stopAllAudioAndMedia();
     }
 
     function handleDashboardAudioUpload(inputEl) {
@@ -1677,6 +1709,7 @@
     }
 
     function openAddQuestionModal(editId) {
+      stopAllAudioAndMedia();
       editingQuestionId = editId || null;
       var modal = document.getElementById('addQuestionModal');
       if (!modal) return;
@@ -1719,14 +1752,26 @@
     }
 
     function closeAddQuestionModal() {
+      stopAllAudioAndMedia();
       var modal = document.getElementById('addQuestionModal');
       if (modal) {
+        modal.querySelectorAll('video').forEach(function(v) {
+          try { v.pause(); v.currentTime = 0; } catch(e){}
+        });
+        modal.querySelectorAll('audio').forEach(function(a) {
+          try { a.pause(); a.currentTime = 0; } catch(e){}
+        });
+        modal.querySelectorAll('iframe').forEach(function(f) {
+          try { f.src = 'about:blank'; } catch(e){}
+        });
+        var container = document.getElementById('modalDashboardAudioPreviewContainer');
+        if (container) container.innerHTML = '';
+        var vFrame = document.getElementById('modalDashboardVideoPreviewFrame');
+        if (vFrame) vFrame.innerHTML = '';
         modal.style.display = 'none';
         modal.classList.add('hidden');
       }
       editingQuestionId = null;
-      stopDashboardAudio();
-      stopPreviewMedia();
     }
 
     function editQuestion(id) {
@@ -1742,6 +1787,7 @@
 
     function handleAddQuestionSubmit(e) {
       e.preventDefault();
+      stopAllAudioAndMedia();
       var audioUrl = document.getElementById('modalAudioUrl') ? document.getElementById('modalAudioUrl').value.trim() : '';
       var imageUrl = document.getElementById('modalImageUrl') ? document.getElementById('modalImageUrl').value.trim() : '';
       var videoUrl = document.getElementById('modalVideoUrl') ? document.getElementById('modalVideoUrl').value.trim() : '';
@@ -1810,6 +1856,7 @@
     window.updateDashboardAudioPreview = updateDashboardAudioPreview;
     window.clearDashboardAudio = clearDashboardAudio;
     window.stopDashboardAudio = stopDashboardAudio;
+    window.stopAllAudioAndMedia = stopAllAudioAndMedia;
     window.testDashboardAudio = testDashboardAudio;
     window.editQuestion = editQuestion;
     window.updatePreviewEssayCount = updatePreviewEssayCount;

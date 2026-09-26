@@ -2775,7 +2775,57 @@
     }
 
     // Question Bank Interactive Handlers
+    let activeModalAudio = null;
+    let activePreviewAudio = null;
+
+    function stopAllAudioAndMedia() {
+      if (activeModalAudio) {
+        try {
+          activeModalAudio.pause();
+          activeModalAudio.currentTime = 0;
+        } catch(e) {}
+        activeModalAudio = null;
+      }
+      if (activePreviewAudio) {
+        try {
+          activePreviewAudio.pause();
+          activePreviewAudio.currentTime = 0;
+        } catch(e) {}
+        activePreviewAudio = null;
+      }
+      if (typeof ExamAudioManager !== 'undefined' && ExamAudioManager.stop) {
+        try { ExamAudioManager.stop(); } catch(e) {}
+      }
+      if (typeof SpeakingAudioPlayer !== 'undefined' && SpeakingAudioPlayer.stop) {
+        try { SpeakingAudioPlayer.stop(); } catch(e) {}
+      }
+      if ('speechSynthesis' in window) {
+        try { window.speechSynthesis.cancel(); } catch(e) {}
+      }
+      document.querySelectorAll('video').forEach(v => {
+        try { v.pause(); v.currentTime = 0; } catch(e) {}
+      });
+      document.querySelectorAll('audio').forEach(a => {
+        try { a.pause(); a.currentTime = 0; } catch(e) {}
+      });
+      document.querySelectorAll('#modalAudioPreviewContainer iframe, #modalVideoPreviewFrame iframe, #previewSimulationArena iframe, iframe[src*="soundcloud"], iframe[src*="youtube"]').forEach(f => {
+        try { f.src = 'about:blank'; } catch(e) {}
+      });
+      const icon = document.getElementById("btnPreviewAudioIcon");
+      const label = document.getElementById("btnPreviewAudioLabel");
+      const bar = document.getElementById("previewAudioProgressBar");
+      if (icon) icon.setAttribute("data-lucide", "play");
+      if (label) label.innerText = "Play Audio Track";
+      if (bar) bar.style.width = "0%";
+      lucide.createIcons();
+    }
+
+    function stopModalAudio() {
+      stopAllAudioAndMedia();
+    }
+
     function openAddQuestionSpaModal(editingId) {
+      stopAllAudioAndMedia();
       const modal = document.getElementById("addQuestionSpaModal");
       if (!modal) return;
       
@@ -2895,28 +2945,24 @@
     }
 
     function closeAddQuestionSpaModal() {
+      stopAllAudioAndMedia();
       const modal = document.getElementById("addQuestionSpaModal");
       if (modal) {
+        modal.querySelectorAll('video').forEach(v => {
+          try { v.pause(); v.currentTime = 0; } catch(e){}
+        });
+        modal.querySelectorAll('audio').forEach(a => {
+          try { a.pause(); a.currentTime = 0; } catch(e){}
+        });
+        modal.querySelectorAll('iframe').forEach(f => {
+          try { f.src = 'about:blank'; } catch(e){}
+        });
+        const container = document.getElementById("modalAudioPreviewContainer");
+        if (container) container.innerHTML = '';
+        const vFrame = document.getElementById("modalVideoPreviewFrame");
+        if (vFrame) vFrame.innerHTML = '';
         modal.style.display = "none";
         modal.classList.add("hidden");
-      }
-      stopModalAudio();
-      stopPreviewMedia();
-    }
-
-    // Audio upload and preview handlers
-    let activeModalAudio = null;
-
-    function stopModalAudio() {
-      if (activeModalAudio) {
-        try {
-          activeModalAudio.pause();
-          activeModalAudio.currentTime = 0;
-        } catch(e) {}
-        activeModalAudio = null;
-      }
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
       }
     }
 
@@ -3206,6 +3252,7 @@
 
     function saveQuestionSpa(e) {
       e.preventDefault();
+      stopAllAudioAndMedia();
       const editingId = document.getElementById("modalEditingId").value;
       const examType = document.getElementById("modalExamType").value;
       const section = document.getElementById("modalSection").value;
@@ -3440,6 +3487,7 @@
     }
 
     function openQuestionPreviewSpaModal(q) {
+      stopAllAudioAndMedia();
       const modal = document.getElementById("questionPreviewSpaModal");
       const arena = document.getElementById("previewSimulationArena");
       const badge = document.getElementById("previewModalBadge");
@@ -3644,37 +3692,19 @@
     let activePreviewAudio = null;
 
     function stopPreviewMedia() {
-      if (activePreviewAudio) {
-        try {
-          activePreviewAudio.pause();
-          activePreviewAudio.currentTime = 0;
-        } catch(e) {}
-        activePreviewAudio = null;
-      }
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-      }
-      const icon = document.getElementById("btnPreviewAudioIcon");
-      const label = document.getElementById("btnPreviewAudioLabel");
-      const bar = document.getElementById("previewAudioProgressBar");
-      if (icon) icon.setAttribute("data-lucide", "play");
-      if (label) label.innerText = "Play Audio Track";
-      if (bar) bar.style.width = "0%";
-      lucide.createIcons();
+      stopAllAudioAndMedia();
     }
 
     function closeQuestionPreviewSpaModal() {
+      stopAllAudioAndMedia();
       const modal = document.getElementById("questionPreviewSpaModal");
       if (modal) {
-        // 1. Pause and stop all video elements
         modal.querySelectorAll('video').forEach(v => {
           try { v.pause(); v.currentTime = 0; } catch(e){}
         });
-        // 2. Pause and stop all audio elements
         modal.querySelectorAll('audio').forEach(a => {
           try { a.pause(); a.currentTime = 0; } catch(e){}
         });
-        // 3. Stop all iframes (YouTube, SoundCloud) by clearing innerHTML or src
         modal.querySelectorAll('iframe').forEach(f => {
           try { f.src = 'about:blank'; } catch(e){}
         });
@@ -3684,7 +3714,6 @@
         modal.style.display = "none";
         modal.classList.add("hidden");
       }
-      stopPreviewMedia();
     }
 
     function togglePreviewHint() {
@@ -3910,6 +3939,7 @@
     window.clearModalAudio = clearModalAudio;
     window.stopModalAudio = stopModalAudio;
     window.stopPreviewMedia = stopPreviewMedia;
+    window.stopAllAudioAndMedia = stopAllAudioAndMedia;
     window.saveQuestionSpa = saveQuestionSpa;
     window.editQuestionSpa = editQuestionSpa;
     window.deleteQuestionSpa = deleteQuestionSpa;
