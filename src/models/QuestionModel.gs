@@ -322,6 +322,311 @@ var QuestionModel = (function () {
         },
         points: 100,
         tags: "IELTS, Speaking Part 2, Audio Recorder"
+      },
+
+      // ================= GRADE 7 (SMP CLASS 7) QUESTIONS =================
+      {
+        id: "Q-G7-LIST-01",
+        examType: "Grade 7",
+        section: "listening",
+        type: "multiple_choice",
+        passage: "Classroom Dialogue: First Day at SMP Al-Imam",
+        prompt: "Ahmad: 'Excuse me, is this the English classroom for Grade 7?'\nTeacher: 'Yes, Ahmad! Welcome to our class. Please take a seat next to Bilal.'\nNarrator: 'Where does Ahmad sit?'",
+        audioUrl: "https://actions.google.com/sounds/v1/speech/announcement_chime.ogg",
+        imageUrl: "",
+        optionsJson: [
+          { key: "A", text: "Next to Bilal in the Grade 7 classroom" },
+          { key: "B", text: "Near the teacher's office" },
+          { key: "C", text: "Outside the school gate" },
+          { key: "D", text: "In the Grade 8 laboratory" }
+        ],
+        correctAnswer: "A",
+        points: 1,
+        tags: "Grade 7, Listening, Daily Conversation"
+      },
+      {
+        id: "Q-G7-STRUC-01",
+        examType: "Grade 7",
+        section: "structure",
+        type: "multiple_choice",
+        passage: "",
+        prompt: "Bilal and his classmates _______ English together in the school library every Tuesday afternoon.",
+        audioUrl: "",
+        imageUrl: "",
+        optionsJson: [
+          { key: "A", text: "studies" },
+          { key: "B", text: "study" },
+          { key: "C", text: "studying" },
+          { key: "D", text: "studied" }
+        ],
+        correctAnswer: "B",
+        points: 1,
+        tags: "Grade 7, Simple Present Tense, Subject-Verb Agreement"
+      },
+      {
+        id: "Q-G7-READ-01",
+        examType: "Grade 7",
+        section: "reading",
+        type: "multiple_choice",
+        passage: "Daily Routine at SMP Al-Imam Islamic School:\n\nSMP Al-Imam Islamic School provides a balanced curriculum blending modern academic sciences with Islamic character building. Grade 7 students begin their day at 07:00 AM with morning Dhuha prayer and Al-Quran tahfidz session. Afterward, they attend general subjects including English, Mathematics, and Natural Sciences in state-of-the-art classrooms. During lunchtime, students practice Islamic table manners (adab) and perform congregational Dhuhr prayer together.",
+        prompt: "What is the first activity Grade 7 students perform when they arrive at school in the morning?",
+        audioUrl: "",
+        imageUrl: "",
+        optionsJson: [
+          { key: "A", text: "Morning Dhuha prayer and Al-Quran tahfidz session" },
+          { key: "B", text: "English mid-term examination" },
+          { key: "C", text: "Science laboratory experiments" },
+          { key: "D", text: "Playing football in the school yard" }
+        ],
+        correctAnswer: "A",
+        points: 1,
+        tags: "Grade 7, Reading Comprehension, Factual Information"
+      },
+      {
+        id: "Q-G7-WRIT-01",
+        examType: "Grade 7",
+        section: "writing",
+        type: "essay",
+        passage: "Descriptive Text Writing Task",
+        prompt: "Write a short descriptive paragraph (60-80 words) introducing yourself, your favorite subject at SMP Al-Imam, and your daily hobby.",
+        audioUrl: "",
+        imageUrl: "",
+        optionsJson: [],
+        correctAnswer: "",
+        rubricJson: { content: 30, grammar: 35, vocabulary: 35, minWords: 60 },
+        points: 100,
+        tags: "Grade 7, Writing, Descriptive Text"
+      },
+      {
+        id: "Q-G7-SPK-01",
+        examType: "Grade 7",
+        section: "speaking",
+        type: "speaking_record",
+        passage: "Speaking Part 1: Self-Introduction & Aspirations",
+        prompt: "Record your voice (1 minute) answering these 3 prompts:\n1. Introduce your full name and your Grade 7 class.\n2. What is your favorite subject and why do you like it?\n3. What is your future goal or dream?",
+        audioUrl: "https://actions.google.com/sounds/v1/speech/bell_ring.ogg",
+        imageUrl: "",
+        optionsJson: [],
+        correctAnswer: "",
+        rubricJson: { fluency: 30, pronunciation: 35, grammar: 35, maxRecordSeconds: 60 },
+        points: 100,
+        tags: "Grade 7, Speaking, Self-Introduction"
+      },
+
+      // ================= GRADE 8 (SMP CLASS 8) QUESTIONS =================
+      {
+        id: "Q-G8-LIST-01",
+        examType: "Grade 8",
+        section: "listening",
+        type: "multiple_choice",
+        passage: "Dialogue: School Science Fair Preparation",
+        prompt: "Fatimah: 'Have you finished building the water filtration model for the science exhibition?'\nAisyah: 'Not yet, I still need to add the activated charcoal layer this afternoon.'\nNarrator: 'What is Aisyah going to do this afternoon?'",
+        audioUrl: "https://actions.google.com/sounds/v1/speech/announcement_chime.ogg",
+        imageUrl: "",
+        optionsJson: [
+          { key: "A", text: "Add the activated charcoal layer to the water filtration model" },
+          { key: "B", text: "Buy a new aquarium for the classroom" },
+          { key: "C", text: "Cancel the science project presentation" },
+          { key: "D", text: "Visit the principal's office" }
+        ],
+        correctAnswer: "A",
+        points: 1,
+        tags: "Grade 8, Listening, Dialogue Detail"
+      },
+      {
+        id: "Q-G8-STRUC-01",
+        examType: "Grade 8",
+        section: "structure",
+        type: "multiple_choice",
+        passage: "",
+        prompt: "While the students _______ an experiment in the chemistry lab yesterday, the school bell rang.",
+        audioUrl: "",
+        imageUrl: "",
+        optionsJson: [
+          { key: "A", text: "are conducting" },
+          { key: "B", text: "were conducting" },
+          { key: "C", text: "conduct" },
+          { key: "D", text: "have conducted" }
+        ],
+        correctAnswer: "B",
+        points: 1,
+        tags: "Grade 8, Past Continuous Tense, Time Clauses"
+      },
+      {
+        id: "Q-G8-STRUC-02",
+        examType: "Grade 8",
+        section: "structure",
+        type: "multiple_choice",
+        passage: "",
+        prompt: "Mount Everest is __________________ mountain in the world, attracting climbers from every continent.",
+        audioUrl: "",
+        imageUrl: "",
+        optionsJson: [
+          { key: "A", text: "highest" },
+          { key: "B", text: "higher than" },
+          { key: "C", text: "the highest" },
+          { key: "D", text: "as high as" }
+        ],
+        correctAnswer: "C",
+        points: 1,
+        tags: "Grade 8, Degree of Comparison, Superlative"
+      },
+      {
+        id: "Q-G8-READ-01",
+        examType: "Grade 8",
+        section: "reading",
+        type: "multiple_choice",
+        passage: "Passage: The Legacy of Abbas Ibn Firnas\n\nIn the 9th century in Cordoba, Andalusia, the polymath Abbas Ibn Firnas designed a winged glider apparatus and attempted one of the earliest recorded human flights in history. Beyond aviation, Ibn Firnas also invented a water clock, devised colorless glass manufacturing techniques, and created a mechanized planetarium simulating planetary movements. His courageous spirit and scientific curiosity inspire modern youth to pursue aerospace and technological frontiers.",
+        prompt: "According to the passage, which invention was created by Abbas Ibn Firnas besides his aviation glider?",
+        audioUrl: "",
+        imageUrl: "",
+        optionsJson: [
+          { key: "A", text: "A water clock and a mechanized planetarium" },
+          { key: "B", text: "A digital electronic smartwatch" },
+          { key: "C", text: "A solar-powered automobile engine" },
+          { key: "D", text: "A mechanical movable printing press" }
+        ],
+        correctAnswer: "A",
+        points: 1,
+        tags: "Grade 8, Reading Comprehension, Historical Recount"
+      },
+      {
+        id: "Q-G8-WRIT-01",
+        examType: "Grade 8",
+        section: "writing",
+        type: "essay",
+        passage: "Recount Text Writing Task",
+        prompt: "Write a recount text (100-150 words) about a memorable school trip, science competition, or outdoor activity you participated in. Describe the orientation, sequence of events, and personal reflection.",
+        audioUrl: "",
+        imageUrl: "",
+        optionsJson: [],
+        correctAnswer: "",
+        rubricJson: { orientation: 25, events: 35, grammar: 25, vocabulary: 15, minWords: 100 },
+        points: 100,
+        tags: "Grade 8, Writing, Recount Text"
+      },
+      {
+        id: "Q-G8-SPK-01",
+        examType: "Grade 8",
+        section: "speaking",
+        type: "speaking_record",
+        passage: "Speaking Part 2: Recount a Past Experience",
+        prompt: "Record your voice (1.5 minutes) describing a memorable experience in your life:\n- What happened and when did it take place?\n- Who was with you during the event?\n- What did you learn from this experience?",
+        audioUrl: "https://actions.google.com/sounds/v1/speech/bell_ring.ogg",
+        imageUrl: "",
+        optionsJson: [],
+        correctAnswer: "",
+        rubricJson: { fluency: 30, coherence: 25, grammar: 25, vocabulary: 20, maxRecordSeconds: 90 },
+        points: 100,
+        tags: "Grade 8, Speaking, Past Experience"
+      },
+
+      // ================= GRADE 9 (SMP CLASS 9) QUESTIONS =================
+      {
+        id: "Q-G9-LIST-01",
+        examType: "Grade 9",
+        section: "listening",
+        type: "multiple_choice",
+        passage: "Academic Announcement: International STEM & English Olympiad",
+        prompt: "Principal: 'Attention to all Grade 9 candidates. Registration for the International STEM Olympiad closes this Friday at 3:00 PM. Make sure your research abstracts are endorsed by your academic advisor.'\nNarrator: 'What is required before Grade 9 candidates can submit their Olympiad registration?'",
+        audioUrl: "https://actions.google.com/sounds/v1/speech/announcement_chime.ogg",
+        imageUrl: "",
+        optionsJson: [
+          { key: "A", text: "Obtain academic advisor endorsement for their abstracts" },
+          { key: "B", text: "Pay a late submission penalty fee" },
+          { key: "C", text: "Cancel all scheduled afternoon classes" },
+          { key: "D", text: "Travel to an overseas university campus" }
+        ],
+        correctAnswer: "A",
+        points: 1,
+        tags: "Grade 9, Listening, Formal Announcement"
+      },
+      {
+        id: "Q-G9-STRUC-01",
+        examType: "Grade 9",
+        section: "structure",
+        type: "multiple_choice",
+        passage: "",
+        prompt: "The new renewable energy guideline __________________ by the academic committee before the next school term begins.",
+        audioUrl: "",
+        imageUrl: "",
+        optionsJson: [
+          { key: "A", text: "will be implemented" },
+          { key: "B", text: "will implement" },
+          { key: "C", text: "is implementing" },
+          { key: "D", text: "was implement" }
+        ],
+        correctAnswer: "A",
+        points: 1,
+        tags: "Grade 9, Passive Voice, Future Tense"
+      },
+      {
+        id: "Q-G9-STRUC-02",
+        examType: "Grade 9",
+        section: "structure",
+        type: "multiple_choice",
+        passage: "",
+        prompt: "If students __________________ consistent reading habits today, they will achieve outstanding academic results in high school.",
+        audioUrl: "",
+        imageUrl: "",
+        optionsJson: [
+          { key: "A", text: "prioritize" },
+          { key: "B", text: "prioritized" },
+          { key: "C", text: "had prioritized" },
+          { key: "D", text: "will prioritize" }
+        ],
+        correctAnswer: "A",
+        points: 1,
+        tags: "Grade 9, Conditional Sentence Type 1"
+      },
+      {
+        id: "Q-G9-READ-01",
+        examType: "Grade 9",
+        section: "reading",
+        type: "multiple_choice",
+        passage: "Report Text: Artificial Intelligence in Modern Education\n\nArtificial Intelligence (AI) is transforming academic environments by enabling adaptive learning pathways tailored to individual student needs. Intelligent tutoring systems analyze performance metrics in real time, identifying knowledge gaps and generating customized practice modules. However, leading education experts emphasize that AI should augment rather than replace human educators, as ethical guidance, empathy, and moral leadership remain fundamentally human virtues.",
+        prompt: "According to the report, what is the primary conclusion regarding the relationship between AI and human educators?",
+        audioUrl: "",
+        imageUrl: "",
+        optionsJson: [
+          { key: "A", text: "AI should assist educators while human teachers provide essential moral and empathetic guidance." },
+          { key: "B", text: "AI systems should completely replace human teachers in secondary schools." },
+          { key: "C", text: "AI technologies have no practical benefits in educational environments." },
+          { key: "D", text: "Adaptive learning systems must be restricted to university postgraduate levels." }
+        ],
+        correctAnswer: "A",
+        points: 1,
+        tags: "Grade 9, Reading Comprehension, Report Text"
+      },
+      {
+        id: "Q-G9-WRIT-01",
+        examType: "Grade 9",
+        section: "writing",
+        type: "essay",
+        passage: "Analytical Exposition Essay Task",
+        prompt: "Write an analytical exposition essay (150-200 words) on the topic:\n'Why Mastery of the English Language is Essential for Junior High Students in the Global Digital Era.'\nInclude a clear thesis statement, two supporting arguments with evidence, and a reiteration conclusion.",
+        audioUrl: "",
+        imageUrl: "",
+        optionsJson: [],
+        correctAnswer: "",
+        rubricJson: { thesis: 25, arguments: 35, cohesion: 20, languageAccuracy: 20, minWords: 150 },
+        points: 100,
+        tags: "Grade 9, Writing, Analytical Exposition"
+      },
+      {
+        id: "Q-G9-SPK-01",
+        examType: "Grade 9",
+        section: "speaking",
+        type: "speaking_record",
+        passage: "Speaking Part 2: Persuasive Speech on Environmental Action",
+        prompt: "Record your voice (2 minutes) presenting your viewpoint:\n'How can junior high students contribute to environmental preservation and renewable energy in their school community?'\nProvide at least two practical action steps with reasoned justification.",
+        audioUrl: "https://actions.google.com/sounds/v1/speech/bell_ring.ogg",
+        imageUrl: "",
+        optionsJson: [],
+        correctAnswer: "",
+        rubricJson: { fluency: 25, coherence: 25, lexicalResource: 25, grammaticalRange: 25, maxRecordSeconds: 120 },
+        points: 100,
+        tags: "Grade 9, Speaking, Persuasive Speech"
       }
     ];
   }

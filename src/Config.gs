@@ -69,8 +69,11 @@ var CONFIG = {
     AUDIT_LOGS: "DB_AuditLogs"
   },
 
-  // Supported Assessment Standards
+  // Supported Assessment Standards & Grade Levels
   EXAM_TYPES: {
+    GRADE_7: "Grade 7 (Kelas 7 SMP)",
+    GRADE_8: "Grade 8 (Kelas 8 SMP)",
+    GRADE_9: "Grade 9 (Kelas 9 SMP)",
     TOEFL_ITP: "TOEFL ITP / PBT",
     IELTS_ACADEMIC: "IELTS Academic",
     IELTS_GENERAL: "IELTS General Training",
@@ -78,6 +81,13 @@ var CONFIG = {
     EPT: "Al-Imam EPT (English Proficiency Test)",
     CUSTOM: "Custom Institutional Exam"
   },
+
+  // SMP Class Categories
+  GRADE_LEVELS: [
+    { id: "Grade 7", code: "GRADE_7", name: "Grade 7 (Kelas 7 SMP)", defaultExamCode: "GRADE7" },
+    { id: "Grade 8", code: "GRADE_8", name: "Grade 8 (Kelas 8 SMP)", defaultExamCode: "GRADE8" },
+    { id: "Grade 9", code: "GRADE_9", name: "Grade 9 (Kelas 9 SMP)", defaultExamCode: "GRADE9" }
+  ],
 
   // Dynamic Assessment Section Weights (Standard English Rubric)
   DEFAULT_WEIGHTS: {

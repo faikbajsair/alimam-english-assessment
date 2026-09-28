@@ -228,7 +228,7 @@ var UserModel = (function () {
         passwordHash: hashPassword("student123"),
         fullName: "Muhammad Rayhan Al-Fatih",
         role: "student",
-        classGroup: "Grade 12 - Science Alpha",
+        classGroup: "Grade 7 - Abu Bakar",
         phone: "+6281234567893",
         status: "active",
         createdAt: new Date().toISOString()
@@ -240,8 +240,20 @@ var UserModel = (function () {
         passwordHash: hashPassword("student123"),
         fullName: "Aisha Zahra Nurhaliza",
         role: "student",
-        classGroup: "Grade 12 - Tahfidz Excellence",
+        classGroup: "Grade 8 - Utsman",
         phone: "+6281234567894",
+        status: "active",
+        createdAt: new Date().toISOString()
+      },
+      {
+        id: "USR-STUD03",
+        username: "candidate3",
+        email: "bilal.habashi@student.alimam.ac.id",
+        passwordHash: hashPassword("student123"),
+        fullName: "Bilal Ibnu Rabah",
+        role: "student",
+        classGroup: "Grade 9 - Khalid bin Walid",
+        phone: "+6281234567895",
         status: "active",
         createdAt: new Date().toISOString()
       }

@@ -21,6 +21,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
   <!-- html2pdf for PDF Generation -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <!-- Canvas Confetti for Gamified Celebrations -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
   <script>
     tailwind.config = {
@@ -49,6 +51,33 @@
               600: '#d97706',
               700: '#b45309',
             }
+          },
+          keyframes: {
+            bounceIn: {
+              '0%': { transform: 'scale(0.3)', opacity: '0' },
+              '50%': { transform: 'scale(1.08)' },
+              '70%': { transform: 'scale(0.95)' },
+              '100%': { transform: 'scale(1)', opacity: '1' }
+            },
+            wobble: {
+              '0%, 100%': { transform: 'translateX(0)' },
+              '20%, 60%': { transform: 'translateX(-8px) rotate(-2deg)' },
+              '40%, 80%': { transform: 'translateX(8px) rotate(2deg)' }
+            },
+            pulseGlow: {
+              '0%, 100%': { boxShadow: '0 0 15px rgba(16, 185, 129, 0.4)' },
+              '50%': { boxShadow: '0 0 30px rgba(16, 185, 129, 0.85)' }
+            },
+            podiumRise: {
+              '0%': { transform: 'translateY(100px)', opacity: '0' },
+              '100%': { transform: 'translateY(0)', opacity: '1' }
+            }
+          },
+          animation: {
+            'bounce-in': 'bounceIn 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
+            'wobble': 'wobble 0.5s ease-in-out',
+            'pulse-glow': 'pulseGlow 2s infinite',
+            'podium-rise': 'podiumRise 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards'
           }
         }
       }
@@ -101,6 +130,33 @@
     .no-select {
       user-select: none;
       -webkit-user-select: none;
+    }
+    .kahoot-btn-correct {
+      animation: bounceIn 0.3s ease-out;
+      background: linear-gradient(135deg, #10b981, #059669) !important;
+      color: white !important;
+      border-color: #047857 !important;
+    }
+    .kahoot-btn-incorrect {
+      animation: wobble 0.45s ease-in-out;
+      background: linear-gradient(135deg, #f43f5e, #e11d48) !important;
+      color: white !important;
+      border-color: #be123c !important;
+    }
+    .kahoot-podium-1 {
+      height: 180px;
+      background: linear-gradient(180deg, #f59e0b 0%, #b45309 100%);
+      box-shadow: 0 10px 30px rgba(245, 158, 11, 0.4);
+    }
+    .kahoot-podium-2 {
+      height: 135px;
+      background: linear-gradient(180deg, #94a3b8 0%, #475569 100%);
+      box-shadow: 0 8px 24px rgba(148, 163, 184, 0.3);
+    }
+    .kahoot-podium-3 {
+      height: 100px;
+      background: linear-gradient(180deg, #d97706 0%, #78350f 100%);
+      box-shadow: 0 6px 20px rgba(217, 119, 6, 0.3);
     }
   </style>
 </head>
@@ -331,11 +387,629 @@
         options: [],
         correct: "Examiner Rubric",
         points: 100
+      },
+
+      // ================= GRADE 7 (SMP CLASS 7) QUESTIONS =================
+      {
+        id: "Q-G7-LIST-01",
+        examType: "Grade 7",
+        section: "listening",
+        type: "multiple_choice",
+        passage: "Classroom Dialogue: First Day at SMP Al-Imam",
+        prompt: "Ahmad: 'Excuse me, is this the English classroom for Grade 7?'\nTeacher: 'Yes, Ahmad! Welcome to our class. Please take a seat next to Bilal.'\nNarrator: 'Where does Ahmad sit?'",
+        audioUrl: "https://actions.google.com/sounds/v1/speech/announcement_chime.ogg",
+        imageUrl: "",
+        videoUrl: "",
+        options: [
+          { key: "A", text: "Next to Bilal in the Grade 7 classroom" },
+          { key: "B", text: "Near the teacher's office" },
+          { key: "C", text: "Outside the school gate" },
+          { key: "D", text: "In the Grade 8 laboratory" }
+        ],
+        correct: "A",
+        points: 1
+      },
+      {
+        id: "Q-G7-STRUC-01",
+        examType: "Grade 7",
+        section: "structure",
+        type: "multiple_choice",
+        passage: "",
+        prompt: "Bilal and his classmates _______ English together in the school library every Tuesday afternoon.",
+        audioUrl: "",
+        imageUrl: "",
+        videoUrl: "",
+        options: [
+          { key: "A", text: "studies" },
+          { key: "B", text: "study" },
+          { key: "C", text: "studying" },
+          { key: "D", text: "studied" }
+        ],
+        correct: "B",
+        points: 1
+      },
+      {
+        id: "Q-G7-VOCAB-01",
+        examType: "Grade 7",
+        section: "structure",
+        type: "sentence_blank",
+        passage: "",
+        prompt: "Every morning before class starts, the Grade 7 students gather in the mosque to recite the Holy Quran with great __________________.",
+        audioUrl: "",
+        imageUrl: "",
+        videoUrl: "",
+        options: [
+          { key: "A", text: "devotion" },
+          { key: "B", text: "careless" },
+          { key: "C", text: "noisy" },
+          { key: "D", text: "angry" }
+        ],
+        correct: "A",
+        points: 1,
+        hints: [
+          "Hint 1: Look for a positive noun related to sincerity, focus, and spiritual reverence.",
+          "Hint 2: It is synonymous with dedication and deep respect."
+        ]
+      },
+      {
+        id: "Q-G7-READ-01",
+        examType: "Grade 7",
+        section: "reading",
+        type: "multiple_choice",
+        passage: "Daily Routine at SMP Al-Imam Islamic School:\n\nSMP Al-Imam Islamic School provides a balanced curriculum blending modern academic sciences with Islamic character building. Grade 7 students begin their day at 07:00 AM with morning Dhuha prayer and Al-Quran tahfidz session. Afterward, they attend general subjects including English, Mathematics, and Natural Sciences in state-of-the-art classrooms. During lunchtime, students practice Islamic table manners (adab) and perform congregational Dhuhr prayer together.",
+        prompt: "What is the first activity Grade 7 students perform when they arrive at school in the morning?",
+        audioUrl: "",
+        imageUrl: "",
+        videoUrl: "",
+        options: [
+          { key: "A", text: "Morning Dhuha prayer and Al-Quran tahfidz session" },
+          { key: "B", text: "English mid-term examination" },
+          { key: "C", text: "Science laboratory experiments" },
+          { key: "D", text: "Playing football in the school yard" }
+        ],
+        correct: "A",
+        points: 1
+      },
+      {
+        id: "Q-G7-WRIT-01",
+        examType: "Grade 7",
+        section: "writing",
+        type: "essay",
+        passage: "Descriptive Text Writing Task",
+        prompt: "Write a short descriptive paragraph (60-80 words) introducing yourself, your favorite subject at SMP Al-Imam, and your daily hobby.",
+        audioUrl: "",
+        imageUrl: "",
+        videoUrl: "",
+        options: [],
+        correct: "Standard Descriptive Rubric",
+        points: 100
+      },
+      {
+        id: "Q-G7-SPK-01",
+        examType: "Grade 7",
+        section: "speaking",
+        type: "speaking_record",
+        passage: "Speaking Part 1: Self-Introduction & Aspirations",
+        prompt: "Record your voice (1 minute) answering these 3 prompts:\n1. Introduce your full name and your Grade 7 class.\n2. What is your favorite subject and why do you like it?\n3. What is your future goal or dream?",
+        audioUrl: "https://actions.google.com/sounds/v1/speech/bell_ring.ogg",
+        imageUrl: "",
+        videoUrl: "",
+        options: [],
+        correct: "Examiner Speaking Rubric",
+        points: 100
+      },
+
+      // ================= GRADE 8 (SMP CLASS 8) QUESTIONS =================
+      {
+        id: "Q-G8-LIST-01",
+        examType: "Grade 8",
+        section: "listening",
+        type: "multiple_choice",
+        passage: "Dialogue: School Science Fair Preparation",
+        prompt: "Fatimah: 'Have you finished building the water filtration model for the science exhibition?'\nAisyah: 'Not yet, I still need to add the activated charcoal layer this afternoon.'\nNarrator: 'What is Aisyah going to do this afternoon?'",
+        audioUrl: "https://actions.google.com/sounds/v1/speech/announcement_chime.ogg",
+        imageUrl: "",
+        videoUrl: "",
+        options: [
+          { key: "A", text: "Add the activated charcoal layer to the water filtration model" },
+          { key: "B", text: "Buy a new aquarium for the classroom" },
+          { key: "C", text: "Cancel the science project presentation" },
+          { key: "D", text: "Visit the principal's office" }
+        ],
+        correct: "A",
+        points: 1
+      },
+      {
+        id: "Q-G8-STRUC-01",
+        examType: "Grade 8",
+        section: "structure",
+        type: "multiple_choice",
+        passage: "",
+        prompt: "While the students _______ an experiment in the chemistry lab yesterday, the school bell rang.",
+        audioUrl: "",
+        imageUrl: "",
+        videoUrl: "",
+        options: [
+          { key: "A", text: "are conducting" },
+          { key: "B", text: "were conducting" },
+          { key: "C", text: "conduct" },
+          { key: "D", text: "have conducted" }
+        ],
+        correct: "B",
+        points: 1
+      },
+      {
+        id: "Q-G8-STRUC-02",
+        examType: "Grade 8",
+        section: "structure",
+        type: "multiple_choice",
+        passage: "",
+        prompt: "Mount Everest is __________________ mountain in the world, attracting climbers from every continent.",
+        audioUrl: "",
+        imageUrl: "",
+        videoUrl: "",
+        options: [
+          { key: "A", text: "highest" },
+          { key: "B", text: "higher than" },
+          { key: "C", text: "the highest" },
+          { key: "D", text: "as high as" }
+        ],
+        correct: "C",
+        points: 1
+      },
+      {
+        id: "Q-G8-VOCAB-01",
+        examType: "Grade 8",
+        section: "structure",
+        type: "sentence_blank",
+        passage: "",
+        prompt: "The robotics club won first place in the national competition because their invention was highly __________________ and solved real agricultural challenges.",
+        audioUrl: "",
+        imageUrl: "",
+        videoUrl: "",
+        options: [
+          { key: "A", text: "innovative" },
+          { key: "B", text: "useless" },
+          { key: "C", text: "ordinary" },
+          { key: "D", text: "confusing" }
+        ],
+        correct: "A",
+        points: 1,
+        hints: [
+          "Hint 1: An adjective that describes something original, clever, and newly created.",
+          "Hint 2: Directly related to innovation and cutting-edge design."
+        ]
+      },
+      {
+        id: "Q-G8-READ-01",
+        examType: "Grade 8",
+        section: "reading",
+        type: "multiple_choice",
+        passage: "Passage: The Legacy of Abbas Ibn Firnas\n\nIn the 9th century in Cordoba, Andalusia, the polymath Abbas Ibn Firnas designed a winged glider apparatus and attempted one of the earliest recorded human flights in history. Beyond aviation, Ibn Firnas also invented a water clock, devised colorless glass manufacturing techniques, and created a mechanized planetarium simulating planetary movements. His courageous spirit and scientific curiosity inspire modern youth to pursue aerospace and technological frontiers.",
+        prompt: "According to the passage, which invention was created by Abbas Ibn Firnas besides his aviation glider?",
+        audioUrl: "",
+        imageUrl: "",
+        videoUrl: "",
+        options: [
+          { key: "A", text: "A water clock and a mechanized planetarium" },
+          { key: "B", text: "A digital electronic smartwatch" },
+          { key: "C", text: "A solar-powered automobile engine" },
+          { key: "D", text: "A mechanical movable printing press" }
+        ],
+        correct: "A",
+        points: 1
+      },
+      {
+        id: "Q-G8-WRIT-01",
+        examType: "Grade 8",
+        section: "writing",
+        type: "essay",
+        passage: "Recount Text Writing Task",
+        prompt: "Write a recount text (100-150 words) about a memorable school trip, science competition, or outdoor activity you participated in. Describe the orientation, sequence of events, and personal reflection.",
+        audioUrl: "",
+        imageUrl: "",
+        videoUrl: "",
+        options: [],
+        correct: "Standard Recount Rubric",
+        points: 100
+      },
+      {
+        id: "Q-G8-SPK-01",
+        examType: "Grade 8",
+        section: "speaking",
+        type: "speaking_record",
+        passage: "Speaking Part 2: Recount a Past Experience",
+        prompt: "Record your voice (1.5 minutes) describing a memorable experience in your life:\n- What happened and when did it take place?\n- Who was with you during the event?\n- What did you learn from this experience?",
+        audioUrl: "https://actions.google.com/sounds/v1/speech/bell_ring.ogg",
+        imageUrl: "",
+        videoUrl: "",
+        options: [],
+        correct: "Examiner Speaking Rubric",
+        points: 100
+      },
+
+      // ================= GRADE 9 (SMP CLASS 9) QUESTIONS =================
+      {
+        id: "Q-G9-LIST-01",
+        examType: "Grade 9",
+        section: "listening",
+        type: "multiple_choice",
+        passage: "Academic Announcement: International STEM & English Olympiad",
+        prompt: "Principal: 'Attention to all Grade 9 candidates. Registration for the International STEM Olympiad closes this Friday at 3:00 PM. Make sure your research abstracts are endorsed by your academic advisor.'\nNarrator: 'What is required before Grade 9 candidates can submit their Olympiad registration?'",
+        audioUrl: "https://actions.google.com/sounds/v1/speech/announcement_chime.ogg",
+        imageUrl: "",
+        videoUrl: "",
+        options: [
+          { key: "A", text: "Obtain academic advisor endorsement for their abstracts" },
+          { key: "B", text: "Pay a late submission penalty fee" },
+          { key: "C", text: "Cancel all scheduled afternoon classes" },
+          { key: "D", text: "Travel to an overseas university campus" }
+        ],
+        correct: "A",
+        points: 1
+      },
+      {
+        id: "Q-G9-STRUC-01",
+        examType: "Grade 9",
+        section: "structure",
+        type: "multiple_choice",
+        passage: "",
+        prompt: "The new renewable energy guideline __________________ by the academic committee before the next school term begins.",
+        audioUrl: "",
+        imageUrl: "",
+        videoUrl: "",
+        options: [
+          { key: "A", text: "will be implemented" },
+          { key: "B", text: "will implement" },
+          { key: "C", text: "is implementing" },
+          { key: "D", text: "was implement" }
+        ],
+        correct: "A",
+        points: 1
+      },
+      {
+        id: "Q-G9-STRUC-02",
+        examType: "Grade 9",
+        section: "structure",
+        type: "multiple_choice",
+        passage: "",
+        prompt: "If students __________________ consistent reading habits today, they will achieve outstanding academic results in high school.",
+        audioUrl: "",
+        imageUrl: "",
+        videoUrl: "",
+        options: [
+          { key: "A", text: "prioritize" },
+          { key: "B", text: "prioritized" },
+          { key: "C", text: "had prioritized" },
+          { key: "D", text: "will prioritize" }
+        ],
+        correct: "A",
+        points: 1
+      },
+      {
+        id: "Q-G9-VOCAB-01",
+        examType: "Grade 9",
+        section: "structure",
+        type: "sentence_blank",
+        passage: "",
+        prompt: "The researcher presented compelling empirical evidence to __________________ the hypothesis that renewable solar arrays significantly decrease urban carbon emissions.",
+        audioUrl: "",
+        imageUrl: "",
+        videoUrl: "",
+        options: [
+          { key: "A", text: "substantiate" },
+          { key: "B", text: "contradict" },
+          { key: "C", text: "disregard" },
+          { key: "D", text: "diminish" }
+        ],
+        correct: "A",
+        points: 1,
+        hints: [
+          "Hint 1: A verb meaning to prove, confirm, or provide evidence in support of an assertion.",
+          "Hint 2: Synonym of 'validate', 'corroborate', or 'verify'."
+        ]
+      },
+      {
+        id: "Q-G9-READ-01",
+        examType: "Grade 9",
+        section: "reading",
+        type: "multiple_choice",
+        passage: "Report Text: Artificial Intelligence in Modern Education\n\nArtificial Intelligence (AI) is transforming academic environments by enabling adaptive learning pathways tailored to individual student needs. Intelligent tutoring systems analyze performance metrics in real time, identifying knowledge gaps and generating customized practice modules. However, leading education experts emphasize that AI should augment rather than replace human educators, as ethical guidance, empathy, and moral leadership remain fundamentally human virtues.",
+        prompt: "According to the report, what is the primary conclusion regarding the relationship between AI and human educators?",
+        audioUrl: "",
+        imageUrl: "",
+        videoUrl: "",
+        options: [
+          { key: "A", text: "AI should assist educators while human teachers provide essential moral and empathetic guidance." },
+          { key: "B", text: "AI systems should completely replace human teachers in secondary schools." },
+          { key: "C", text: "AI technologies have no practical benefits in educational environments." },
+          { key: "D", text: "Adaptive learning systems must be restricted to university postgraduate levels." }
+        ],
+        correct: "A",
+        points: 1
+      },
+      {
+        id: "Q-G9-WRIT-01",
+        examType: "Grade 9",
+        section: "writing",
+        type: "essay",
+        passage: "Analytical Exposition Essay Task",
+        prompt: "Write an analytical exposition essay (150-200 words) on the topic:\n'Why Mastery of the English Language is Essential for Junior High Students in the Global Digital Era.'\nInclude a clear thesis statement, two supporting arguments with evidence, and a reiteration conclusion.",
+        audioUrl: "",
+        imageUrl: "",
+        videoUrl: "",
+        options: [],
+        correct: "Standard Analytical Exposition Rubric",
+        points: 100
+      },
+      {
+        id: "Q-G9-SPK-01",
+        examType: "Grade 9",
+        section: "speaking",
+        type: "speaking_record",
+        passage: "Speaking Part 2: Persuasive Speech on Environmental Action",
+        prompt: "Record your voice (2 minutes) presenting your viewpoint:\n'How can junior high students contribute to environmental preservation and renewable energy in their school community?'\nProvide at least two practical action steps with reasoned justification.",
+        audioUrl: "https://actions.google.com/sounds/v1/speech/bell_ring.ogg",
+        imageUrl: "",
+        videoUrl: "",
+        options: [],
+        correct: "Examiner Speaking Rubric",
+        points: 100
       }
     ];
 
     // Persistence Helpers for Questions Storage
     const STORAGE_KEY_QUESTIONS = "alimam_assessment_questions_v1";
+    const STORAGE_KEY_STUDENTS = "alimam_registered_students_v3";
+
+    // 16 Fun Animated Avatars for Students
+    const AVATAR_LIST = [
+      { id: "lion", emoji: "🦁", name: "Lion Hero", bg: "bg-amber-100 border-amber-400 text-amber-900" },
+      { id: "rocket", emoji: "🚀", name: "Rocket Champ", bg: "bg-blue-100 border-blue-400 text-blue-900" },
+      { id: "owl", emoji: "🦉", name: "Wise Owl", bg: "bg-emerald-100 border-emerald-400 text-emerald-900" },
+      { id: "cat", emoji: "🐱", name: "Ninja Cat", bg: "bg-pink-100 border-pink-400 text-pink-900" },
+      { id: "panda", emoji: "🐼", name: "Panda Master", bg: "bg-slate-100 border-slate-400 text-slate-900" },
+      { id: "fox", emoji: "🦊", name: "Clever Fox", bg: "bg-orange-100 border-orange-400 text-orange-900" },
+      { id: "eagle", emoji: "🦅", name: "Sky Eagle", bg: "bg-sky-100 border-sky-400 text-sky-900" },
+      { id: "star", emoji: "🌟", name: "Star Scholar", bg: "bg-yellow-100 border-yellow-400 text-yellow-900" },
+      { id: "bot", emoji: "🤖", name: "Robo Genius", bg: "bg-indigo-100 border-indigo-400 text-indigo-900" },
+      { id: "dolphin", emoji: "🐬", name: "Speed Dolphin", bg: "bg-cyan-100 border-cyan-400 text-cyan-900" },
+      { id: "hijab", emoji: "🧕", name: "Princess Al-Imam", bg: "bg-rose-100 border-rose-400 text-rose-900" },
+      { id: "turban", emoji: "👳", name: "Sultan Scholar", bg: "bg-teal-100 border-teal-400 text-teal-900" },
+      { id: "unicorn", emoji: "🦄", name: "Magic Unicorn", bg: "bg-purple-100 border-purple-400 text-purple-900" },
+      { id: "tiger", emoji: "🐯", name: "Brave Tiger", bg: "bg-amber-100 border-amber-500 text-amber-950" },
+      { id: "astronaut", emoji: "👨‍🚀", name: "Cosmo Explorer", bg: "bg-violet-100 border-violet-400 text-violet-900" },
+      { id: "crown", emoji: "👑", name: "Gold Legend", bg: "bg-yellow-100 border-yellow-500 text-yellow-950" }
+    ];
+
+    // Default Pre-Configured Student Database for SMP Al-Imam (Grade 7, 8, 9)
+    const DEFAULT_STUDENTS = [
+      {
+        username: "rayhan",
+        email: "rayhan@alimamischool.com",
+        name: "Muhammad Rayhan Al-Fatih",
+        grade: "Grade 7",
+        classGroup: "Grade 7 - Abu Bakar",
+        avatar: "🦁",
+        avatarId: "lion",
+        password: "student123",
+        role: "student",
+        score: 8900,
+        streak: 5,
+        accuracy: 94
+      },
+      {
+        username: "aisha",
+        email: "aisha@alimamischool.com",
+        name: "Aisha Zahra Nurhaliza",
+        grade: "Grade 8",
+        classGroup: "Grade 8 - Utsman",
+        avatar: "🧕",
+        avatarId: "hijab",
+        password: "student123",
+        role: "student",
+        score: 9450,
+        streak: 7,
+        accuracy: 98
+      },
+      {
+        username: "bilal",
+        email: "bilal@alimamischool.com",
+        name: "Bilal Ibnu Rabah",
+        grade: "Grade 9",
+        classGroup: "Grade 9 - Khalid bin Walid",
+        avatar: "🚀",
+        avatarId: "rocket",
+        password: "student123",
+        role: "student",
+        score: 9200,
+        streak: 6,
+        accuracy: 96
+      },
+      {
+        username: "fatimah",
+        email: "fatimah@alimamischool.com",
+        name: "Fatimah Az-Zahra",
+        grade: "Grade 7",
+        classGroup: "Grade 7 - Khadijah",
+        avatar: "🌟",
+        avatarId: "star",
+        password: "student123",
+        role: "student",
+        score: 8750,
+        streak: 4,
+        accuracy: 91
+      },
+      {
+        username: "umar",
+        email: "umar@alimamischool.com",
+        name: "Umar bin Khattab",
+        grade: "Grade 8",
+        classGroup: "Grade 8 - Ali bin Abi Thalib",
+        avatar: "🦅",
+        avatarId: "eagle",
+        password: "student123",
+        role: "student",
+        score: 8600,
+        streak: 4,
+        accuracy: 90
+      },
+      {
+        username: "salman",
+        email: "salman@alimamischool.com",
+        name: "Salman Al-Farisi",
+        grade: "Grade 9",
+        classGroup: "Grade 9 - Thariq bin Ziyad",
+        avatar: "🦉",
+        avatarId: "owl",
+        password: "student123",
+        role: "student",
+        score: 8850,
+        streak: 5,
+        accuracy: 92
+      }
+    ];
+
+    function loadRegisteredStudents() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY_STUDENTS);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+      } catch (e) {
+        console.warn("Failed to load students from localStorage:", e);
+      }
+      return JSON.parse(JSON.stringify(DEFAULT_STUDENTS));
+    }
+
+    function persistStudents(students) {
+      try {
+        localStorage.setItem(STORAGE_KEY_STUDENTS, JSON.stringify(students));
+      } catch (e) {
+        console.warn("Failed to save students to localStorage:", e);
+      }
+    }
+
+    // Web Audio Sound Synthesizer (Kahoot Style Audio Engine)
+    const SoundFX = {
+      ctx: null,
+      isMuted: false,
+
+      getCtx() {
+        if (!this.ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (AudioCtx) this.ctx = new AudioCtx();
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+        return this.ctx;
+      },
+
+      toggleMute() {
+        this.isMuted = !this.isMuted;
+        const icon = document.getElementById("audioMuteIcon");
+        if (icon) {
+          icon.setAttribute("data-lucide", this.isMuted ? "volume-x" : "volume-2");
+          lucide.createIcons();
+        }
+        showToast(this.isMuted ? "🔇 Audio Sound Effects Muted" : "🔊 Audio Sound Effects Active!");
+        return this.isMuted;
+      },
+
+      playCorrect() {
+        if (this.isMuted) return;
+        try {
+          const ctx = this.getCtx();
+          if (!ctx) return;
+          const notes = [523.25, 659.25, 783.99, 1046.50]; // C5 -> E5 -> G5 -> C6 Kahoot chime
+          notes.forEach((freq, idx) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.08);
+            gain.gain.setValueAtTime(0, ctx.currentTime + idx * 0.08);
+            gain.gain.linearRampToValueAtTime(0.28, ctx.currentTime + idx * 0.08 + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + idx * 0.08 + 0.28);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(ctx.currentTime + idx * 0.08);
+            osc.stop(ctx.currentTime + idx * 0.08 + 0.3);
+          });
+        } catch (e) {}
+      },
+
+      playIncorrect() {
+        if (this.isMuted) return;
+        try {
+          const ctx = this.getCtx();
+          if (!ctx) return;
+          const freqs = [320, 270, 220, 180]; // Cartoon wobble descending
+          freqs.forEach((freq, idx) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.09);
+            gain.gain.setValueAtTime(0.12, ctx.currentTime + idx * 0.09);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + idx * 0.09 + 0.14);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(ctx.currentTime + idx * 0.09);
+            osc.stop(ctx.currentTime + idx * 0.09 + 0.15);
+          });
+        } catch (e) {}
+      },
+
+      playStreak() {
+        if (this.isMuted) return;
+        try {
+          const ctx = this.getCtx();
+          if (!ctx) return;
+          const chords = [523.25, 659.25, 783.99, 1046.50, 1318.51];
+          chords.forEach((freq, idx) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.05);
+            gain.gain.setValueAtTime(0.25, ctx.currentTime + idx * 0.05);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + idx * 0.05 + 0.4);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(ctx.currentTime + idx * 0.05);
+            osc.stop(ctx.currentTime + idx * 0.05 + 0.45);
+          });
+        } catch (e) {}
+      },
+
+      playVictory() {
+        if (this.isMuted) return;
+        try {
+          const ctx = this.getCtx();
+          if (!ctx) return;
+          const fanfare = [
+            { f: 523.25, d: 0.15, t: 0 },
+            { f: 523.25, d: 0.15, t: 0.15 },
+            { f: 523.25, d: 0.15, t: 0.3 },
+            { f: 659.25, d: 0.35, t: 0.45 },
+            { f: 783.99, d: 0.2, t: 0.8 },
+            { f: 1046.50, d: 0.8, t: 1.0 }
+          ];
+          fanfare.forEach(item => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(item.f, ctx.currentTime + item.t);
+            gain.gain.setValueAtTime(0.28, ctx.currentTime + item.t);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + item.t + item.d);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(ctx.currentTime + item.t);
+            osc.stop(ctx.currentTime + item.t + item.d);
+          });
+        } catch (e) {}
+      }
+    };
 
     function loadPersistedQuestions() {
       try {
@@ -374,12 +1048,16 @@
     const AppState = {
       currentPage: "landing", // 'landing', 'exam', 'admin', 'cms', 'guide'
       currentUser: null,
-      activeExamCode: "TOEFL2026",
+      activeExamCode: "GRADE7",
+      selectedRegAvatarId: "lion",
       
       // Question Bank (loaded from localStorage or template defaults)
       questions: loadPersistedQuestions(),
 
-      // Exam Player Live State
+      // Registered Students Database
+      students: loadRegisteredStudents(),
+
+      // Exam Player Live State & Gamification Engine
       examSession: {
         currentIndex: 0,
         currentSection: "listening",
@@ -395,7 +1073,16 @@
         audioPlays: {}, // Map questionId -> play count
         isRecording: false,
         speakingAudioSaved: false,
-        submitted: false
+        submitted: false,
+
+        // Kahoot Gamification State
+        score: 0,
+        streak: 0,
+        maxStreak: 0,
+        correctCount: 0,
+        speedBonusTotal: 0,
+        questionStartTime: Date.now(),
+        kahootReaction: null
       }
     };
 
@@ -426,6 +1113,21 @@
 
       switch(page) {
         case "exam":
+          if (params.code) {
+            const codeUpper = params.code.toUpperCase();
+            let gradeTarget = null;
+            if (codeUpper === "GRADE7") gradeTarget = "Grade 7";
+            else if (codeUpper === "GRADE8") gradeTarget = "Grade 8";
+            else if (codeUpper === "GRADE9") gradeTarget = "Grade 9";
+
+            if (gradeTarget) {
+              const qIndex = AppState.questions.findIndex(q => q.examType === gradeTarget);
+              if (qIndex !== -1) {
+                AppState.examSession.currentIndex = qIndex;
+                AppState.examSession.currentSection = AppState.questions[qIndex].section || "listening";
+              }
+            }
+          }
           renderExamPlayerView(root);
           break;
         case "admin":
@@ -550,74 +1252,192 @@
             </div>
 
             <!-- Quick Exam Code Entry -->
-            <div class="p-6 bg-gradient-to-br from-brand-950 via-slate-900 to-slate-950 rounded-3xl text-white shadow-2xl border border-emerald-900/50">
-              <h2 class="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-2 flex items-center gap-2">
-                <i data-lucide="key" class="w-4 h-4"></i> Quick Exam Access with Token
-              </h2>
+            <div class="p-6 bg-gradient-to-br from-brand-950 via-slate-900 to-slate-950 rounded-3xl text-white shadow-2xl border border-emerald-900/50 space-y-3.5">
+              <div class="flex items-center justify-between">
+                <h2 class="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-2">
+                  <i data-lucide="key" class="w-4 h-4"></i> Quick Exam Access with Token
+                </h2>
+                <span class="text-[10px] text-slate-400 font-semibold">SMP Al-Imam Assessment Center</span>
+              </div>
               <div class="flex flex-col sm:flex-row gap-3">
-                <input type="text" id="landingExamToken" value="${AppState.activeExamCode || 'TOEFL2026'}" placeholder="e.g. TOEFL2026 or IELTS2026" class="uppercase font-mono tracking-widest text-slate-900 px-4 py-3 rounded-2xl flex-grow focus:outline-none focus:ring-2 focus:ring-emerald-400 text-sm font-bold bg-white">
+                <input type="text" id="landingExamToken" value="${AppState.activeExamCode || 'GRADE7'}" placeholder="e.g. GRADE7, GRADE8, GRADE9, TOEFL2026" class="uppercase font-mono tracking-widest text-slate-900 px-4 py-3 rounded-2xl flex-grow focus:outline-none focus:ring-2 focus:ring-emerald-400 text-sm font-bold bg-white">
                 <button onclick="handleQuickTokenStart()" class="bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-black px-6 py-3 rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2 text-xs sm:text-sm whitespace-nowrap cursor-pointer">
                   Start Exam <i data-lucide="arrow-right" class="w-4 h-4"></i>
                 </button>
               </div>
+              <!-- Quick tokens pills -->
+              <div class="flex flex-wrap items-center gap-1.5 pt-1 text-[11px]">
+                <span class="text-slate-400 text-[10px] font-semibold mr-1">Select Grade / Exam:</span>
+                <button type="button" onclick="document.getElementById('landingExamToken').value='GRADE7'; handleQuickTokenStart();" class="px-2.5 py-1 rounded-lg bg-blue-900/70 hover:bg-blue-800 text-blue-300 border border-blue-600/60 font-mono font-bold cursor-pointer transition-colors text-xs">GRADE7 (Grade 7)</button>
+                <button type="button" onclick="document.getElementById('landingExamToken').value='GRADE8'; handleQuickTokenStart();" class="px-2.5 py-1 rounded-lg bg-emerald-900/70 hover:bg-emerald-800 text-emerald-300 border border-emerald-600/60 font-mono font-bold cursor-pointer transition-colors text-xs">GRADE8 (Grade 8)</button>
+                <button type="button" onclick="document.getElementById('landingExamToken').value='GRADE9'; handleQuickTokenStart();" class="px-2.5 py-1 rounded-lg bg-purple-900/70 hover:bg-purple-800 text-purple-300 border border-purple-600/60 font-mono font-bold cursor-pointer transition-colors text-xs">GRADE9 (Grade 9)</button>
+                <button type="button" onclick="document.getElementById('landingExamToken').value='TOEFL2026'; handleQuickTokenStart();" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 font-mono font-bold cursor-pointer transition-colors text-xs">TOEFL2026</button>
+              </div>
             </div>
           </div>
 
-          <!-- Right Login Portal -->
+          <!-- Right Login & Registration Portal -->
           <div id="portal" class="lg:col-span-5">
-            <div class="glassmorphism p-6 sm:p-8 rounded-3xl shadow-xl border border-white/80 space-y-6">
-              <div class="text-center space-y-1">
-                <div class="w-14 h-14 mx-auto rounded-2xl bg-brand-100 flex items-center justify-center text-brand-600 shadow-inner mb-3">
-                  <i data-lucide="shield-check" class="w-7 h-7"></i>
-                </div>
-                <h2 class="text-2xl font-black text-slate-900">Unified Access Portal</h2>
-                <p class="text-xs text-slate-500">Choose a demo account or enter your credentials</p>
-              </div>
-
-              <!-- Quick Demo Login Buttons -->
-              <div>
-                <label class="block text-[11px] font-bold text-slate-600 uppercase mb-2">Quick Demo Access:</label>
-                <div class="grid grid-cols-2 gap-2 text-xs">
-                  <button onclick="setCredentials('superadmin', 'admin123')" class="p-2.5 rounded-xl border border-slate-200 bg-white hover:border-brand-500 hover:bg-brand-50 font-semibold text-left flex items-center gap-2 transition-all">
-                    <span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span> Super Admin
-                  </button>
-                  <button onclick="setCredentials('admincms', 'admin123')" class="p-2.5 rounded-xl border border-slate-200 bg-white hover:border-brand-500 hover:bg-brand-50 font-semibold text-left flex items-center gap-2 transition-all">
-                    <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span> Admin CMS
-                  </button>
-                  <button onclick="setCredentials('teacher', 'teacher123')" class="p-2.5 rounded-xl border border-slate-200 bg-white hover:border-brand-500 hover:bg-brand-50 font-semibold text-left flex items-center gap-2 transition-all">
-                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Teacher / Examiner
-                  </button>
-                  <button onclick="setCredentials('candidate1', 'student123')" class="p-2.5 rounded-xl border border-slate-200 bg-white hover:border-brand-500 hover:bg-brand-50 font-semibold text-left flex items-center gap-2 transition-all">
-                    <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Student / Candidate
-                  </button>
-                </div>
-              </div>
-
-              <!-- Login Form -->
-              <form onsubmit="handleLoginSubmit(event)" class="space-y-4 text-xs">
-                <div>
-                  <label class="block font-bold text-slate-700 uppercase mb-1">Username / Email</label>
-                  <div class="relative">
-                    <i data-lucide="user" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5"></i>
-                    <input type="text" id="txtUsername" required placeholder="Enter your username" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 outline-none transition-all font-medium">
-                  </div>
-                </div>
-
-                <div>
-                  <label class="block font-bold text-slate-700 uppercase mb-1">Password</label>
-                  <div class="relative">
-                    <i data-lucide="lock" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5"></i>
-                    <input type="password" id="txtPassword" required placeholder="••••••••" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 outline-none transition-all">
-                  </div>
-                </div>
-
-                <button type="submit" id="btnLoginAction" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 text-xs sm:text-sm">
-                  <span>Sign In to Dashboard</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            <div class="glassmorphism p-5 sm:p-7 rounded-3xl shadow-xl border border-white/80 space-y-5">
+              
+              <!-- Tab Switcher Header -->
+              <div class="flex items-center p-1.5 bg-slate-200/70 rounded-2xl border border-slate-300/60 text-xs font-bold shadow-inner">
+                <button type="button" onclick="switchPortalTab('login')" id="tabBtnLogin" class="flex-1 py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 bg-white text-slate-900 shadow-sm">
+                  <i data-lucide="log-in" class="w-4 h-4 text-brand-600"></i>
+                  <span>Masuk (Sign In)</span>
                 </button>
-              </form>
+                <button type="button" onclick="switchPortalTab('register')" id="tabBtnRegister" class="flex-1 py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 text-slate-600 hover:text-slate-900">
+                  <i data-lucide="sparkles" class="w-4 h-4 text-amber-500"></i>
+                  <span>Daftar Siswa Baru ✨</span>
+                </button>
+              </div>
+
+              <!-- TAB 1: LOGIN PORTAL -->
+              <div id="portalTabLogin" class="space-y-4">
+                <div class="text-center space-y-1">
+                  <h2 class="text-xl font-black text-slate-900 flex items-center justify-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    Portal Masuk Siswa & Ujian
+                  </h2>
+                  <p class="text-[11px] text-slate-500">Gunakan akun terdaftar atau pilih demo siswa di bawah</p>
+                </div>
+
+                <!-- Quick Demo Login Buttons -->
+                <div>
+                  <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1.5 tracking-wider">Akses Cepat Siswa / Penguji:</label>
+                  <div class="grid grid-cols-2 gap-2 text-xs">
+                    <button type="button" onclick="setCredentials('rayhan@alimamischool.com', 'student123')" class="p-2 rounded-xl border border-slate-200 bg-white hover:border-brand-500 hover:bg-brand-50 font-semibold text-left flex items-center gap-2 transition-all">
+                      <span class="text-base">🦁</span>
+                      <div class="overflow-hidden">
+                        <div class="font-bold text-slate-900 truncate">Rayhan (G7)</div>
+                        <div class="text-[9px] text-slate-400 truncate">rayhan@alimami...</div>
+                      </div>
+                    </button>
+                    <button type="button" onclick="setCredentials('aisha@alimamischool.com', 'student123')" class="p-2 rounded-xl border border-slate-200 bg-white hover:border-brand-500 hover:bg-brand-50 font-semibold text-left flex items-center gap-2 transition-all">
+                      <span class="text-base">🧕</span>
+                      <div class="overflow-hidden">
+                        <div class="font-bold text-slate-900 truncate">Aisha (G8)</div>
+                        <div class="text-[9px] text-slate-400 truncate">aisha@alimami...</div>
+                      </div>
+                    </button>
+                    <button type="button" onclick="setCredentials('bilal@alimamischool.com', 'student123')" class="p-2 rounded-xl border border-slate-200 bg-white hover:border-brand-500 hover:bg-brand-50 font-semibold text-left flex items-center gap-2 transition-all">
+                      <span class="text-base">🚀</span>
+                      <div class="overflow-hidden">
+                        <div class="font-bold text-slate-900 truncate">Bilal (G9)</div>
+                        <div class="text-[9px] text-slate-400 truncate">bilal@alimami...</div>
+                      </div>
+                    </button>
+                    <button type="button" onclick="setCredentials('teacher', 'teacher123')" class="p-2 rounded-xl border border-slate-200 bg-white hover:border-emerald-500 hover:bg-emerald-50 font-semibold text-left flex items-center gap-2 transition-all">
+                      <span class="text-base">👩‍🏫</span>
+                      <div class="overflow-hidden">
+                        <div class="font-bold text-slate-900 truncate">Teacher Sarah</div>
+                        <div class="text-[9px] text-emerald-600 font-bold">Examiner</div>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Login Form -->
+                <form onsubmit="handleLoginSubmit(event)" class="space-y-3.5 text-xs pt-1">
+                  <div>
+                    <label class="block font-bold text-slate-700 uppercase mb-1 text-[11px]">Email / Username Siswa</label>
+                    <div class="relative">
+                      <i data-lucide="mail" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5"></i>
+                      <input type="text" id="txtUsername" required placeholder="namasiswa@alimamischool.com" value="rayhan@alimamischool.com" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 outline-none transition-all font-medium text-xs">
+                    </div>
+                  </div>
+
+                  <div>
+                    <label class="block font-bold text-slate-700 uppercase mb-1 text-[11px]">Password</label>
+                    <div class="relative">
+                      <i data-lucide="lock" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5"></i>
+                      <input type="password" id="txtPassword" required placeholder="••••••••" value="student123" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 outline-none transition-all text-xs">
+                    </div>
+                  </div>
+
+                  <button type="submit" id="btnLoginAction" class="w-full bg-gradient-to-r from-brand-600 to-teal-600 hover:from-brand-500 hover:to-teal-500 text-white font-bold py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 text-xs sm:text-sm cursor-pointer active:scale-98">
+                    <span>Masuk ke Ujian & Mulai Kompetisi</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                  </button>
+                </form>
+              </div>
+
+              <!-- TAB 2: REGISTRATION PORTAL -->
+              <div id="portalTabRegister" class="space-y-4 hidden">
+                <div class="text-center space-y-1">
+                  <h2 class="text-xl font-black text-slate-900 flex items-center justify-center gap-2">
+                    <span class="text-xl">🌟</span>
+                    Daftar Siswa Baru SMP Al-Imam
+                  </h2>
+                  <p class="text-[11px] text-slate-500">Pilih avatar favoritmu & ikuti kompetisi seru!</p>
+                </div>
+
+                <form onsubmit="handleStudentRegister(event)" class="space-y-3.5 text-xs">
+                  <div>
+                    <label class="block font-bold text-slate-700 uppercase mb-1 text-[11px]">Nama Lengkap Siswa</label>
+                    <div class="relative">
+                      <i data-lucide="user" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5"></i>
+                      <input type="text" id="regFullName" required placeholder="Contoh: Muhammad Farhan Al-Ghifari" oninput="autoSuggestRegEmail(this.value)" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 outline-none transition-all text-xs font-medium">
+                    </div>
+                  </div>
+
+                  <div>
+                    <label class="block font-bold text-slate-700 uppercase mb-1 text-[11px]">Email Resmi Siswa (@alimamischool.com)</label>
+                    <div class="flex items-center rounded-xl border border-slate-300 bg-white overflow-hidden focus-within:border-brand-500 focus-within:ring-2 focus-within:ring-brand-100">
+                      <span class="pl-3 text-slate-400"><i data-lucide="at-sign" class="w-3.5 h-3.5"></i></span>
+                      <input type="text" id="regEmailPrefix" required placeholder="namasiswa" class="flex-grow px-2.5 py-2.5 outline-none text-xs font-semibold text-slate-800 lowercase">
+                      <span class="px-2.5 py-2.5 bg-slate-100 text-brand-700 font-bold text-[11px] border-l border-slate-200">@alimamischool.com</span>
+                    </div>
+                  </div>
+
+                  <div class="grid grid-cols-2 gap-2.5">
+                    <div>
+                      <label class="block font-bold text-slate-700 uppercase mb-1 text-[11px]">Tingkat / Kelas</label>
+                      <select id="regGrade" class="w-full p-2.5 rounded-xl border border-slate-300 focus:border-brand-500 outline-none text-xs font-semibold bg-white cursor-pointer">
+                        <option value="Grade 7 - Abu Bakar">Grade 7 - Abu Bakar</option>
+                        <option value="Grade 7 - Khadijah">Grade 7 - Khadijah</option>
+                        <option value="Grade 8 - Utsman">Grade 8 - Utsman</option>
+                        <option value="Grade 8 - Ali bin Abi Thalib">Grade 8 - Ali</option>
+                        <option value="Grade 9 - Khalid bin Walid">Grade 9 - Khalid</option>
+                        <option value="Grade 9 - Thariq bin Ziyad">Grade 9 - Thariq</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label class="block font-bold text-slate-700 uppercase mb-1 text-[11px]">Buat Password</label>
+                      <input type="password" id="regPassword" required placeholder="••••••••" value="student123" class="w-full p-2.5 rounded-xl border border-slate-300 focus:border-brand-500 outline-none text-xs">
+                    </div>
+                  </div>
+
+                  <!-- AVATAR SELECTION GRID -->
+                  <div class="space-y-1.5 pt-1">
+                    <div class="flex items-center justify-between">
+                      <label class="block font-bold text-slate-700 uppercase text-[11px] flex items-center gap-1">
+                        <span>Pilih Avatar Karaktermu:</span>
+                      </label>
+                      <span id="regAvatarSelectedBadge" class="text-[10px] font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full flex items-center gap-1">
+                        <span>🦁</span> <span id="regAvatarSelectedName">Lion Hero</span>
+                      </span>
+                    </div>
+
+                    <div class="grid grid-cols-4 sm:grid-cols-8 gap-1.5 p-2 bg-slate-50/90 rounded-2xl border border-slate-200/80 max-h-36 overflow-y-auto custom-scrollbar">
+                      ${AVATAR_LIST.map(av => `
+                        <button type="button" onclick="selectRegisterAvatar('${av.id}')" id="avatarBtn_${av.id}" title="${av.name}" class="p-2 rounded-xl border text-xl flex flex-col items-center justify-center transition-all cursor-pointer ${
+                          AppState.selectedRegAvatarId === av.id ? 'bg-amber-100 border-amber-500 ring-2 ring-amber-400 scale-105 shadow-sm' : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-100'
+                        }">
+                          <span>${av.emoji}</span>
+                        </button>
+                      `).join('')}
+                    </div>
+                  </div>
+
+                  <button type="submit" id="btnRegisterAction" class="w-full bg-gradient-to-r from-amber-500 via-emerald-500 to-teal-500 hover:from-amber-400 hover:to-teal-400 text-slate-950 font-black py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 text-xs sm:text-sm cursor-pointer active:scale-98">
+                    <span>✨ Daftarkan Akun & Langsung Ujian!</span> <i data-lucide="sparkles" class="w-4 h-4"></i>
+                  </button>
+                </form>
+              </div>
 
               <!-- Direct Navigation Links -->
-              <div class="pt-4 border-t border-slate-200 text-center text-xs text-slate-500 space-x-2">
+              <div class="pt-3 border-t border-slate-200 text-center text-xs text-slate-500 space-x-2">
                 <button onclick="navigateTo('exam')" class="text-brand-700 font-bold hover:underline">Exam Player</button> •
                 <button onclick="navigateTo('admin')" class="text-brand-700 font-bold hover:underline">Admin Dashboard</button> •
                 <button onclick="navigateTo('cms')" class="text-brand-700 font-bold hover:underline">Appearance & SaaS</button>
@@ -640,6 +1460,133 @@
       `;
     }
 
+    // Portal Tab Switcher (Login / Register)
+    function switchPortalTab(tab) {
+      const loginTab = document.getElementById("portalTabLogin");
+      const regTab = document.getElementById("portalTabRegister");
+      const btnLogin = document.getElementById("tabBtnLogin");
+      const btnReg = document.getElementById("tabBtnRegister");
+
+      if (tab === "register") {
+        if (loginTab) loginTab.classList.add("hidden");
+        if (regTab) regTab.classList.remove("hidden");
+        if (btnReg) btnReg.className = "flex-1 py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 bg-white text-slate-900 shadow-sm font-bold";
+        if (btnLogin) btnLogin.className = "flex-1 py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 text-slate-600 hover:text-slate-900 font-semibold";
+      } else {
+        if (regTab) regTab.classList.add("hidden");
+        if (loginTab) loginTab.classList.remove("hidden");
+        if (btnLogin) btnLogin.className = "flex-1 py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 bg-white text-slate-900 shadow-sm font-bold";
+        if (btnReg) btnReg.className = "flex-1 py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 text-slate-600 hover:text-slate-900 font-semibold";
+      }
+      lucide.createIcons();
+    }
+
+    function selectRegisterAvatar(avatarId) {
+      AppState.selectedRegAvatarId = avatarId;
+      const av = AVATAR_LIST.find(a => a.id === avatarId) || AVATAR_LIST[0];
+      
+      AVATAR_LIST.forEach(a => {
+        const el = document.getElementById(`avatarBtn_${a.id}`);
+        if (el) {
+          if (a.id === avatarId) {
+            el.className = "p-2 rounded-xl border text-xl flex flex-col items-center justify-center transition-all cursor-pointer bg-amber-100 border-amber-500 ring-2 ring-amber-400 scale-105 shadow-sm";
+          } else {
+            el.className = "p-2 rounded-xl border text-xl flex flex-col items-center justify-center transition-all cursor-pointer bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-100";
+          }
+        }
+      });
+
+      const badge = document.getElementById("regAvatarSelectedBadge");
+      const label = document.getElementById("regAvatarSelectedName");
+      if (badge && label) {
+        badge.firstElementChild.innerText = av.emoji;
+        label.innerText = av.name;
+      }
+      SoundFX.playCorrect();
+    }
+
+    function autoSuggestRegEmail(name) {
+      const prefixInput = document.getElementById("regEmailPrefix");
+      if (prefixInput && (!prefixInput.value || prefixInput.dataset.manual !== "true")) {
+        const clean = name.toLowerCase().replace(/[^a-z0-9]/g, '');
+        if (clean.length > 0) {
+          prefixInput.value = clean;
+        }
+      }
+    }
+
+    function handleStudentRegister(e) {
+      e.preventDefault();
+      const fullName = (document.getElementById("regFullName").value || "").trim();
+      let emailPrefix = (document.getElementById("regEmailPrefix").value || "").trim().toLowerCase();
+      emailPrefix = emailPrefix.replace(/@.*$/, '').replace(/[^a-z0-9._-]/g, '');
+      const gradeClass = document.getElementById("regGrade").value;
+      const password = (document.getElementById("regPassword").value || "student123").trim();
+      
+      if (!fullName) {
+        showToast("Mohon masukkan nama lengkap siswa.");
+        return;
+      }
+      if (!emailPrefix) {
+        emailPrefix = fullName.toLowerCase().replace(/[^a-z0-9]/g, '');
+      }
+
+      const fullEmail = `${emailPrefix}@alimamischool.com`;
+      const chosenAvatar = AVATAR_LIST.find(a => a.id === AppState.selectedRegAvatarId) || AVATAR_LIST[0];
+
+      // Extract Grade
+      let gradeType = "Grade 7";
+      let examToken = "GRADE7";
+      if (gradeClass.includes("Grade 8")) {
+        gradeType = "Grade 8";
+        examToken = "GRADE8";
+      } else if (gradeClass.includes("Grade 9")) {
+        gradeType = "Grade 9";
+        examToken = "GRADE9";
+      }
+
+      const newStudent = {
+        username: emailPrefix,
+        email: fullEmail,
+        name: fullName,
+        grade: gradeType,
+        classGroup: gradeClass,
+        avatar: chosenAvatar.emoji,
+        avatarId: chosenAvatar.id,
+        password: password,
+        role: "student",
+        score: 0,
+        streak: 0,
+        accuracy: 0
+      };
+
+      // Add to database
+      if (!AppState.students) AppState.students = loadRegisteredStudents();
+      const existingIdx = AppState.students.findIndex(s => s.email === fullEmail || s.username === emailPrefix);
+      if (existingIdx !== -1) {
+        AppState.students[existingIdx] = newStudent;
+      } else {
+        AppState.students.unshift(newStudent);
+      }
+      persistStudents(AppState.students);
+
+      // Auto login
+      AppState.currentUser = newStudent;
+      sessionStorage.setItem("alimam_user", JSON.stringify(newStudent));
+
+      // Celebration
+      SoundFX.playCorrect();
+      if (typeof confetti === 'function') {
+        confetti({ particleCount: 70, spread: 80, origin: { y: 0.6 } });
+      }
+
+      showToast(`Selamat datang ${fullName}! Pendaftaran berhasil. Menuju arena ujian...`);
+
+      setTimeout(() => {
+        navigateTo("exam", { code: examToken });
+      }, 600);
+    }
+
     // Quick Login Helper
     function setCredentials(u, p) {
       document.getElementById("txtUsername").value = u;
@@ -649,31 +1596,91 @@
 
     function handleLoginSubmit(e) {
       e.preventDefault();
-      const u = document.getElementById("txtUsername").value.trim();
+      const inputVal = document.getElementById("txtUsername").value.trim().toLowerCase();
+      const pwd = document.getElementById("txtPassword").value.trim();
       const btn = document.getElementById("btnLoginAction");
       btn.disabled = true;
-      btn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Verifying...';
+      btn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Memverifikasi...';
       lucide.createIcons();
 
       setTimeout(() => {
-        if (u === "superadmin" || u === "admincms") {
-          AppState.currentUser = { username: u, role: "admin", name: "Administrator Al-Imam" };
+        btn.disabled = false;
+        btn.innerHTML = '<span>Masuk ke Ujian & Mulai Kompetisi</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>';
+        lucide.createIcons();
+
+        // 1. Check Admin / Teacher
+        if (inputVal === "superadmin" || inputVal === "admincms" || inputVal === "admin@alimamischool.com") {
+          AppState.currentUser = { username: "superadmin", role: "admin", name: "Administrator Al-Imam", avatar: "🛡️" };
           sessionStorage.setItem("alimam_user", JSON.stringify(AppState.currentUser));
+          SoundFX.playCorrect();
           navigateTo("admin");
-        } else if (u === "teacher") {
-          AppState.currentUser = { username: u, role: "teacher", name: "Ustazah Sarah Jenkins, M.Ed" };
+          return;
+        } else if (inputVal === "teacher" || inputVal === "sarah@alimamischool.com") {
+          AppState.currentUser = { username: "teacher", role: "teacher", name: "Ustazah Sarah Jenkins, M.Ed", avatar: "👩‍🏫" };
           sessionStorage.setItem("alimam_user", JSON.stringify(AppState.currentUser));
+          SoundFX.playCorrect();
           navigateTo("admin");
-        } else {
-          AppState.currentUser = { username: u, role: "student", name: "Muhammad Rayhan Al-Fatih" };
-          sessionStorage.setItem("alimam_user", JSON.stringify(AppState.currentUser));
-          navigateTo("exam", { code: "TOEFL2026" });
+          return;
         }
-      }, 500);
+
+        // 2. Check Student Database
+        if (!AppState.students) AppState.students = loadRegisteredStudents();
+        const foundStudent = AppState.students.find(s => 
+          s.email.toLowerCase() === inputVal || 
+          s.username.toLowerCase() === inputVal ||
+          `${s.username}@alimamischool.com` === inputVal
+        );
+
+        if (foundStudent) {
+          AppState.currentUser = foundStudent;
+          sessionStorage.setItem("alimam_user", JSON.stringify(foundStudent));
+          SoundFX.playCorrect();
+
+          let examToken = "GRADE7";
+          if (foundStudent.grade === "Grade 8" || (foundStudent.classGroup && foundStudent.classGroup.includes("Grade 8"))) {
+            examToken = "GRADE8";
+          } else if (foundStudent.grade === "Grade 9" || (foundStudent.classGroup && foundStudent.classGroup.includes("Grade 9"))) {
+            examToken = "GRADE9";
+          }
+          showToast(`Ahlan wa Sahlan, ${foundStudent.name}! Masuk ke ${foundStudent.grade}...`);
+          navigateTo("exam", { code: examToken });
+          return;
+        }
+
+        // 3. Fallback Dynamic Match
+        let gradeToken = "GRADE7";
+        let defaultGrade = "Grade 7 - Abu Bakar";
+        let avatarEmoji = "🦁";
+        if (inputVal.includes("aisha") || inputVal.includes("grade8") || inputVal.includes("candidate2")) {
+          gradeToken = "GRADE8";
+          defaultGrade = "Grade 8 - Utsman";
+          avatarEmoji = "🧕";
+        } else if (inputVal.includes("bilal") || inputVal.includes("grade9") || inputVal.includes("candidate3")) {
+          gradeToken = "GRADE9";
+          defaultGrade = "Grade 9 - Khalid bin Walid";
+          avatarEmoji = "🚀";
+        }
+
+        const fallbackStudent = {
+          username: inputVal.replace(/@.*$/, ''),
+          email: inputVal.includes("@") ? inputVal : `${inputVal}@alimamischool.com`,
+          name: inputVal.replace(/@.*$/, '').replace(/[0-9_.-]/g, ' ').toUpperCase(),
+          role: "student",
+          grade: gradeToken === "GRADE8" ? "Grade 8" : gradeToken === "GRADE9" ? "Grade 9" : "Grade 7",
+          classGroup: defaultGrade,
+          avatar: avatarEmoji
+        };
+
+        AppState.currentUser = fallbackStudent;
+        sessionStorage.setItem("alimam_user", JSON.stringify(fallbackStudent));
+        SoundFX.playCorrect();
+        showToast(`Selamat datang ${fallbackStudent.name}!`);
+        navigateTo("exam", { code: gradeToken });
+      }, 450);
     }
 
     function handleQuickTokenStart() {
-      const token = document.getElementById("landingExamToken").value.trim();
+      const token = document.getElementById("landingExamToken").value.trim().toUpperCase();
       if (!token) {
         alert("Please enter an exam token code first.");
         return;
@@ -686,37 +1693,88 @@
     function renderExamPlayerView(container) {
       const session = AppState.examSession;
       const q = AppState.questions[session.currentIndex] || AppState.questions[0];
+      const examCode = (AppState.activeExamCode || "GRADE7").toUpperCase();
+      
+      let examTitle = "SMP Al-Imam English Assessment";
+      if (examCode === "GRADE7") examTitle = "SMP Al-Imam Grade 7 English Assessment";
+      else if (examCode === "GRADE8") examTitle = "SMP Al-Imam Grade 8 English Assessment";
+      else if (examCode === "GRADE9") examTitle = "SMP Al-Imam Grade 9 English Graduation Assessment";
+      else if (examCode === "TOEFL2026") examTitle = "Al-Imam TOEFL ITP Full Diagnostic";
+      else if (examCode === "IELTS2026") examTitle = "Al-Imam Comprehensive IELTS Academic Simulation";
+
+      const candidateName = (AppState.currentUser && AppState.currentUser.name) || "Muhammad Rayhan Al-Fatih";
+      const candidateClass = (AppState.currentUser && AppState.currentUser.classGroup) || "Grade 7 - Abu Bakar";
+      const candidateAvatar = (AppState.currentUser && AppState.currentUser.avatar) || "🦁";
+      const currentScore = session.score || 0;
+      const currentStreak = session.streak || 0;
+      const currentRank = getStudentCurrentRank(currentScore, candidateClass);
 
       container.innerHTML = `
-        <!-- Sticky Exam Topbar -->
-        <header class="bg-slate-900 text-white sticky top-0 z-40 shadow-md border-b border-slate-800">
-          <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <button onclick="confirmExitExam()" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300">
+        <!-- Sticky Exam Topbar with Kahoot Gamification HUD -->
+        <header class="bg-slate-900 text-white sticky top-0 z-40 shadow-xl border-b border-slate-800">
+          <div class="max-w-7xl mx-auto px-3 sm:px-6 h-18 sm:h-20 flex items-center justify-between py-2 gap-2">
+            
+            <!-- Left: Candidate Info & Exit -->
+            <div class="flex items-center gap-2.5 sm:gap-3">
+              <button onclick="confirmExitExam()" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors cursor-pointer" title="Leave Exam Room">
                 <i data-lucide="arrow-left" class="w-4 h-4"></i>
               </button>
-              <div>
-                <h1 class="text-xs sm:text-sm font-bold text-white leading-tight">Al-Imam TOEFL ITP Full Diagnostic</h1>
-                <div class="text-[10px] text-emerald-400 font-medium">Candidate: Muhammad Rayhan Al-Fatih</div>
+              <div class="flex items-center gap-2">
+                <span class="text-2xl sm:text-3xl p-1 bg-slate-800/90 rounded-2xl border border-slate-700 shadow-inner">${candidateAvatar}</span>
+                <div>
+                  <h1 class="text-xs sm:text-sm font-bold text-white leading-tight flex items-center gap-1.5">
+                    <span class="truncate max-w-[140px] sm:max-w-none">${candidateName}</span>
+                  </h1>
+                  <div class="text-[10px] text-emerald-400 font-semibold truncate">${candidateClass}</div>
+                </div>
               </div>
             </div>
 
-            <!-- Countdown Timer -->
-            <div class="flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-xl bg-slate-800 border border-slate-700">
-              <i data-lucide="clock" class="w-4 h-4 text-amber-400 animate-pulse"></i>
-              <span class="text-[10px] uppercase font-bold text-slate-400 hidden sm:inline">Time Remaining:</span>
-              <span id="playerTimer" class="font-mono text-sm sm:text-base font-black text-amber-400">01:54:20</span>
+            <!-- Center: Kahoot Score, Flame Streak & Live Rank HUD -->
+            <div class="flex items-center gap-1.5 sm:gap-3">
+              <!-- Score Badge -->
+              <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-gradient-to-r from-amber-500/20 to-yellow-500/20 border border-amber-500/50 shadow-inner">
+                <span class="text-sm">⭐</span>
+                <div>
+                  <div class="text-[9px] uppercase font-bold text-amber-300 leading-none">Score</div>
+                  <div id="playerKahootScore" class="font-mono text-xs sm:text-sm font-black text-amber-400 leading-tight">${currentScore.toLocaleString()} <span class="text-[9px] font-normal text-amber-300">PTS</span></div>
+                </div>
+              </div>
+
+              <!-- Streak Flame Badge -->
+              <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-gradient-to-r from-rose-500/20 to-orange-500/20 border border-rose-500/50 ${currentStreak >= 2 ? 'animate-pulse' : ''}">
+                <span class="text-sm ${currentStreak >= 2 ? 'animate-bounce' : ''}">🔥</span>
+                <div>
+                  <div class="text-[9px] uppercase font-bold text-rose-300 leading-none">Streak</div>
+                  <div id="playerKahootStreak" class="font-mono text-xs sm:text-sm font-black text-orange-400 leading-tight">x${currentStreak}</div>
+                </div>
+              </div>
+
+              <!-- Live Rank Predictor -->
+              <div class="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-indigo-500/20 border border-indigo-500/50">
+                <span class="text-sm">🏆</span>
+                <div>
+                  <div class="text-[9px] uppercase font-bold text-indigo-300 leading-none">Rank</div>
+                  <div class="font-mono text-xs font-black text-indigo-300 leading-tight">#${currentRank}</div>
+                </div>
+              </div>
             </div>
 
-            <!-- Strikes & Submit Button -->
+            <!-- Right: Sound Toggle, Timer & Submit -->
             <div class="flex items-center gap-2 sm:gap-3">
-              <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-red-950/80 border border-red-800 text-red-300 text-xs font-bold">
-                <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-red-400"></i>
-                <span class="hidden sm:inline">Strikes:</span>
-                <span id="playerStrikeCount" class="font-mono text-red-400">${session.strikes} / 3</span>
+              <!-- Sound FX Mute Button -->
+              <button onclick="SoundFX.toggleMute()" id="btnMuteToggle" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-all cursor-pointer" title="Toggle Sound FX">
+                <i data-lucide="${SoundFX.isMuted ? 'volume-x' : 'volume-2'}" id="audioMuteIcon" class="w-4 h-4 text-emerald-400"></i>
+              </button>
+
+              <!-- Countdown Timer -->
+              <div class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700">
+                <i data-lucide="clock" class="w-3.5 h-3.5 text-amber-400 animate-pulse"></i>
+                <span id="playerTimer" class="font-mono text-xs sm:text-sm font-black text-amber-400">01:54:20</span>
               </div>
-              <button onclick="confirmFinishExam()" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs px-4 py-2 rounded-xl shadow-md flex items-center gap-1.5 transition-all">
-                <i data-lucide="check-circle" class="w-4 h-4"></i> Submit Exam
+
+              <button onclick="confirmFinishExam()" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs px-3.5 sm:px-4 py-2 rounded-xl shadow-md flex items-center gap-1.5 transition-all cursor-pointer">
+                <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> <span class="hidden sm:inline">Finish</span>
               </button>
             </div>
           </div>
@@ -959,24 +2017,34 @@
                 `;
               })() : ''}
 
-              <!-- STANDARD MULTIPLE CHOICE & ERROR IDENTIFICATION -->
+              <!-- STANDARD MULTIPLE CHOICE & ERROR IDENTIFICATION (KAHOOT STYLED) -->
               ${(q.type === 'multiple_choice' || q.type === 'error_identification') ? `
                 <div>
-                  <h2 class="text-sm sm:text-base font-bold text-slate-900 leading-snug mb-3">
+                  <h2 class="text-sm sm:text-base font-bold text-slate-900 leading-snug mb-4">
                     ${q.prompt.replace(/\n/g, '<br>')}
                   </h2>
 
-                  <div class="space-y-3">
-                    ${q.options.map(opt => `
-                      <div onclick="selectExamAnswer('${q.id}', '${opt.key}')" class="p-3.5 sm:p-4 rounded-2xl border transition-all cursor-pointer flex items-start gap-3 ${
-                        session.answers[q.id] === opt.key ? 'bg-emerald-50 border-brand-500 shadow-sm ring-1 ring-brand-500' : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50'
-                      }">
-                        <div class="w-7 h-7 rounded-xl flex items-center justify-center font-black text-xs flex-shrink-0 ${
-                          session.answers[q.id] === opt.key ? 'bg-brand-600 text-white shadow' : 'bg-slate-100 text-slate-700 border border-slate-300'
-                        }">${opt.key}</div>
-                        <div class="text-xs sm:text-sm text-slate-800 pt-0.5">${opt.text}</div>
-                      </div>
-                    `).join('')}
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    ${q.options.map((opt, optIdx) => {
+                      const isSelected = session.answers[q.id] === opt.key;
+                      const shapes = [
+                        { symbol: "▲", color: "bg-red-500 text-white" },
+                        { symbol: "◆", color: "bg-blue-500 text-white" },
+                        { symbol: "●", color: "bg-amber-500 text-white" },
+                        { symbol: "■", color: "bg-emerald-500 text-white" }
+                      ];
+                      const shape = shapes[optIdx % shapes.length];
+                      return `
+                        <div onclick="selectExamAnswer('${q.id}', '${opt.key}')" class="p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center gap-3.5 shadow-sm active:scale-98 ${
+                          isSelected ? 'bg-brand-50 border-brand-500 ring-2 ring-brand-400/40 shadow-md' : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50'
+                        }">
+                          <div class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-sm flex-shrink-0 ${shape.color} shadow-sm">
+                            ${shape.symbol}
+                          </div>
+                          <div class="text-xs sm:text-sm text-slate-800 font-semibold flex-grow text-left">${opt.text}</div>
+                        </div>
+                      `;
+                    }).join('')}
                   </div>
                 </div>
               ` : ''}
@@ -1011,14 +2079,14 @@
                       <span class="text-xs font-mono font-bold">${session.isRecording ? 'RECORDING IN PROGRESS...' : (session.speakingAudioUrl ? 'RECORDING SAVED' : 'STANDBY (READY TO RECORD)')}</span>
                     </div>
                     <div class="flex flex-wrap items-center justify-center gap-3">
-                      <button onclick="toggleSpeakingRecording('${q.id}')" class="px-6 py-3 rounded-2xl font-bold text-xs sm:text-sm flex items-center gap-2 shadow-lg transition-all ${
+                      <button onclick="toggleSpeakingRecording('${q.id}')" class="px-6 py-3 rounded-2xl font-bold text-xs sm:text-sm flex items-center gap-2 shadow-lg transition-all cursor-pointer ${
                         session.isRecording ? 'bg-red-600 hover:bg-red-700 text-white animate-pulse' : 'bg-brand-600 hover:bg-brand-500 text-white'
                       }">
                         <i data-lucide="${session.isRecording ? 'square' : 'mic'}" class="w-4 h-4"></i>
                         <span>${session.isRecording ? 'Stop Recording' : (session.speakingAudioUrl ? 'Re-record Response' : 'Start Voice Recording')}</span>
                       </button>
                       ${session.speakingAudioUrl ? `
-                        <button onclick="previewExamSpeakingRecording()" class="px-5 py-3 rounded-2xl font-bold text-xs sm:text-sm flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg transition-all">
+                        <button onclick="previewExamSpeakingRecording()" class="px-5 py-3 rounded-2xl font-bold text-xs sm:text-sm flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg transition-all cursor-pointer">
                           <i data-lucide="play" class="w-4 h-4"></i>
                           <span>Play Recorded Audio</span>
                         </button>
@@ -1031,12 +2099,12 @@
 
               <!-- Prev / Next Navigation -->
               <div class="flex items-center justify-between pt-6 border-t border-slate-100">
-                <button onclick="prevExamQuestion()" ${session.currentIndex === 0 ? 'disabled' : ''} class="px-4 py-2.5 rounded-xl border border-slate-300 hover:bg-slate-100 text-slate-700 text-xs sm:text-sm font-bold flex items-center gap-1.5 transition-all disabled:opacity-40">
-                  <i data-lucide="chevron-left" class="w-4 h-4"></i> Previous
+                <button onclick="prevExamQuestion()" ${session.currentIndex === 0 ? 'disabled' : ''} class="px-4 py-2.5 rounded-xl border border-slate-300 hover:bg-slate-100 text-slate-700 text-xs sm:text-sm font-bold flex items-center gap-1.5 transition-all disabled:opacity-40 cursor-pointer">
+                  <i data-lucide="chevron-left" class="w-4 h-4"></i> Sebelumnya
                 </button>
-                <span class="text-xs text-slate-400 font-mono">Question ${session.currentIndex + 1} of ${AppState.questions.length}</span>
-                <button onclick="nextExamQuestion()" class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-bold flex items-center gap-1.5 transition-all shadow-md">
-                  <span>${session.currentIndex === AppState.questions.length - 1 ? 'Finish' : 'Next'}</span>
+                <span class="text-xs text-slate-400 font-mono">Soal ${session.currentIndex + 1} dari ${AppState.questions.length}</span>
+                <button onclick="nextExamQuestion()" class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-bold flex items-center gap-1.5 transition-all shadow-md cursor-pointer">
+                  <span>${session.currentIndex === AppState.questions.length - 1 ? 'Selesai' : 'Lanjut'}</span>
                   <i data-lucide="chevron-right" class="w-4 h-4"></i>
                 </button>
               </div>
@@ -1078,8 +2146,8 @@
                   <i data-lucide="grid" class="w-4 h-4 text-brand-600"></i> Question Palette
                 </h2>
                 <div class="flex items-center gap-2 text-[10px] text-slate-500">
-                  <span class="flex items-center gap-1"><span class="w-2 h-2 rounded bg-brand-600"></span> Answered</span>
-                  <span class="flex items-center gap-1"><span class="w-2 h-2 rounded bg-amber-400"></span> Flagged</span>
+                  <span class="flex items-center gap-1"><span class="w-2 h-2 rounded bg-brand-600"></span> Terjawab</span>
+                  <span class="flex items-center gap-1"><span class="w-2 h-2 rounded bg-amber-400"></span> Ditandai</span>
                 </div>
               </div>
 
@@ -1096,20 +2164,81 @@
                   else if (isAnswered) btnClass = 'bg-brand-600 text-white font-bold border-brand-700';
 
                   return `
-                    <button id="paletteBtn_${qItem.id}" onclick="jumpToExamQuestion(${idx})" class="h-9 rounded-xl border text-xs font-mono transition-all flex items-center justify-center ${btnClass}">
+                    <button id="paletteBtn_${qItem.id}" onclick="jumpToExamQuestion(${idx})" class="h-9 rounded-xl border text-xs font-mono transition-all flex items-center justify-center cursor-pointer ${btnClass}">
                       ${idx + 1}
                     </button>
                   `;
                 }).join('')}
               </div>
 
-              <button onclick="confirmFinishExam()" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs py-3 rounded-xl shadow-md transition-all flex items-center justify-center gap-1.5">
+              <button onclick="confirmFinishExam()" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs py-3 rounded-xl shadow-md transition-all flex items-center justify-center gap-1.5 cursor-pointer">
                 <i data-lucide="send" class="w-4 h-4"></i> Submit Assessment
               </button>
             </div>
 
           </div>
         </main>
+
+        <!-- KAHOOT EXPRESSIVE REACTION POPUP MODAL -->
+        <div id="kahootReactionModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm ${session.kahootReaction ? '' : 'hidden'} flex items-center justify-center p-4">
+          ${session.kahootReaction ? (() => {
+            const rx = session.kahootReaction;
+            if (rx.isCorrect) {
+              return `
+                <div class="bg-gradient-to-br from-emerald-600 via-teal-700 to-slate-900 text-white rounded-3xl max-w-md w-full p-6 sm:p-8 text-center space-y-4 shadow-2xl border-4 border-emerald-400 animate-bounce-in">
+                  <div class="text-5xl sm:text-6xl animate-bounce">🌟</div>
+                  <div class="space-y-1">
+                    <span class="inline-block px-3 py-1 rounded-full bg-emerald-400/30 text-emerald-200 text-xs font-black uppercase tracking-wider">Jawaban Benar!</span>
+                    <h2 class="text-2xl sm:text-3xl font-black text-white">${rx.title}</h2>
+                  </div>
+
+                  <div class="p-4 bg-emerald-950/70 rounded-2xl border border-emerald-500/50 space-y-2 text-xs">
+                    <div class="text-3xl font-black text-amber-300 font-mono">+${rx.points} <span class="text-sm font-normal text-slate-300">PTS</span></div>
+                    <div class="flex justify-center gap-3 text-[11px] text-emerald-200 pt-1 border-t border-emerald-800">
+                      <span>Base: +${rx.basePoints}</span>
+                      <span>Speed: +${rx.speedBonus}</span>
+                      ${rx.streakBonus > 0 ? `<span>🔥 Streak Bonus: +${rx.streakBonus}</span>` : ''}
+                    </div>
+                  </div>
+
+                  ${rx.streak >= 2 ? `
+                    <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-orange-500/30 border border-orange-400 text-orange-300 text-xs font-black">
+                      <span>🔥 ${rx.streak} Jawaban Benar Berturut-turut!</span>
+                    </div>
+                  ` : ''}
+
+                  <button onclick="dismissKahootReaction()" class="w-full bg-gradient-to-r from-amber-400 to-yellow-400 hover:from-amber-300 hover:to-yellow-300 text-slate-950 font-black py-3.5 rounded-2xl shadow-lg transition-all text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer active:scale-95">
+                    <span>Lanjut ke Soal Berikutnya ⚡</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                  </button>
+                </div>
+              `;
+            } else {
+              return `
+                <div class="bg-gradient-to-br from-rose-600 via-red-700 to-slate-900 text-white rounded-3xl max-w-md w-full p-6 sm:p-8 text-center space-y-4 shadow-2xl border-4 border-rose-400 animate-bounce-in">
+                  <div class="text-5xl sm:text-6xl animate-pulse">💪</div>
+                  <div class="space-y-1">
+                    <span class="inline-block px-3 py-1 rounded-full bg-rose-400/30 text-rose-200 text-xs font-black uppercase tracking-wider">Hampir Benar!</span>
+                    <h2 class="text-2xl font-black text-white">${rx.title}</h2>
+                  </div>
+
+                  <div class="p-4 bg-red-950/70 rounded-2xl border border-red-500/50 text-left space-y-1.5 text-xs">
+                    <div class="text-[11px] text-rose-300 font-bold uppercase">Kunci Jawaban:</div>
+                    <div class="font-bold text-white text-sm">Pilihan ${rx.correctKey}: ${rx.correctText || ''}</div>
+                    ${rx.explanation ? `<div class="text-[11px] text-rose-200 italic pt-1 border-t border-red-900">${rx.explanation}</div>` : ''}
+                  </div>
+
+                  <p class="text-xs text-rose-200 leading-relaxed">
+                    Jangan patah semangat! Setiap soal adalah kesempatan baru untuk meraih poin tertinggi! 🌈
+                  </p>
+
+                  <button onclick="dismissKahootReaction()" class="w-full bg-white hover:bg-slate-100 text-slate-950 font-black py-3.5 rounded-2xl shadow-lg transition-all text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer active:scale-95">
+                    <span>Lanjut ke Soal Berikutnya ⚡</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                  </button>
+                </div>
+              `;
+            }
+          })() : ''}
+        </div>
 
         <!-- Violation Modal -->
         <div id="spaViolationModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden flex items-center justify-center p-4">
@@ -1124,67 +2253,200 @@
             <div class="p-3 bg-red-50 rounded-2xl border border-red-200 text-red-800 text-xs font-bold font-mono">
               Violation Status: <span id="modalStrikeSpan">${session.strikes}</span> / 3 Strikes
             </div>
-            <button onclick="closeViolationModal()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl shadow-lg transition-all text-xs sm:text-sm">
+            <button onclick="closeViolationModal()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl shadow-lg transition-all text-xs sm:text-sm cursor-pointer">
               I Understand & Return to Exam
             </button>
           </div>
         </div>
 
-        <!-- Result / Certificate Preview Modal -->
-        <div id="spaResultModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden flex items-center justify-center p-4">
-          <div class="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 space-y-6 shadow-2xl max-h-[90vh] overflow-y-auto custom-scrollbar">
-            <div class="text-center space-y-1">
-              <div class="w-16 h-16 mx-auto rounded-2xl bg-emerald-100 text-brand-600 flex items-center justify-center">
-                <i data-lucide="award" class="w-9 h-9"></i>
-              </div>
-              <h2 class="text-2xl font-black text-slate-900">Assessment Completed!</h2>
-              <p class="text-xs text-slate-500">Your results have been automatically scaled according to official conversion standards</p>
+        <!-- Result / 3D Kahoot Grand Victory Podium & Certificate Modal -->
+        <div id="spaResultModal" class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md hidden flex items-center justify-center p-3 sm:p-4">
+          <div class="bg-white rounded-3xl max-w-3xl w-full p-5 sm:p-7 space-y-5 shadow-2xl max-h-[92vh] overflow-y-auto custom-scrollbar border border-slate-200">
+            
+            <!-- Result Navigation Tabs -->
+            <div class="flex items-center p-1 bg-slate-100 rounded-2xl border border-slate-200 text-xs font-bold shadow-inner">
+              <button type="button" onclick="switchResultTab('podium')" id="resultTabBtnPodium" class="flex-1 py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 bg-white text-slate-900 shadow-sm font-bold cursor-pointer">
+                <span>🏆 Kahoot Podium & Leaderboard</span>
+              </button>
+              <button type="button" onclick="switchResultTab('certificate')" id="resultTabBtnCert" class="flex-1 py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 text-slate-600 hover:text-slate-900 font-semibold cursor-pointer">
+                <span>📜 Hasil Skor & Sertifikat PDF</span>
+              </button>
             </div>
 
-            <div class="p-6 bg-gradient-to-br from-emerald-950 to-slate-900 text-white rounded-2xl shadow-xl space-y-4">
-              <div class="flex items-center justify-between border-b border-emerald-800 pb-3">
-                <div>
-                  <div class="text-xs text-emerald-400 font-bold uppercase">Scaled Score (TOEFL Scale)</div>
-                  <div class="text-3xl font-black text-white"><span id="spaResultScaledScore">577</span> <span class="text-sm font-normal text-slate-300">/ 677</span></div>
+            <!-- VIEW A: KAHOOT 3D GRAND VICTORY PODIUM & CLASS LEADERBOARD -->
+            <div id="resultTabPodiumView" class="space-y-6">
+              
+              <div class="text-center space-y-1">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 text-amber-800 font-bold text-xs uppercase tracking-wider">
+                  <span class="animate-bounce">👑</span> Grand Victory Podium SMP Al-Imam
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-black text-slate-900">Selamat atas Pencapaian Luar Biasa!</h2>
+                <p class="text-xs text-slate-500">Peringkat & kompetisi nilai langsung berdasarkan akurasi dan kecepatan menjawab</p>
+              </div>
+
+              <!-- 3D PODIUM ARENA -->
+              <div id="kahootPodiumArena" class="pt-6 pb-2 px-2 bg-gradient-to-b from-slate-900 via-indigo-950 to-slate-900 rounded-3xl text-white shadow-2xl border border-indigo-900/60 overflow-hidden relative">
+                <!-- Fireworks background dots -->
+                <div class="absolute inset-0 bg-[radial-gradient(#fbbf24_1px,transparent_1px)] [background-size:16px_16px] opacity-10 pointer-events-none"></div>
+
+                <!-- 3 PODIUM COLUMNS -->
+                <div class="grid grid-cols-3 gap-2 sm:gap-4 items-end max-w-lg mx-auto relative z-10 pt-8">
+                  
+                  <!-- 2ND PLACE (SILVER - LEFT) -->
+                  <div id="podiumRank2" class="flex flex-col items-center space-y-2 animate-podium-rise" style="animation-delay: 0.15s;">
+                    <div class="text-center">
+                      <span class="text-3xl sm:text-4xl block transform hover:scale-110 transition-transform">🥈</span>
+                      <div id="podium2Avatar" class="text-2xl sm:text-3xl mt-0.5">🧕</div>
+                      <div id="podium2Name" class="text-[11px] sm:text-xs font-bold text-slate-200 truncate max-w-[90px]">Aisha Zahra</div>
+                      <div id="podium2Score" class="text-[10px] font-mono text-slate-300 font-semibold">9,450 PTS</div>
+                    </div>
+                    <div class="w-full kahoot-podium-2 rounded-t-2xl flex flex-col items-center justify-center text-white border-t-2 border-slate-300">
+                      <span class="text-3xl font-black">2</span>
+                      <span class="text-[9px] uppercase font-bold tracking-wider text-slate-300">Silver</span>
+                    </div>
+                  </div>
+
+                  <!-- 1ST PLACE (GOLD - CENTER / TALLEST) -->
+                  <div id="podiumRank1" class="flex flex-col items-center space-y-2 animate-podium-rise" style="animation-delay: 0.35s;">
+                    <div class="text-center relative">
+                      <span class="text-3xl sm:text-4xl block animate-bounce">👑</span>
+                      <div id="podium1Avatar" class="text-3xl sm:text-4xl mt-0.5">🦁</div>
+                      <div id="podium1Name" class="text-xs sm:text-sm font-black text-amber-300 truncate max-w-[110px]">Rayhan Al-Fatih</div>
+                      <div id="podium1Score" class="text-xs font-mono text-amber-400 font-black">10,250 PTS</div>
+                    </div>
+                    <div class="w-full kahoot-podium-1 rounded-t-2xl flex flex-col items-center justify-center text-slate-950 border-t-2 border-yellow-300 shadow-xl">
+                      <span class="text-4xl font-black">1</span>
+                      <span class="text-[10px] uppercase font-black tracking-widest text-amber-950">Champion 🥇</span>
+                    </div>
+                  </div>
+
+                  <!-- 3RD PLACE (BRONZE - RIGHT) -->
+                  <div id="podiumRank3" class="flex flex-col items-center space-y-2 animate-podium-rise" style="animation-delay: 0.25s;">
+                    <div class="text-center">
+                      <span class="text-3xl sm:text-4xl block transform hover:scale-110 transition-transform">🥉</span>
+                      <div id="podium3Avatar" class="text-2xl sm:text-3xl mt-0.5">🚀</div>
+                      <div id="podium3Name" class="text-[11px] sm:text-xs font-bold text-amber-200 truncate max-w-[90px]">Bilal Ibnu Rabah</div>
+                      <div id="podium3Score" class="text-[10px] font-mono text-amber-300 font-semibold">9,200 PTS</div>
+                    </div>
+                    <div class="w-full kahoot-podium-3 rounded-t-2xl flex flex-col items-center justify-center text-white border-t-2 border-amber-500">
+                      <span class="text-2xl font-black">3</span>
+                      <span class="text-[9px] uppercase font-bold tracking-wider text-amber-200">Bronze</span>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <!-- Student Personal Rank Card -->
+              <div id="personalRankHighlightCard" class="p-4 bg-gradient-to-r from-brand-50 to-teal-50 rounded-2xl border border-brand-200 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <span class="text-3xl p-2 bg-white rounded-2xl border border-brand-200 shadow-sm">${candidateAvatar}</span>
+                  <div>
+                    <div class="text-xs text-brand-800 font-bold uppercase">Peringkat Kompetisi Siswa:</div>
+                    <div class="text-base sm:text-lg font-black text-slate-900">${candidateName} <span class="text-brand-600 font-mono" id="personalRankSpan">#1 di Kelas</span></div>
+                  </div>
                 </div>
                 <div class="text-right">
-                  <span id="spaResultCefrBadge" class="px-3 py-1 rounded-full bg-emerald-500 text-slate-950 text-xs font-black">CEFR B2</span>
-                  <div id="spaResultCefrLabel" class="text-[10px] text-slate-300 mt-1">Upper Intermediate</div>
+                  <div class="text-xs font-bold text-slate-500 uppercase">Total Poin:</div>
+                  <div class="text-xl sm:text-2xl font-black text-brand-700 font-mono" id="personalScoreSpan">${currentScore.toLocaleString()} PTS</div>
                 </div>
               </div>
-              <div class="grid grid-cols-3 gap-2 text-center text-xs">
-                <div class="p-2 bg-emerald-950/60 rounded-xl border border-emerald-800">
-                  <div class="text-slate-400 text-[10px]">Listening</div>
-                  <div id="spaResultListeningScore" class="font-bold text-emerald-300 font-mono">58 / 68</div>
+
+              <!-- CLASS LEADERBOARD TABLE -->
+              <div class="space-y-2">
+                <div class="flex items-center justify-between">
+                  <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+                    <i data-lucide="trophy" class="w-4 h-4 text-amber-500"></i> Klasemen Seluruh Siswa (${candidateClass})
+                  </h3>
+                  <span class="text-[10px] text-slate-400 font-mono">Real-time Class Standings</span>
                 </div>
-                <div class="p-2 bg-emerald-950/60 rounded-xl border border-emerald-800">
-                  <div class="text-slate-400 text-[10px]">Structure & Blank</div>
-                  <div id="spaResultStructureScore" class="font-bold text-emerald-300 font-mono">57 / 68</div>
+
+                <div class="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
+                  <table class="w-full text-left text-xs border-collapse">
+                    <thead class="bg-slate-50 text-slate-500 font-bold uppercase text-[10px] border-b border-slate-200">
+                      <tr>
+                        <th class="p-3">Rank</th>
+                        <th class="p-3">Siswa</th>
+                        <th class="p-3">Email Resmi</th>
+                        <th class="p-3 text-center">Streak</th>
+                        <th class="p-3 text-right">Total Score</th>
+                      </tr>
+                    </thead>
+                    <tbody id="classLeaderboardTbody" class="divide-y divide-slate-100">
+                      <!-- Dynamically rendered rows -->
+                    </tbody>
+                  </table>
                 </div>
-                <div class="p-2 bg-emerald-950/60 rounded-xl border border-emerald-800">
-                  <div class="text-slate-400 text-[10px]">Reading & Cloze</div>
-                  <div id="spaResultReadingScore" class="font-bold text-emerald-300 font-mono">58 / 67</div>
+              </div>
+
+              <!-- Modal Bottom Actions -->
+              <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                <button onclick="switchResultTab('certificate')" class="flex-1 bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 rounded-xl shadow-md transition-all text-xs sm:text-sm text-center cursor-pointer">
+                  Lihat Sertifikat Resmi & Nilai Skala TOEFL/IELTS 📜
+                </button>
+                <button onclick="navigateTo('landing')" class="px-5 py-3 rounded-xl border border-slate-300 hover:bg-slate-100 text-slate-700 font-bold text-xs sm:text-sm cursor-pointer">
+                  Kembali ke Portal
+                </button>
+              </div>
+
+            </div>
+
+            <!-- VIEW B: OFFICIAL CERTIFICATE & DETAILED SCORE CONVERSION -->
+            <div id="resultTabCertView" class="space-y-6 hidden">
+              <div class="text-center space-y-1">
+                <div class="w-14 h-14 mx-auto rounded-2xl bg-emerald-100 text-brand-600 flex items-center justify-center">
+                  <i data-lucide="award" class="w-8 h-8"></i>
                 </div>
+                <h2 class="text-2xl font-black text-slate-900">Assessment Completed!</h2>
+                <p class="text-xs text-slate-500">Hasil nilai kamu telah dikonversi otomatis sesuai standar TOEFL / IELTS</p>
+              </div>
+
+              <div class="p-6 bg-gradient-to-br from-emerald-950 to-slate-900 text-white rounded-2xl shadow-xl space-y-4">
+                <div class="flex items-center justify-between border-b border-emerald-800 pb-3">
+                  <div>
+                    <div class="text-xs text-emerald-400 font-bold uppercase">Scaled Score (TOEFL Scale)</div>
+                    <div class="text-3xl font-black text-white"><span id="spaResultScaledScore">577</span> <span class="text-sm font-normal text-slate-300">/ 677</span></div>
+                  </div>
+                  <div class="text-right">
+                    <span id="spaResultCefrBadge" class="px-3 py-1 rounded-full bg-emerald-500 text-slate-950 text-xs font-black">CEFR B2</span>
+                    <div id="spaResultCefrLabel" class="text-[10px] text-slate-300 mt-1">Upper Intermediate</div>
+                  </div>
+                </div>
+                <div class="grid grid-cols-3 gap-2 text-center text-xs">
+                  <div class="p-2 bg-emerald-950/60 rounded-xl border border-emerald-800">
+                    <div class="text-slate-400 text-[10px]">Listening</div>
+                    <div id="spaResultListeningScore" class="font-bold text-emerald-300 font-mono">58 / 68</div>
+                  </div>
+                  <div class="p-2 bg-emerald-950/60 rounded-xl border border-emerald-800">
+                    <div class="text-slate-400 text-[10px]">Structure & Blank</div>
+                    <div id="spaResultStructureScore" class="font-bold text-emerald-300 font-mono">57 / 68</div>
+                  </div>
+                  <div class="p-2 bg-emerald-950/60 rounded-xl border border-emerald-800">
+                    <div class="text-slate-400 text-[10px]">Reading & Cloze</div>
+                    <div id="spaResultReadingScore" class="font-bold text-emerald-300 font-mono">58 / 67</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                <canvas id="resultQrCanvas" class="w-20 h-20 bg-white p-1 rounded-xl shadow-sm"></canvas>
+                <div class="text-xs space-y-1">
+                  <div class="font-bold text-slate-800">Official Al-Imam Digital Certificate</div>
+                  <p class="text-slate-500 text-[11px]">Verified with security proctoring code and digital institutional signature.</p>
+                  <div class="text-brand-700 font-mono text-[10px]">CERT/AL-IMAM/2026/SUB-001</div>
+                </div>
+              </div>
+
+              <div class="flex flex-col sm:flex-row gap-3">
+                <button onclick="navigateTo('admin')" class="flex-1 bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 rounded-xl shadow-md transition-all text-xs sm:text-sm text-center cursor-pointer">
+                  Buka Dashboard Penguji & Cetak PDF
+                </button>
+                <button onclick="switchResultTab('podium')" class="px-5 py-3 rounded-xl border border-slate-300 hover:bg-slate-100 text-slate-700 font-bold text-xs sm:text-sm cursor-pointer">
+                  🏆 Kembali ke Podium
+                </button>
               </div>
             </div>
 
-            <div class="flex items-center gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-200">
-              <canvas id="resultQrCanvas" class="w-20 h-20 bg-white p-1 rounded-xl shadow-sm"></canvas>
-              <div class="text-xs space-y-1">
-                <div class="font-bold text-slate-800">Official Al-Imam Digital Certificate</div>
-                <p class="text-slate-500 text-[11px]">Verified with security proctoring code and digital institutional signature.</p>
-                <div class="text-brand-700 font-mono text-[10px]">CERT/AL-IMAM/2026/SUB-001</div>
-              </div>
-            </div>
-
-            <div class="flex flex-col sm:flex-row gap-3">
-              <button onclick="navigateTo('admin')" class="flex-1 bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 rounded-xl shadow-md transition-all text-xs sm:text-sm text-center">
-                View Full Results & Official Certificate
-              </button>
-              <button onclick="navigateTo('landing')" class="px-5 py-3 rounded-xl border border-slate-300 hover:bg-slate-100 text-slate-700 font-bold text-xs sm:text-sm">
-                Return to Portal
-              </button>
-            </div>
           </div>
         </div>
       `;
@@ -1194,9 +2456,122 @@
       initSpaProctoringEvents();
     }
 
-    // Exam Player Handlers
+    // Helper: Calculate Student Rank
+    function getStudentCurrentRank(currentScore, gradeGroup) {
+      const students = loadRegisteredStudents();
+      const currentGrade = (gradeGroup || "").includes("Grade 8") ? "Grade 8" : (gradeGroup || "").includes("Grade 9") ? "Grade 9" : "Grade 7";
+      const peers = students.filter(s => (s.grade === currentGrade) || (s.classGroup && s.classGroup.includes(currentGrade)));
+      const higherCount = peers.filter(s => (s.score || 0) > (currentScore || 0)).length;
+      return Math.max(1, higherCount + 1);
+    }
+
+    // Kahoot Reaction Modal Dismiss & Auto Proceed
+    function dismissKahootReaction() {
+      AppState.examSession.kahootReaction = null;
+      const modal = document.getElementById("kahootReactionModal");
+      if (modal) modal.classList.add("hidden");
+      if (AppState.examSession.currentIndex < AppState.questions.length - 1) {
+        nextExamQuestion();
+      } else {
+        renderExamPlayerView(document.getElementById("appRoot"));
+      }
+    }
+
+    // Switch Result Modal Tab (Podium vs Certificate)
+    function switchResultTab(tab) {
+      const podiumView = document.getElementById("resultTabPodiumView");
+      const certView = document.getElementById("resultTabCertView");
+      const btnPodium = document.getElementById("resultTabBtnPodium");
+      const btnCert = document.getElementById("resultTabBtnCert");
+
+      if (tab === "certificate") {
+        if (podiumView) podiumView.classList.add("hidden");
+        if (certView) certView.classList.remove("hidden");
+        if (btnCert) btnCert.className = "flex-1 py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 bg-white text-slate-900 shadow-sm font-bold cursor-pointer";
+        if (btnPodium) btnPodium.className = "flex-1 py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 text-slate-600 hover:text-slate-900 font-semibold cursor-pointer";
+      } else {
+        if (certView) certView.classList.add("hidden");
+        if (podiumView) podiumView.classList.remove("hidden");
+        if (btnPodium) btnPodium.className = "flex-1 py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 bg-white text-slate-900 shadow-sm font-bold cursor-pointer";
+        if (btnCert) btnCert.className = "flex-1 py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 text-slate-600 hover:text-slate-900 font-semibold cursor-pointer";
+      }
+      lucide.createIcons();
+    }
+
+    // Exam Player Handlers with Kahoot Instant Reaction
     function selectExamAnswer(qId, key) {
-      AppState.examSession.answers[qId] = key;
+      const session = AppState.examSession;
+      session.answers[qId] = key;
+
+      const q = AppState.questions.find(item => item.id === qId);
+      const isCorrect = q && (q.correct === key);
+
+      if (isCorrect) {
+        session.streak = (session.streak || 0) + 1;
+        if (session.streak > (session.maxStreak || 0)) session.maxStreak = session.streak;
+        session.correctCount = (session.correctCount || 0) + 1;
+
+        const elapsedSec = Math.max(1, (Date.now() - (session.questionStartTime || Date.now())) / 1000);
+        const speedBonus = Math.max(50, Math.round(300 - Math.min(250, elapsedSec * 15)));
+        const streakBonus = (session.streak - 1) * 150;
+        const totalPoints = 1000 + speedBonus + streakBonus;
+
+        session.score = (session.score || 0) + totalPoints;
+        session.speedBonusTotal = (session.speedBonusTotal || 0) + speedBonus;
+
+        if (session.streak >= 3) {
+          SoundFX.playStreak();
+        } else {
+          SoundFX.playCorrect();
+        }
+        if (typeof confetti === 'function') {
+          confetti({ particleCount: 55, spread: 65, origin: { y: 0.65 } });
+        }
+
+        const praises = [
+          "🔥 SUBHANALLAH! LUAR BIASA!",
+          "🌟 BRILLIANT! JAWABAN SEMPURNA!",
+          "⚡ SPEED DEMON! KILAT & TEPAT!",
+          "🎯 BULLSEYE! FOKUS TINGGI!",
+          "🚀 ON FIRE! TERUSKAN TREN JUARA!"
+        ];
+        const praiseText = praises[Math.floor(Math.random() * praises.length)];
+
+        session.kahootReaction = {
+          isCorrect: true,
+          points: totalPoints,
+          basePoints: 1000,
+          speedBonus: speedBonus,
+          streakBonus: streakBonus,
+          streak: session.streak,
+          title: praiseText,
+          explanation: q ? q.explanation : null
+        };
+      } else {
+        session.streak = 0;
+        SoundFX.playIncorrect();
+
+        const encouragements = [
+          "💪 JANGAN MENYERAH!",
+          "🌈 HAMPIR BENAR! KAMU PASTI BISA!",
+          "🎯 TETAP SEMANGAT!",
+          "⭐ BUKTIKAN DI SOAL BERIKUTNYA!"
+        ];
+        const encText = encouragements[Math.floor(Math.random() * encouragements.length)];
+
+        const correctOpt = q && q.options && q.options.find(o => o.key === q.correct);
+        session.kahootReaction = {
+          isCorrect: false,
+          points: 0,
+          streak: 0,
+          title: encText,
+          correctKey: q ? q.correct : "A",
+          correctText: correctOpt ? correctOpt.text : "",
+          explanation: q ? q.explanation : null
+        };
+      }
+
+      session.questionStartTime = Date.now();
       renderExamPlayerView(document.getElementById("appRoot"));
       lucide.createIcons();
     }
@@ -2112,6 +3487,129 @@
       else if (totalScaled >= 460) { cefr = "B1"; cefrLabel = "Intermediate"; }
       else { cefr = "A2"; cefrLabel = "Elementary / Pre-Intermediate"; }
 
+      const totalAnsweredCorrect = (listCorrect + strucCorrect + readCorrect);
+      const totalQuestionsCount = Math.max(1, listTotal + strucTotal + readTotal);
+      const finalAccuracy = Math.round((totalAnsweredCorrect / totalQuestionsCount) * 100);
+
+      // Compute Gamified Kahoot Score
+      const finalGamifiedScore = AppState.examSession.score || Math.round(totalScaled * 15);
+      const maxStreak = AppState.examSession.maxStreak || Math.max(1, AppState.examSession.streak || 1);
+
+      // Active User identification
+      const currentUser = AppState.currentUser || {
+        name: "Rayhan Al-Fatih",
+        email: "rayhan@alimamischool.com",
+        avatar: "🦁",
+        grade: "Grade 7",
+        classGroup: "Grade 7 (Abu Bakar / Khadijah)"
+      };
+
+      const studentGrade = currentUser.grade || ((currentUser.classGroup || "").includes("Grade 8") ? "Grade 8" : (currentUser.classGroup || "").includes("Grade 9") ? "Grade 9" : "Grade 7");
+
+      // Update student record in LocalStorage
+      const allStudents = loadRegisteredStudents();
+      let foundIdx = allStudents.findIndex(s => s.email && s.email.toLowerCase() === (currentUser.email || "").toLowerCase());
+      if (foundIdx >= 0) {
+        allStudents[foundIdx].score = Math.max(allStudents[foundIdx].score || 0, finalGamifiedScore);
+        allStudents[foundIdx].accuracy = finalAccuracy;
+        allStudents[foundIdx].streak = Math.max(allStudents[foundIdx].streak || 1, maxStreak);
+        allStudents[foundIdx].avatar = currentUser.avatar || allStudents[foundIdx].avatar || "🦁";
+        allStudents[foundIdx].completed = true;
+      } else {
+        allStudents.push({
+          id: "stu_" + Date.now(),
+          name: currentUser.name || "Siswa Baru",
+          email: currentUser.email || `${(currentUser.name || "siswa").toLowerCase().replace(/[^a-z0-9]/g, "")}@alimamischool.com`,
+          avatar: currentUser.avatar || "🦁",
+          grade: studentGrade,
+          classGroup: currentUser.classGroup || `${studentGrade} (Al-Imam)`,
+          score: finalGamifiedScore,
+          accuracy: finalAccuracy,
+          streak: maxStreak,
+          completed: true
+        });
+      }
+      persistStudents(allStudents);
+
+      // Filter and sort peers in this grade for Kahoot Leaderboard & Podium
+      const gradePeers = allStudents.filter(s => (s.grade === studentGrade) || (s.classGroup && s.classGroup.includes(studentGrade)));
+      gradePeers.sort((a, b) => (b.score || 0) - (a.score || 0));
+
+      const myRank = gradePeers.findIndex(s => s.email && s.email.toLowerCase() === (currentUser.email || "").toLowerCase()) + 1;
+      const rankDisplay = myRank > 0 ? `#${myRank} di ${studentGrade}` : `#1 di ${studentGrade}`;
+
+      // Populate Grand Victory Podium (Rank 1, 2, 3)
+      const p1 = gradePeers[0] || { name: currentUser.name, avatar: currentUser.avatar || "🦁", score: finalGamifiedScore };
+      const p2 = gradePeers[1] || { name: "Aisha Zahra", avatar: "🧕", score: Math.round(finalGamifiedScore * 0.92) };
+      const p3 = gradePeers[2] || { name: "Bilal Ibnu Rabah", avatar: "🚀", score: Math.round(finalGamifiedScore * 0.88) };
+
+      const elP1Avatar = document.getElementById("podium1Avatar");
+      if (elP1Avatar) elP1Avatar.innerText = p1.avatar || "🦁";
+      const elP1Name = document.getElementById("podium1Name");
+      if (elP1Name) elP1Name.innerText = p1.name || "Juara 1";
+      const elP1Score = document.getElementById("podium1Score");
+      if (elP1Score) elP1Score.innerText = `${(p1.score || 0).toLocaleString()} PTS`;
+
+      const elP2Avatar = document.getElementById("podium2Avatar");
+      if (elP2Avatar) elP2Avatar.innerText = p2.avatar || "🧕";
+      const elP2Name = document.getElementById("podium2Name");
+      if (elP2Name) elP2Name.innerText = p2.name || "Juara 2";
+      const elP2Score = document.getElementById("podium2Score");
+      if (elP2Score) elP2Score.innerText = `${(p2.score || 0).toLocaleString()} PTS`;
+
+      const elP3Avatar = document.getElementById("podium3Avatar");
+      if (elP3Avatar) elP3Avatar.innerText = p3.avatar || "🚀";
+      const elP3Name = document.getElementById("podium3Name");
+      if (elP3Name) elP3Name.innerText = p3.name || "Juara 3";
+      const elP3Score = document.getElementById("podium3Score");
+      if (elP3Score) elP3Score.innerText = `${(p3.score || 0).toLocaleString()} PTS`;
+
+      // Highlight Card
+      const elPersonalRank = document.getElementById("personalRankSpan");
+      if (elPersonalRank) elPersonalRank.innerText = rankDisplay;
+      const elPersonalScore = document.getElementById("personalScoreSpan");
+      if (elPersonalScore) elPersonalScore.innerText = `${finalGamifiedScore.toLocaleString()} PTS`;
+
+      // Render Class Leaderboard Table Rows
+      const tbody = document.getElementById("classLeaderboardTbody");
+      if (tbody) {
+        tbody.innerHTML = gradePeers.map((st, idx) => {
+          const rank = idx + 1;
+          const isMe = st.email && st.email.toLowerCase() === (currentUser.email || "").toLowerCase();
+          const rankBadge = rank === 1 ? '🥇 <span class="font-black text-amber-600">1st</span>' :
+                            rank === 2 ? '🥈 <span class="font-bold text-slate-500">2nd</span>' :
+                            rank === 3 ? '🥉 <span class="font-bold text-amber-700">3rd</span>' :
+                            `<span class="font-mono text-slate-400 font-bold">#${rank}</span>`;
+          
+          return `
+            <tr class="${isMe ? 'bg-brand-50/80 font-bold ring-1 ring-inset ring-brand-300' : 'hover:bg-slate-50'} transition-colors">
+              <td class="p-3 text-center w-16">${rankBadge}</td>
+              <td class="p-3">
+                <div class="flex items-center gap-2.5">
+                  <span class="text-xl p-1 bg-white rounded-xl shadow-xs border border-slate-200">${st.avatar || "👤"}</span>
+                  <div>
+                    <div class="font-bold text-slate-900 flex items-center gap-1.5">
+                      ${st.name} ${isMe ? '<span class="px-1.5 py-0.5 rounded bg-brand-600 text-white text-[9px] font-black uppercase tracking-wider">Anda ⭐</span>' : ''}
+                    </div>
+                    <div class="text-[10px] text-slate-400 font-mono">${st.classGroup || studentGrade}</div>
+                  </div>
+                </div>
+              </td>
+              <td class="p-3 font-mono text-[11px] text-slate-600">${st.email}</td>
+              <td class="p-3 text-center">
+                <span class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold">
+                  🔥 x${st.streak || 1}
+                </span>
+              </td>
+              <td class="p-3 text-right font-mono font-black text-xs ${isMe ? 'text-brand-700' : 'text-slate-900'}">
+                ${(st.score || 0).toLocaleString()} <span class="text-[9px] text-slate-400 font-normal">PTS</span>
+              </td>
+            </tr>
+          `;
+        }).join("");
+      }
+
+      // Populate Standard Certificate Elements
       const elTotal = document.getElementById("spaResultScaledScore");
       if (elTotal) elTotal.innerText = totalScaled;
       const elCefr = document.getElementById("spaResultCefrBadge");
@@ -2125,15 +3623,29 @@
       const elRead = document.getElementById("spaResultReadingScore");
       if (elRead) elRead.innerText = `${readScaled} / 67`;
 
+      // Show Result Modal
       const modal = document.getElementById("spaResultModal");
       if (modal) modal.classList.remove("hidden");
 
+      // Play Victory Audio & Confetti
+      SoundFX.playVictory();
+      if (typeof confetti === 'function') {
+        confetti({ particleCount: 90, spread: 80, origin: { y: 0.6 } });
+        setTimeout(() => {
+          confetti({ particleCount: 120, spread: 100, origin: { x: 0.25, y: 0.45 } });
+        }, 300);
+        setTimeout(() => {
+          confetti({ particleCount: 120, spread: 100, origin: { x: 0.75, y: 0.45 } });
+        }, 600);
+      }
+
+      // Generate Verification QR
       setTimeout(() => {
         const qrEl = document.getElementById("resultQrCanvas");
-        if (qrEl) {
+        if (qrEl && typeof QRious !== 'undefined') {
           new QRious({
             element: qrEl,
-            value: `https://alimamischool.com/verify?cert=CERT/AL-IMAM/2026/SUB-001&score=${totalScaled}`,
+            value: `https://alimamischool.com/verify?cert=CERT/AL-IMAM/2026/${currentUser.email || 'SUB-001'}&score=${totalScaled}&pts=${finalGamifiedScore}`,
             size: 140
           });
         }
@@ -2248,19 +3760,34 @@
 
             <!-- Filters & Search -->
             <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 bg-white p-4 rounded-2xl border border-slate-200 text-xs">
-              <div class="flex items-center gap-2">
-                <span class="font-bold text-slate-700 whitespace-nowrap">Filter Section:</span>
-                <select id="spaFilterSection" onchange="renderAdminQuestionsTable()" class="px-3 py-1.5 rounded-lg border border-slate-300 font-semibold outline-none bg-slate-50 text-slate-800">
-                  <option value="ALL">All Sections</option>
-                  <option value="listening">Listening</option>
-                  <option value="structure">Structure & Written Expression</option>
-                  <option value="reading">Reading Comprehension</option>
-                  <option value="writing">Writing Task</option>
-                  <option value="speaking">Speaking Test</option>
-                </select>
+              <div class="flex flex-wrap items-center gap-3">
+                <div class="flex items-center gap-2">
+                  <span class="font-bold text-slate-700 whitespace-nowrap">Category / Grade:</span>
+                  <select id="spaFilterCategory" onchange="renderAdminQuestionsTable()" class="px-3 py-1.5 rounded-lg border border-slate-300 font-semibold outline-none bg-slate-50 text-slate-800">
+                    <option value="ALL">All Categories & Grades</option>
+                    <option value="Grade 7">Grade 7 (Kelas 7 SMP)</option>
+                    <option value="Grade 8">Grade 8 (Kelas 8 SMP)</option>
+                    <option value="Grade 9">Grade 9 (Kelas 9 SMP)</option>
+                    <option value="TOEFL_ITP">TOEFL ITP / PBT</option>
+                    <option value="IELTS_ACADEMIC">IELTS Academic</option>
+                    <option value="TOEIC">TOEIC Standard</option>
+                    <option value="EPT">Al-Imam EPT</option>
+                  </select>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="font-bold text-slate-700 whitespace-nowrap">Section:</span>
+                  <select id="spaFilterSection" onchange="renderAdminQuestionsTable()" class="px-3 py-1.5 rounded-lg border border-slate-300 font-semibold outline-none bg-slate-50 text-slate-800">
+                    <option value="ALL">All Sections</option>
+                    <option value="listening">Listening</option>
+                    <option value="structure">Structure & Written Expression</option>
+                    <option value="reading">Reading Comprehension</option>
+                    <option value="writing">Writing Task</option>
+                    <option value="speaking">Speaking Test</option>
+                  </select>
+                </div>
               </div>
               <div class="relative flex-grow sm:max-w-xs">
-                <input type="text" id="spaSearchQuestion" oninput="renderAdminQuestionsTable()" placeholder="Search ID or keywords..." class="w-full pl-8 pr-3 py-1.5 rounded-lg border border-slate-300 outline-none text-xs">
+                <input type="text" id="spaSearchQuestion" oninput="renderAdminQuestionsTable()" placeholder="Search ID, Grade or keywords..." class="w-full pl-8 pr-3 py-1.5 rounded-lg border border-slate-300 outline-none text-xs">
                 <i data-lucide="search" class="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-slate-400"></i>
               </div>
             </div>
@@ -2545,12 +4072,19 @@
               
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
-                  <label class="block font-bold text-slate-700 uppercase mb-1">Exam Module</label>
+                  <label class="block font-bold text-slate-700 uppercase mb-1">Category / Grade Level</label>
                   <select id="modalExamType" class="w-full p-2.5 rounded-xl border border-slate-300 font-semibold outline-none focus:border-brand-500 bg-slate-50">
-                    <option value="TOEFL_ITP">TOEFL ITP / PBT</option>
-                    <option value="IELTS_ACADEMIC">IELTS Academic</option>
-                    <option value="TOEIC">TOEIC Standard</option>
-                    <option value="EPT">Al-Imam EPT</option>
+                    <optgroup label="SMP Class Categories">
+                      <option value="Grade 7">Grade 7 (Kelas 7 SMP)</option>
+                      <option value="Grade 8">Grade 8 (Kelas 8 SMP)</option>
+                      <option value="Grade 9">Grade 9 (Kelas 9 SMP)</option>
+                    </optgroup>
+                    <optgroup label="International / Standard Modules">
+                      <option value="TOEFL_ITP">TOEFL ITP / PBT</option>
+                      <option value="IELTS_ACADEMIC">IELTS Academic</option>
+                      <option value="TOEIC">TOEIC Standard</option>
+                      <option value="EPT">Al-Imam EPT</option>
+                    </optgroup>
                   </select>
                 </div>
                 <div>
@@ -2946,9 +4480,9 @@
       } else {
         if (title) title.innerText = "Add Question to Assessment Bank";
         if (editingInput) editingInput.value = "";
-        if (form) form.reset();
         const examTypeEl = document.getElementById("modalExamType");
-        if (examTypeEl) examTypeEl.value = "TOEFL_ITP";
+        const currentFilterCat = document.getElementById("spaFilterCategory") ? document.getElementById("spaFilterCategory").value : "ALL";
+        if (examTypeEl) examTypeEl.value = (currentFilterCat !== "ALL") ? currentFilterCat : "Grade 7";
         const secEl = document.getElementById("modalSection");
         if (secEl) secEl.value = "listening";
         const typeEl = document.getElementById("modalType");
@@ -3403,10 +4937,14 @@
       const tbody = document.getElementById("spaQuestionTableBody");
       if (!tbody) return;
       
+      const filterCat = document.getElementById("spaFilterCategory") ? document.getElementById("spaFilterCategory").value : "ALL";
       const filterSec = document.getElementById("spaFilterSection") ? document.getElementById("spaFilterSection").value : "ALL";
       const searchKeyword = document.getElementById("spaSearchQuestion") ? document.getElementById("spaSearchQuestion").value.toLowerCase().trim() : "";
 
       let items = AppState.questions;
+      if (filterCat !== "ALL") {
+        items = items.filter(q => q.examType === filterCat);
+      }
       if (filterSec !== "ALL") {
         items = items.filter(q => q.section === filterSec);
       }
@@ -3423,7 +4961,7 @@
           <tr>
             <td colspan="6" class="p-8 text-center text-slate-400">
               <i data-lucide="help-circle" class="w-8 h-8 mx-auto mb-2 text-slate-300"></i>
-              No questions match the selected filter or search keyword.
+              No questions match the selected filter (${filterCat !== 'ALL' ? filterCat : 'All Categories'}, ${filterSec !== 'ALL' ? filterSec : 'All Sections'}) or search keyword.
             </td>
           </tr>
         `;
@@ -3443,6 +4981,21 @@
           typeBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">Speaking Audio</span>`;
         }
 
+        let catBadge = `<span class="inline-block mt-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-700">${q.examType || 'Standard'}</span>`;
+        if (q.examType === 'Grade 7') {
+          catBadge = `<span class="inline-block mt-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-300"><i data-lucide="award" class="w-2.5 h-2.5 inline mr-0.5"></i>Grade 7 (Kelas 7)</span>`;
+        } else if (q.examType === 'Grade 8') {
+          catBadge = `<span class="inline-block mt-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300"><i data-lucide="award" class="w-2.5 h-2.5 inline mr-0.5"></i>Grade 8 (Kelas 8)</span>`;
+        } else if (q.examType === 'Grade 9') {
+          catBadge = `<span class="inline-block mt-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-purple-100 text-purple-800 border border-purple-300"><i data-lucide="award" class="w-2.5 h-2.5 inline mr-0.5"></i>Grade 9 (Kelas 9)</span>`;
+        } else if (q.examType === 'TOEFL_ITP') {
+          catBadge = `<span class="inline-block mt-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300">TOEFL ITP</span>`;
+        } else if (q.examType === 'IELTS_ACADEMIC') {
+          catBadge = `<span class="inline-block mt-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-300">IELTS Academic</span>`;
+        } else if (q.examType === 'EPT') {
+          catBadge = `<span class="inline-block mt-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-teal-100 text-teal-800 border border-teal-300">Al-Imam EPT</span>`;
+        }
+
         let mediaBadges = '';
         if (q.audioUrl) mediaBadges += `<span class="inline-flex items-center text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded text-[9px] font-bold border border-emerald-200" title="Audio Attached"><i data-lucide="volume-2" class="w-2.5 h-2.5 mr-0.5"></i> Audio</span> `;
         if (q.imageUrl) mediaBadges += `<span class="inline-flex items-center text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded text-[9px] font-bold border border-blue-200" title="Image Attached"><i data-lucide="image" class="w-2.5 h-2.5 mr-0.5"></i> Image</span> `;
@@ -3453,7 +5006,7 @@
         return `
           <tr class="hover:bg-slate-50 transition-colors">
             <td class="p-3.5 font-bold font-mono text-slate-800">
-              ${q.id}<br><span class="text-[10px] text-brand-700 font-sans font-semibold">${q.examType || 'TOEFL_ITP'}</span>
+              ${q.id}<br>${catBadge}
             </td>
             <td class="p-3.5 uppercase font-bold text-slate-600">
               ${q.section}
@@ -3968,6 +5521,18 @@
     window.scrollToPortal = scrollToPortal;
     window.setCredentials = setCredentials;
     window.handleLoginSubmit = handleLoginSubmit;
+    window.handleLogin = handleLoginSubmit;
+    window.quickFillLogin = setCredentials;
+    window.switchPortalTab = switchPortalTab;
+    window.selectRegisterAvatar = selectRegisterAvatar;
+    window.autoSuggestRegEmail = autoSuggestRegEmail;
+    window.handleStudentRegister = handleStudentRegister;
+    window.dismissKahootReaction = dismissKahootReaction;
+    window.switchResultTab = switchResultTab;
+    window.SoundFX = SoundFX;
+    window.getStudentCurrentRank = getStudentCurrentRank;
+    window.submitSpaExam = submitSpaExam;
+    window.showToast = showToast;
     window.handleQuickTokenStart = handleQuickTokenStart;
     window.openAddQuestionSpaModal = openAddQuestionSpaModal;
     window.closeAddQuestionSpaModal = closeAddQuestionSpaModal;
