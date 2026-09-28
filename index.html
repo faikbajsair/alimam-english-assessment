@@ -1284,11 +1284,11 @@
               <div class="flex items-center p-1.5 bg-slate-200/70 rounded-2xl border border-slate-300/60 text-xs font-bold shadow-inner">
                 <button type="button" onclick="switchPortalTab('login')" id="tabBtnLogin" class="flex-1 py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 bg-white text-slate-900 shadow-sm">
                   <i data-lucide="log-in" class="w-4 h-4 text-brand-600"></i>
-                  <span>Masuk (Sign In)</span>
+                  <span>Sign In</span>
                 </button>
                 <button type="button" onclick="switchPortalTab('register')" id="tabBtnRegister" class="flex-1 py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 text-slate-600 hover:text-slate-900">
                   <i data-lucide="sparkles" class="w-4 h-4 text-amber-500"></i>
-                  <span>Daftar Siswa Baru ✨</span>
+                  <span>New Student Registration ✨</span>
                 </button>
               </div>
 
@@ -1297,14 +1297,14 @@
                 <div class="text-center space-y-1">
                   <h2 class="text-xl font-black text-slate-900 flex items-center justify-center gap-2">
                     <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    Portal Masuk Siswa & Ujian
+                    Student & Examination Portal
                   </h2>
-                  <p class="text-[11px] text-slate-500">Gunakan akun terdaftar atau pilih demo siswa di bawah</p>
+                  <p class="text-[11px] text-slate-500">Use your registered account or choose a student demo account below</p>
                 </div>
 
                 <!-- Quick Demo Login Buttons -->
                 <div>
-                  <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1.5 tracking-wider">Akses Cepat Siswa / Penguji:</label>
+                  <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1.5 tracking-wider">Quick Student / Examiner Access:</label>
                   <div class="grid grid-cols-2 gap-2 text-xs">
                     <button type="button" onclick="setCredentials('rayhan@alimamischool.com', 'student123')" class="p-2 rounded-xl border border-slate-200 bg-white hover:border-brand-500 hover:bg-brand-50 font-semibold text-left flex items-center gap-2 transition-all">
                       <span class="text-base">🦁</span>
@@ -1340,10 +1340,10 @@
                 <!-- Login Form -->
                 <form onsubmit="handleLoginSubmit(event)" class="space-y-3.5 text-xs pt-1">
                   <div>
-                    <label class="block font-bold text-slate-700 uppercase mb-1 text-[11px]">Email / Username Siswa</label>
+                    <label class="block font-bold text-slate-700 uppercase mb-1 text-[11px]">Student Email / Username</label>
                     <div class="relative">
                       <i data-lucide="mail" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5"></i>
-                      <input type="text" id="txtUsername" required placeholder="namasiswa@alimamischool.com" value="rayhan@alimamischool.com" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 outline-none transition-all font-medium text-xs">
+                      <input type="text" id="txtUsername" required placeholder="studentname@alimamischool.com" value="rayhan@alimamischool.com" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 outline-none transition-all font-medium text-xs">
                     </div>
                   </div>
 
@@ -1356,7 +1356,7 @@
                   </div>
 
                   <button type="submit" id="btnLoginAction" class="w-full bg-gradient-to-r from-brand-600 to-teal-600 hover:from-brand-500 hover:to-teal-500 text-white font-bold py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 text-xs sm:text-sm cursor-pointer active:scale-98">
-                    <span>Masuk ke Ujian & Mulai Kompetisi</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    <span>Sign In & Enter Competition</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>
                   </button>
                 </form>
               </div>
@@ -1366,32 +1366,32 @@
                 <div class="text-center space-y-1">
                   <h2 class="text-xl font-black text-slate-900 flex items-center justify-center gap-2">
                     <span class="text-xl">🌟</span>
-                    Daftar Siswa Baru SMP Al-Imam
+                    SMP Al-Imam Student Registration
                   </h2>
-                  <p class="text-[11px] text-slate-500">Pilih avatar favoritmu & ikuti kompetisi seru!</p>
+                  <p class="text-[11px] text-slate-500">Pick your favorite avatar & join the exciting challenge!</p>
                 </div>
 
                 <form onsubmit="handleStudentRegister(event)" class="space-y-3.5 text-xs">
                   <div>
-                    <label class="block font-bold text-slate-700 uppercase mb-1 text-[11px]">Nama Lengkap Siswa</label>
+                    <label class="block font-bold text-slate-700 uppercase mb-1 text-[11px]">Student Full Name</label>
                     <div class="relative">
                       <i data-lucide="user" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5"></i>
-                      <input type="text" id="regFullName" required placeholder="Contoh: Muhammad Farhan Al-Ghifari" oninput="autoSuggestRegEmail(this.value)" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 outline-none transition-all text-xs font-medium">
+                      <input type="text" id="regFullName" required placeholder="e.g. Muhammad Farhan Al-Ghifari" oninput="autoSuggestRegEmail(this.value)" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 outline-none transition-all text-xs font-medium">
                     </div>
                   </div>
 
                   <div>
-                    <label class="block font-bold text-slate-700 uppercase mb-1 text-[11px]">Email Resmi Siswa (@alimamischool.com)</label>
+                    <label class="block font-bold text-slate-700 uppercase mb-1 text-[11px]">Official Student Email (@alimamischool.com)</label>
                     <div class="flex items-center rounded-xl border border-slate-300 bg-white overflow-hidden focus-within:border-brand-500 focus-within:ring-2 focus-within:ring-brand-100">
                       <span class="pl-3 text-slate-400"><i data-lucide="at-sign" class="w-3.5 h-3.5"></i></span>
-                      <input type="text" id="regEmailPrefix" required placeholder="namasiswa" class="flex-grow px-2.5 py-2.5 outline-none text-xs font-semibold text-slate-800 lowercase">
+                      <input type="text" id="regEmailPrefix" required placeholder="studentname" class="flex-grow px-2.5 py-2.5 outline-none text-xs font-semibold text-slate-800 lowercase">
                       <span class="px-2.5 py-2.5 bg-slate-100 text-brand-700 font-bold text-[11px] border-l border-slate-200">@alimamischool.com</span>
                     </div>
                   </div>
 
                   <div class="grid grid-cols-2 gap-2.5">
                     <div>
-                      <label class="block font-bold text-slate-700 uppercase mb-1 text-[11px]">Tingkat / Kelas</label>
+                      <label class="block font-bold text-slate-700 uppercase mb-1 text-[11px]">Grade / Class Level</label>
                       <select id="regGrade" class="w-full p-2.5 rounded-xl border border-slate-300 focus:border-brand-500 outline-none text-xs font-semibold bg-white cursor-pointer">
                         <option value="Grade 7 - Abu Bakar">Grade 7 - Abu Bakar</option>
                         <option value="Grade 7 - Khadijah">Grade 7 - Khadijah</option>
@@ -1403,7 +1403,7 @@
                     </div>
 
                     <div>
-                      <label class="block font-bold text-slate-700 uppercase mb-1 text-[11px]">Buat Password</label>
+                      <label class="block font-bold text-slate-700 uppercase mb-1 text-[11px]">Create Password</label>
                       <input type="password" id="regPassword" required placeholder="••••••••" value="student123" class="w-full p-2.5 rounded-xl border border-slate-300 focus:border-brand-500 outline-none text-xs">
                     </div>
                   </div>
@@ -1412,7 +1412,7 @@
                   <div class="space-y-1.5 pt-1">
                     <div class="flex items-center justify-between">
                       <label class="block font-bold text-slate-700 uppercase text-[11px] flex items-center gap-1">
-                        <span>Pilih Avatar Karaktermu:</span>
+                        <span>Choose Your Avatar Character:</span>
                       </label>
                       <span id="regAvatarSelectedBadge" class="text-[10px] font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full flex items-center gap-1">
                         <span>🦁</span> <span id="regAvatarSelectedName">Lion Hero</span>
@@ -1431,7 +1431,7 @@
                   </div>
 
                   <button type="submit" id="btnRegisterAction" class="w-full bg-gradient-to-r from-amber-500 via-emerald-500 to-teal-500 hover:from-amber-400 hover:to-teal-400 text-slate-950 font-black py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 text-xs sm:text-sm cursor-pointer active:scale-98">
-                    <span>✨ Daftarkan Akun & Langsung Ujian!</span> <i data-lucide="sparkles" class="w-4 h-4"></i>
+                    <span>✨ Register Account & Enter Exam!</span> <i data-lucide="sparkles" class="w-4 h-4"></i>
                   </button>
                 </form>
               </div>
@@ -1524,7 +1524,7 @@
       const password = (document.getElementById("regPassword").value || "student123").trim();
       
       if (!fullName) {
-        showToast("Mohon masukkan nama lengkap siswa.");
+        showToast("Please enter the student's full name.");
         return;
       }
       if (!emailPrefix) {
@@ -1580,7 +1580,7 @@
         confetti({ particleCount: 70, spread: 80, origin: { y: 0.6 } });
       }
 
-      showToast(`Selamat datang ${fullName}! Pendaftaran berhasil. Menuju arena ujian...`);
+      showToast(`Welcome ${fullName}! Registration successful. Entering exam arena...`);
 
       setTimeout(() => {
         navigateTo("exam", { code: examToken });
@@ -1600,12 +1600,12 @@
       const pwd = document.getElementById("txtPassword").value.trim();
       const btn = document.getElementById("btnLoginAction");
       btn.disabled = true;
-      btn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Memverifikasi...';
+      btn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Authenticating...';
       lucide.createIcons();
 
       setTimeout(() => {
         btn.disabled = false;
-        btn.innerHTML = '<span>Masuk ke Ujian & Mulai Kompetisi</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>';
+        btn.innerHTML = '<span>Sign In & Enter Competition</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>';
         lucide.createIcons();
 
         // 1. Check Admin / Teacher
@@ -1642,7 +1642,7 @@
           } else if (foundStudent.grade === "Grade 9" || (foundStudent.classGroup && foundStudent.classGroup.includes("Grade 9"))) {
             examToken = "GRADE9";
           }
-          showToast(`Ahlan wa Sahlan, ${foundStudent.name}! Masuk ke ${foundStudent.grade}...`);
+          showToast(`Welcome, ${foundStudent.name}! Entering ${foundStudent.grade}...`);
           navigateTo("exam", { code: examToken });
           return;
         }
@@ -1674,7 +1674,7 @@
         AppState.currentUser = fallbackStudent;
         sessionStorage.setItem("alimam_user", JSON.stringify(fallbackStudent));
         SoundFX.playCorrect();
-        showToast(`Selamat datang ${fallbackStudent.name}!`);
+        showToast(`Welcome ${fallbackStudent.name}!`);
         navigateTo("exam", { code: gradeToken });
       }, 450);
     }
@@ -2100,11 +2100,11 @@
               <!-- Prev / Next Navigation -->
               <div class="flex items-center justify-between pt-6 border-t border-slate-100">
                 <button onclick="prevExamQuestion()" ${session.currentIndex === 0 ? 'disabled' : ''} class="px-4 py-2.5 rounded-xl border border-slate-300 hover:bg-slate-100 text-slate-700 text-xs sm:text-sm font-bold flex items-center gap-1.5 transition-all disabled:opacity-40 cursor-pointer">
-                  <i data-lucide="chevron-left" class="w-4 h-4"></i> Sebelumnya
+                  <i data-lucide="chevron-left" class="w-4 h-4"></i> Previous
                 </button>
-                <span class="text-xs text-slate-400 font-mono">Soal ${session.currentIndex + 1} dari ${AppState.questions.length}</span>
+                <span class="text-xs text-slate-400 font-mono">Question ${session.currentIndex + 1} of ${AppState.questions.length}</span>
                 <button onclick="nextExamQuestion()" class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-bold flex items-center gap-1.5 transition-all shadow-md cursor-pointer">
-                  <span>${session.currentIndex === AppState.questions.length - 1 ? 'Selesai' : 'Lanjut'}</span>
+                  <span>${session.currentIndex === AppState.questions.length - 1 ? 'Finish' : 'Next'}</span>
                   <i data-lucide="chevron-right" class="w-4 h-4"></i>
                 </button>
               </div>
@@ -2146,8 +2146,8 @@
                   <i data-lucide="grid" class="w-4 h-4 text-brand-600"></i> Question Palette
                 </h2>
                 <div class="flex items-center gap-2 text-[10px] text-slate-500">
-                  <span class="flex items-center gap-1"><span class="w-2 h-2 rounded bg-brand-600"></span> Terjawab</span>
-                  <span class="flex items-center gap-1"><span class="w-2 h-2 rounded bg-amber-400"></span> Ditandai</span>
+                  <span class="flex items-center gap-1"><span class="w-2 h-2 rounded bg-brand-600"></span> Answered</span>
+                  <span class="flex items-center gap-1"><span class="w-2 h-2 rounded bg-amber-400"></span> Flagged</span>
                 </div>
               </div>
 
@@ -2188,7 +2188,7 @@
                 <div class="bg-gradient-to-br from-emerald-600 via-teal-700 to-slate-900 text-white rounded-3xl max-w-md w-full p-6 sm:p-8 text-center space-y-4 shadow-2xl border-4 border-emerald-400 animate-bounce-in">
                   <div class="text-5xl sm:text-6xl animate-bounce">🌟</div>
                   <div class="space-y-1">
-                    <span class="inline-block px-3 py-1 rounded-full bg-emerald-400/30 text-emerald-200 text-xs font-black uppercase tracking-wider">Jawaban Benar!</span>
+                    <span class="inline-block px-3 py-1 rounded-full bg-emerald-400/30 text-emerald-200 text-xs font-black uppercase tracking-wider">Correct Answer!</span>
                     <h2 class="text-2xl sm:text-3xl font-black text-white">${rx.title}</h2>
                   </div>
 
@@ -2203,12 +2203,12 @@
 
                   ${rx.streak >= 2 ? `
                     <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-orange-500/30 border border-orange-400 text-orange-300 text-xs font-black">
-                      <span>🔥 ${rx.streak} Jawaban Benar Berturut-turut!</span>
+                      <span>🔥 ${rx.streak} Correct Answers Streak!</span>
                     </div>
                   ` : ''}
 
                   <button onclick="dismissKahootReaction()" class="w-full bg-gradient-to-r from-amber-400 to-yellow-400 hover:from-amber-300 hover:to-yellow-300 text-slate-950 font-black py-3.5 rounded-2xl shadow-lg transition-all text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer active:scale-95">
-                    <span>Lanjut ke Soal Berikutnya ⚡</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    <span>Next Question ⚡</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>
                   </button>
                 </div>
               `;
@@ -2217,22 +2217,22 @@
                 <div class="bg-gradient-to-br from-rose-600 via-red-700 to-slate-900 text-white rounded-3xl max-w-md w-full p-6 sm:p-8 text-center space-y-4 shadow-2xl border-4 border-rose-400 animate-bounce-in">
                   <div class="text-5xl sm:text-6xl animate-pulse">💪</div>
                   <div class="space-y-1">
-                    <span class="inline-block px-3 py-1 rounded-full bg-rose-400/30 text-rose-200 text-xs font-black uppercase tracking-wider">Hampir Benar!</span>
+                    <span class="inline-block px-3 py-1 rounded-full bg-rose-400/30 text-rose-200 text-xs font-black uppercase tracking-wider">So Close!</span>
                     <h2 class="text-2xl font-black text-white">${rx.title}</h2>
                   </div>
 
                   <div class="p-4 bg-red-950/70 rounded-2xl border border-red-500/50 text-left space-y-1.5 text-xs">
-                    <div class="text-[11px] text-rose-300 font-bold uppercase">Kunci Jawaban:</div>
-                    <div class="font-bold text-white text-sm">Pilihan ${rx.correctKey}: ${rx.correctText || ''}</div>
+                    <div class="text-[11px] text-rose-300 font-bold uppercase">Correct Answer Key:</div>
+                    <div class="font-bold text-white text-sm">Option ${rx.correctKey}: ${rx.correctText || ''}</div>
                     ${rx.explanation ? `<div class="text-[11px] text-rose-200 italic pt-1 border-t border-red-900">${rx.explanation}</div>` : ''}
                   </div>
 
                   <p class="text-xs text-rose-200 leading-relaxed">
-                    Jangan patah semangat! Setiap soal adalah kesempatan baru untuk meraih poin tertinggi! 🌈
+                    Keep your spirits high! Every question is a new opportunity to reach top scores! 🌈
                   </p>
 
                   <button onclick="dismissKahootReaction()" class="w-full bg-white hover:bg-slate-100 text-slate-950 font-black py-3.5 rounded-2xl shadow-lg transition-all text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer active:scale-95">
-                    <span>Lanjut ke Soal Berikutnya ⚡</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    <span>Next Question ⚡</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>
                   </button>
                 </div>
               `;
@@ -2269,7 +2269,7 @@
                 <span>🏆 Kahoot Podium & Leaderboard</span>
               </button>
               <button type="button" onclick="switchResultTab('certificate')" id="resultTabBtnCert" class="flex-1 py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 text-slate-600 hover:text-slate-900 font-semibold cursor-pointer">
-                <span>📜 Hasil Skor & Sertifikat PDF</span>
+                <span>📜 Score Report & Official PDF Certificate</span>
               </button>
             </div>
 
@@ -2278,10 +2278,10 @@
               
               <div class="text-center space-y-1">
                 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 text-amber-800 font-bold text-xs uppercase tracking-wider">
-                  <span class="animate-bounce">👑</span> Grand Victory Podium SMP Al-Imam
+                  <span class="animate-bounce">👑</span> SMP Al-Imam Grand Victory Podium
                 </div>
-                <h2 class="text-2xl sm:text-3xl font-black text-slate-900">Selamat atas Pencapaian Luar Biasa!</h2>
-                <p class="text-xs text-slate-500">Peringkat & kompetisi nilai langsung berdasarkan akurasi dan kecepatan menjawab</p>
+                <h2 class="text-2xl sm:text-3xl font-black text-slate-900">Congratulations on Your Outstanding Achievement!</h2>
+                <p class="text-xs text-slate-500">Live competitive ranking based on accuracy and answer speed</p>
               </div>
 
               <!-- 3D PODIUM ARENA -->
@@ -2342,12 +2342,12 @@
                 <div class="flex items-center gap-3">
                   <span class="text-3xl p-2 bg-white rounded-2xl border border-brand-200 shadow-sm">${candidateAvatar}</span>
                   <div>
-                    <div class="text-xs text-brand-800 font-bold uppercase">Peringkat Kompetisi Siswa:</div>
-                    <div class="text-base sm:text-lg font-black text-slate-900">${candidateName} <span class="text-brand-600 font-mono" id="personalRankSpan">#1 di Kelas</span></div>
+                    <div class="text-xs text-brand-800 font-bold uppercase">Student Competition Rank:</div>
+                    <div class="text-base sm:text-lg font-black text-slate-900">${candidateName} <span class="text-brand-600 font-mono" id="personalRankSpan">#1 in Class</span></div>
                   </div>
                 </div>
                 <div class="text-right">
-                  <div class="text-xs font-bold text-slate-500 uppercase">Total Poin:</div>
+                  <div class="text-xs font-bold text-slate-500 uppercase">Total Score:</div>
                   <div class="text-xl sm:text-2xl font-black text-brand-700 font-mono" id="personalScoreSpan">${currentScore.toLocaleString()} PTS</div>
                 </div>
               </div>
@@ -2356,7 +2356,7 @@
               <div class="space-y-2">
                 <div class="flex items-center justify-between">
                   <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
-                    <i data-lucide="trophy" class="w-4 h-4 text-amber-500"></i> Klasemen Seluruh Siswa (${candidateClass})
+                    <i data-lucide="trophy" class="w-4 h-4 text-amber-500"></i> Full Class Leaderboard (${candidateClass})
                   </h3>
                   <span class="text-[10px] text-slate-400 font-mono">Real-time Class Standings</span>
                 </div>
@@ -2366,8 +2366,8 @@
                     <thead class="bg-slate-50 text-slate-500 font-bold uppercase text-[10px] border-b border-slate-200">
                       <tr>
                         <th class="p-3">Rank</th>
-                        <th class="p-3">Siswa</th>
-                        <th class="p-3">Email Resmi</th>
+                        <th class="p-3">Student</th>
+                        <th class="p-3">Official Email</th>
                         <th class="p-3 text-center">Streak</th>
                         <th class="p-3 text-right">Total Score</th>
                       </tr>
@@ -2382,10 +2382,10 @@
               <!-- Modal Bottom Actions -->
               <div class="flex flex-col sm:flex-row gap-3 pt-2">
                 <button onclick="switchResultTab('certificate')" class="flex-1 bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 rounded-xl shadow-md transition-all text-xs sm:text-sm text-center cursor-pointer">
-                  Lihat Sertifikat Resmi & Nilai Skala TOEFL/IELTS 📜
+                  View Official Certificate & Scaled Scores 📜
                 </button>
                 <button onclick="navigateTo('landing')" class="px-5 py-3 rounded-xl border border-slate-300 hover:bg-slate-100 text-slate-700 font-bold text-xs sm:text-sm cursor-pointer">
-                  Kembali ke Portal
+                  Return to Portal
                 </button>
               </div>
 
@@ -2398,7 +2398,7 @@
                   <i data-lucide="award" class="w-8 h-8"></i>
                 </div>
                 <h2 class="text-2xl font-black text-slate-900">Assessment Completed!</h2>
-                <p class="text-xs text-slate-500">Hasil nilai kamu telah dikonversi otomatis sesuai standar TOEFL / IELTS</p>
+                <p class="text-xs text-slate-500">Your scores have been automatically calculated following standard TOEFL / IELTS criteria</p>
               </div>
 
               <div class="p-6 bg-gradient-to-br from-emerald-950 to-slate-900 text-white rounded-2xl shadow-xl space-y-4">
@@ -2439,10 +2439,10 @@
 
               <div class="flex flex-col sm:flex-row gap-3">
                 <button onclick="navigateTo('admin')" class="flex-1 bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 rounded-xl shadow-md transition-all text-xs sm:text-sm text-center cursor-pointer">
-                  Buka Dashboard Penguji & Cetak PDF
+                  Open Examiner Dashboard & Print PDF
                 </button>
                 <button onclick="switchResultTab('podium')" class="px-5 py-3 rounded-xl border border-slate-300 hover:bg-slate-100 text-slate-700 font-bold text-xs sm:text-sm cursor-pointer">
-                  🏆 Kembali ke Podium
+                  🏆 Back to Podium
                 </button>
               </div>
             </div>
@@ -2529,11 +2529,11 @@
         }
 
         const praises = [
-          "🔥 SUBHANALLAH! LUAR BIASA!",
-          "🌟 BRILLIANT! JAWABAN SEMPURNA!",
-          "⚡ SPEED DEMON! KILAT & TEPAT!",
-          "🎯 BULLSEYE! FOKUS TINGGI!",
-          "🚀 ON FIRE! TERUSKAN TREN JUARA!"
+          "🔥 SUBHANALLAH! OUTSTANDING WORK!",
+          "🌟 BRILLIANT! PERFECT ANSWER!",
+          "⚡ SPEED DEMON! LIGHTNING FAST!",
+          "🎯 BULLSEYE! SHARP & ACCURATE!",
+          "🚀 ON FIRE! KEEP THE WINNING STREAK!"
         ];
         const praiseText = praises[Math.floor(Math.random() * praises.length)];
 
@@ -2552,10 +2552,10 @@
         SoundFX.playIncorrect();
 
         const encouragements = [
-          "💪 JANGAN MENYERAH!",
-          "🌈 HAMPIR BENAR! KAMU PASTI BISA!",
-          "🎯 TETAP SEMANGAT!",
-          "⭐ BUKTIKAN DI SOAL BERIKUTNYA!"
+          "💪 NEVER GIVE UP!",
+          "🌈 SO CLOSE! YOU GOT THIS!",
+          "🎯 STAY FOCUSED & KEEP GOING!",
+          "⭐ SHINE ON THE NEXT QUESTION!"
         ];
         const encText = encouragements[Math.floor(Math.random() * encouragements.length)];
 
@@ -3518,8 +3518,8 @@
       } else {
         allStudents.push({
           id: "stu_" + Date.now(),
-          name: currentUser.name || "Siswa Baru",
-          email: currentUser.email || `${(currentUser.name || "siswa").toLowerCase().replace(/[^a-z0-9]/g, "")}@alimamischool.com`,
+          name: currentUser.name || "New Student",
+          email: currentUser.email || `${(currentUser.name || "student").toLowerCase().replace(/[^a-z0-9]/g, "")}@alimamischool.com`,
           avatar: currentUser.avatar || "🦁",
           grade: studentGrade,
           classGroup: currentUser.classGroup || `${studentGrade} (Al-Imam)`,
@@ -3536,7 +3536,7 @@
       gradePeers.sort((a, b) => (b.score || 0) - (a.score || 0));
 
       const myRank = gradePeers.findIndex(s => s.email && s.email.toLowerCase() === (currentUser.email || "").toLowerCase()) + 1;
-      const rankDisplay = myRank > 0 ? `#${myRank} di ${studentGrade}` : `#1 di ${studentGrade}`;
+      const rankDisplay = myRank > 0 ? `#${myRank} in ${studentGrade}` : `#1 in ${studentGrade}`;
 
       // Populate Grand Victory Podium (Rank 1, 2, 3)
       const p1 = gradePeers[0] || { name: currentUser.name, avatar: currentUser.avatar || "🦁", score: finalGamifiedScore };
@@ -3546,21 +3546,21 @@
       const elP1Avatar = document.getElementById("podium1Avatar");
       if (elP1Avatar) elP1Avatar.innerText = p1.avatar || "🦁";
       const elP1Name = document.getElementById("podium1Name");
-      if (elP1Name) elP1Name.innerText = p1.name || "Juara 1";
+      if (elP1Name) elP1Name.innerText = p1.name || "Champion 🥇";
       const elP1Score = document.getElementById("podium1Score");
       if (elP1Score) elP1Score.innerText = `${(p1.score || 0).toLocaleString()} PTS`;
 
       const elP2Avatar = document.getElementById("podium2Avatar");
       if (elP2Avatar) elP2Avatar.innerText = p2.avatar || "🧕";
       const elP2Name = document.getElementById("podium2Name");
-      if (elP2Name) elP2Name.innerText = p2.name || "Juara 2";
+      if (elP2Name) elP2Name.innerText = p2.name || "2nd Place 🥈";
       const elP2Score = document.getElementById("podium2Score");
       if (elP2Score) elP2Score.innerText = `${(p2.score || 0).toLocaleString()} PTS`;
 
       const elP3Avatar = document.getElementById("podium3Avatar");
       if (elP3Avatar) elP3Avatar.innerText = p3.avatar || "🚀";
       const elP3Name = document.getElementById("podium3Name");
-      if (elP3Name) elP3Name.innerText = p3.name || "Juara 3";
+      if (elP3Name) elP3Name.innerText = p3.name || "3rd Place 🥉";
       const elP3Score = document.getElementById("podium3Score");
       if (elP3Score) elP3Score.innerText = `${(p3.score || 0).toLocaleString()} PTS`;
 
@@ -3589,7 +3589,7 @@
                   <span class="text-xl p-1 bg-white rounded-xl shadow-xs border border-slate-200">${st.avatar || "👤"}</span>
                   <div>
                     <div class="font-bold text-slate-900 flex items-center gap-1.5">
-                      ${st.name} ${isMe ? '<span class="px-1.5 py-0.5 rounded bg-brand-600 text-white text-[9px] font-black uppercase tracking-wider">Anda ⭐</span>' : ''}
+                      ${st.name} ${isMe ? '<span class="px-1.5 py-0.5 rounded bg-brand-600 text-white text-[9px] font-black uppercase tracking-wider">You ⭐</span>' : ''}
                     </div>
                     <div class="text-[10px] text-slate-400 font-mono">${st.classGroup || studentGrade}</div>
                   </div>
