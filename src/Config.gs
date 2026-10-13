@@ -13,7 +13,7 @@ var CONFIG = {
   FOUNDATION_NAME: "Yayasan SAPIN Darussalam",
   INSTITUTION_NAME: "SMP Al-Imam Islamic School (AI IS)",
   INSTITUTION_ADDRESS: "Limus Pratama Regency Jl. Blitar Blok E.12/7B RT 004/ RW 011, Ds./ Kel Limus Nunggal, Kec. Cileungsi, Kab. Bogor, Prop. Jawa Barat. 16820",
-  INSTITUTION_MOTTO: "Berakidah, Berakhlak dan Berprestasi",
+  INSTITUTION_MOTTO: "Faith, Character, and Excellence",
   DEVELOPER_CREDIT: "Development by Al-Imam EduTech",
   INSTITUTION_WEBSITE: "https://alimamischool.com",
   LOGO_URL: "https://alimamischool.com/wp-content/uploads/2020/08/Al-Imam-Islamic-School-alimamischool.com-sekolah-sunnah-logo.png",
@@ -71,9 +71,9 @@ var CONFIG = {
 
   // Supported Assessment Standards & Grade Levels
   EXAM_TYPES: {
-    GRADE_7: "Grade 7 (Kelas 7 SMP)",
-    GRADE_8: "Grade 8 (Kelas 8 SMP)",
-    GRADE_9: "Grade 9 (Kelas 9 SMP)",
+    GRADE_7: "Grade 7 (7th Grade)",
+    GRADE_8: "Grade 8 (8th Grade)",
+    GRADE_9: "Grade 9 (9th Grade)",
     TOEFL_ITP: "TOEFL ITP / PBT",
     IELTS_ACADEMIC: "IELTS Academic",
     IELTS_GENERAL: "IELTS General Training",
@@ -88,9 +88,9 @@ var CONFIG = {
 
   // SMP Class Categories & Official Class Groups
   GRADE_LEVELS: [
-    { id: "Grade 7", code: "GRADE_7", name: "Grade 7 (Kelas 7 SMP)", defaultExamCode: "GRADE7" },
-    { id: "Grade 8", code: "GRADE_8", name: "Grade 8 (Kelas 8 SMP)", defaultExamCode: "GRADE8" },
-    { id: "Grade 9", code: "GRADE_9", name: "Grade 9 (Kelas 9 SMP)", defaultExamCode: "GRADE9" }
+    { id: "Grade 7", code: "GRADE_7", name: "Grade 7 (7th Grade)", defaultExamCode: "GRADE7" },
+    { id: "Grade 8", code: "GRADE_8", name: "Grade 8 (8th Grade)", defaultExamCode: "GRADE8" },
+    { id: "Grade 9", code: "GRADE_9", name: "Grade 9 (9th Grade)", defaultExamCode: "GRADE9" }
   ],
 
   OFFICIAL_CLASSES: [
