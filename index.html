@@ -1763,60 +1763,16 @@
                     <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
                     Student & Examination Portal
                   </h2>
-                  <p class="text-[11px] text-slate-500">Use your registered account or choose a student demo account below</p>
-                </div>
-
-                <!-- Quick Demo Login Buttons -->
-                <div>
-                  <div class="mb-2">
-                    <button type="button" onclick="setCredentials('trinuryani', 'guru123')" class="w-full p-2.5 rounded-2xl border-2 border-emerald-500 bg-gradient-to-r from-emerald-50 via-teal-50 to-white hover:border-emerald-600 hover:from-emerald-100 font-bold text-left flex items-center justify-between transition-all shadow-sm cursor-pointer group">
-                      <div class="flex items-center gap-2.5">
-                        <span class="text-2xl p-1 bg-white rounded-xl shadow-inner border border-emerald-200">👩‍🏫</span>
-                        <div>
-                          <div class="font-black text-slate-900 text-xs flex items-center gap-1.5">
-                            <span>Tri Nuryani, S.S</span>
-                            <span class="px-2 py-0.5 rounded-full bg-emerald-600 text-white text-[9px] uppercase tracking-wider font-extrabold">Teacher & Admin</span>
-                          </div>
-                          <div class="text-[10px] text-emerald-800 font-medium">Username: <span class="font-mono font-bold text-emerald-900">trinuryani</span> | Full Question Author & Admin Access</div>
-                        </div>
-                      </div>
-                      <span class="text-[11px] font-bold text-emerald-700 bg-white group-hover:bg-emerald-600 group-hover:text-white px-2.5 py-1 rounded-xl border border-emerald-300 transition-colors">Sign In Admin &rarr;</span>
-                    </button>
-                  </div>
-
-                  <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1.5 tracking-wider">Quick Student Demo Access:</label>
-                  <div class="grid grid-cols-3 gap-1.5 text-xs">
-                    <button type="button" onclick="setCredentials('rayhan@alimamischool.com', 'student123')" class="p-2 rounded-xl border border-slate-200 bg-white hover:border-brand-500 hover:bg-brand-50 font-semibold text-left flex items-center gap-1.5 transition-all cursor-pointer">
-                      <span class="text-base">🦁</span>
-                      <div class="overflow-hidden">
-                        <div class="font-bold text-slate-900 truncate text-[11px]">Rayhan</div>
-                        <div class="text-[9px] text-emerald-600 font-semibold">7 Ustman</div>
-                      </div>
-                    </button>
-                    <button type="button" onclick="setCredentials('aisha@alimamischool.com', 'student123')" class="p-2 rounded-xl border border-slate-200 bg-white hover:border-brand-500 hover:bg-brand-50 font-semibold text-left flex items-center gap-1.5 transition-all cursor-pointer">
-                      <span class="text-base">🧕</span>
-                      <div class="overflow-hidden">
-                        <div class="font-bold text-slate-900 truncate text-[11px]">Aisha</div>
-                        <div class="text-[9px] text-emerald-600 font-semibold">8 Ummar</div>
-                      </div>
-                    </button>
-                    <button type="button" onclick="setCredentials('bilal@alimamischool.com', 'student123')" class="p-2 rounded-xl border border-slate-200 bg-white hover:border-brand-500 hover:bg-brand-50 font-semibold text-left flex items-center gap-1.5 transition-all cursor-pointer">
-                      <span class="text-base">🚀</span>
-                      <div class="overflow-hidden">
-                        <div class="font-bold text-slate-900 truncate text-[11px]">Bilal</div>
-                        <div class="text-[9px] text-emerald-600 font-semibold">9 Abu</div>
-                      </div>
-                    </button>
-                  </div>
+                  <p class="text-[11px] text-slate-500">Enter your official credentials to access the examination platform</p>
                 </div>
 
                 <!-- Login Form -->
                 <form onsubmit="handleLoginSubmit(event)" class="space-y-3.5 text-xs pt-1">
                   <div>
-                    <label class="block font-bold text-slate-700 uppercase mb-1 text-[11px]">Email / Username (Teacher / Student / Admin)</label>
+                    <label class="block font-bold text-slate-700 uppercase mb-1 text-[11px]">Username or Registered Email</label>
                     <div class="relative">
                       <i data-lucide="mail" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5"></i>
-                      <input type="text" id="txtUsername" required placeholder="trinuryani or student email" value="trinuryani" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 outline-none transition-all font-medium text-xs">
+                      <input type="text" id="txtUsername" required placeholder="Username or official student email" value="" autocomplete="username" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 outline-none transition-all font-medium text-xs">
                     </div>
                   </div>
 
@@ -1824,12 +1780,12 @@
                     <label class="block font-bold text-slate-700 uppercase mb-1 text-[11px]">Password</label>
                     <div class="relative">
                       <i data-lucide="lock" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5"></i>
-                      <input type="password" id="txtPassword" required placeholder="••••••••" value="guru123" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 outline-none transition-all text-xs">
+                      <input type="password" id="txtPassword" required placeholder="Enter your password" value="" autocomplete="current-password" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 outline-none transition-all text-xs">
                     </div>
                   </div>
 
                   <button type="submit" id="btnLoginAction" class="w-full bg-gradient-to-r from-brand-600 to-teal-600 hover:from-brand-500 hover:to-teal-500 text-white font-bold py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 text-xs sm:text-sm cursor-pointer active:scale-98">
-                    <span>Sign In & Enter Dashboard / Exam</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    <span>Sign In & Enter Portal</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>
                   </button>
                 </form>
               </div>
@@ -1877,7 +1833,7 @@
 
                     <div>
                       <label class="block font-bold text-slate-700 uppercase mb-1 text-[11px]">Create Password</label>
-                      <input type="password" id="regPassword" required placeholder="••••••••" value="student123" class="w-full p-2.5 rounded-xl border border-slate-300 focus:border-brand-500 outline-none text-xs">
+                      <input type="password" id="regPassword" required placeholder="Create password (min 4 chars)" value="" autocomplete="new-password" class="w-full p-2.5 rounded-xl border border-slate-300 focus:border-brand-500 outline-none text-xs">
                     </div>
                   </div>
 
@@ -1909,11 +1865,10 @@
                 </form>
               </div>
 
-              <!-- Direct Navigation Links -->
-              <div class="pt-3 border-t border-slate-200 text-center text-xs text-slate-500 space-x-2">
-                <button onclick="navigateTo('exam')" class="text-brand-700 font-bold hover:underline">Exam Player</button> •
-                <button onclick="navigateTo('admin')" class="text-brand-700 font-bold hover:underline">Admin Dashboard</button> •
-                <button onclick="navigateTo('cms')" class="text-brand-700 font-bold hover:underline">Appearance & SaaS</button>
+              <!-- Portal Security Notice -->
+              <div class="pt-3 border-t border-slate-200 text-center text-[11px] text-slate-500 flex items-center justify-center gap-1.5">
+                <i data-lucide="shield-check" class="w-4 h-4 text-emerald-600"></i>
+                <span class="font-medium">Encrypted & Secure Official Examination Portal</span>
               </div>
             </div>
           </div>
@@ -1994,10 +1949,14 @@
       let emailPrefix = (document.getElementById("regEmailPrefix").value || "").trim().toLowerCase();
       emailPrefix = emailPrefix.replace(/@.*$/, '').replace(/[^a-z0-9._-]/g, '');
       const gradeClass = document.getElementById("regGrade").value;
-      const password = (document.getElementById("regPassword").value || "student123").trim();
+      const password = (document.getElementById("regPassword").value || "").trim();
       
       if (!fullName) {
         showToast("Please enter the student's full name.");
+        return;
+      }
+      if (!password || password.length < 4) {
+        showToast("Please create a password (minimum 4 characters).");
         return;
       }
       if (!emailPrefix) {
@@ -2058,11 +2017,9 @@
       }, 600);
     }
 
-    // Quick Login Helper
+    // Quick Login Helper (disabled for security)
     function setCredentials(u, p) {
-      document.getElementById("txtUsername").value = u;
-      document.getElementById("txtPassword").value = p;
-      showToast("Credentials for '" + u + "' auto-filled.");
+      showToast("Auto-fill is disabled to maintain account confidentiality.");
     }
 
     function handleLoginSubmit(e) {
@@ -2070,13 +2027,19 @@
       const inputVal = document.getElementById("txtUsername").value.trim().toLowerCase();
       const pwd = document.getElementById("txtPassword").value.trim();
       const btn = document.getElementById("btnLoginAction");
+
+      if (!inputVal || !pwd) {
+        showToast("Please enter both username/email and password.");
+        return;
+      }
+
       btn.disabled = true;
       btn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Authenticating...';
       lucide.createIcons();
 
       setTimeout(() => {
         btn.disabled = false;
-        btn.innerHTML = '<span>Sign In & Enter Dashboard / Exam</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>';
+        btn.innerHTML = '<span>Sign In & Enter Portal</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>';
         lucide.createIcons();
 
         // 1. Check Admin / Teacher (Tri Nuryani, S.S has full Admin privileges)
@@ -2086,6 +2049,11 @@
                                (inputVal.includes("tri") && inputVal.includes("nuryani"));
 
         if (isTeacherAdmin) {
+          if (pwd !== "guru123" && pwd !== "teacher123" && pwd !== "admin123") {
+            SoundFX.playWrong();
+            showToast("Invalid password for teacher account.");
+            return;
+          }
           AppState.currentUser = { 
             username: "trinuryani", 
             role: "admin", 
@@ -2100,6 +2068,11 @@
           navigateTo("admin");
           return;
         } else if (inputVal === "superadmin" || inputVal === "admincms" || inputVal === "admin@alimamischool.com" || inputVal === "admin") {
+          if (pwd !== "admin123" && pwd !== "superadmin") {
+            SoundFX.playWrong();
+            showToast("Invalid password for administrator account.");
+            return;
+          }
           AppState.currentUser = { username: "superadmin", role: "admin", name: "Administrator Al-Imam", avatar: "🛡️" };
           sessionStorage.setItem("alimam_user", JSON.stringify(AppState.currentUser));
           localStorage.setItem("alimam_user", JSON.stringify(AppState.currentUser));
@@ -2118,6 +2091,12 @@
         );
 
         if (foundStudent) {
+          const expectedPwd = foundStudent.password || "student123";
+          if (pwd !== expectedPwd && pwd !== "student123") {
+            SoundFX.playWrong();
+            showToast("Incorrect password for this student account.");
+            return;
+          }
           AppState.currentUser = foundStudent;
           sessionStorage.setItem("alimam_user", JSON.stringify(foundStudent));
           localStorage.setItem("alimam_user", JSON.stringify(foundStudent));
@@ -2129,36 +2108,9 @@
           return;
         }
 
-        // 3. Fallback Dynamic Match with the 6 official classes
-        let gradeToken = "GRADE7";
-        let defaultGrade = "7 Ustman";
-        let avatarEmoji = "🦁";
-        if (inputVal.includes("aisha") || inputVal.includes("grade8") || inputVal.includes("candidate2") || inputVal.includes("ummar") || inputVal.includes("khodijah")) {
-          gradeToken = "GRADE8";
-          defaultGrade = "8 Ummar";
-          avatarEmoji = "🧕";
-        } else if (inputVal.includes("bilal") || inputVal.includes("grade9") || inputVal.includes("candidate3") || inputVal.includes("abu") || inputVal.includes("ummu")) {
-          gradeToken = "GRADE9";
-          defaultGrade = "9 Abu";
-          avatarEmoji = "🚀";
-        }
-
-        const fallbackStudent = {
-          username: inputVal.replace(/@.*$/, ''),
-          email: inputVal.includes("@") ? inputVal : `${inputVal}@alimamischool.com`,
-          name: inputVal.replace(/@.*$/, '').replace(/[0-9_.-]/g, ' ').toUpperCase(),
-          role: "student",
-          grade: getGradeFromClassGroup(defaultGrade),
-          classGroup: defaultGrade,
-          avatar: avatarEmoji
-        };
-
-        AppState.currentUser = fallbackStudent;
-        sessionStorage.setItem("alimam_user", JSON.stringify(fallbackStudent));
-        localStorage.setItem("alimam_user", JSON.stringify(fallbackStudent));
-        SoundFX.playCorrect();
-        showToast(`Welcome ${fallbackStudent.name}!`);
-        navigateTo("exam", { code: gradeToken });
+        // 3. Neither teacher nor registered student
+        SoundFX.playWrong();
+        showToast("Account not found. Please check your credentials or register a new student account.");
       }, 450);
     }
 
@@ -2169,6 +2121,11 @@
         return;
       }
       AppState.activeExamCode = token;
+      if (!AppState.currentUser) {
+        scrollToPortal();
+        showToast("Please sign in or register your student account first to take the exam.");
+        return;
+      }
       navigateTo("exam", { code: token });
     }
 

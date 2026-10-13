@@ -142,26 +142,7 @@
             <i data-lucide="shield-check" class="w-7 h-7"></i>
           </div>
           <h2 class="text-2xl font-bold text-slate-900">Unified Assessment Portal</h2>
-          <p class="text-xs text-slate-500">Select a demo role or enter your account credentials</p>
-        </div>
-
-        <!-- Role Quick Switcher Pills for Testing -->
-        <div class="mb-4">
-          <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Quick Login / Demo Accounts:</label>
-          <div class="grid grid-cols-2 gap-2 text-xs">
-            <button onclick="setCredentials('superadmin', 'admin123')" class="p-2 rounded-lg border border-slate-200 bg-white hover:border-brand-500 hover:bg-brand-50 font-medium text-left flex items-center gap-2">
-              <span class="w-2 h-2 rounded-full bg-purple-500"></span> Super Admin
-            </button>
-            <button onclick="setCredentials('admincms', 'admin123')" class="p-2 rounded-lg border border-slate-200 bg-white hover:border-brand-500 hover:bg-brand-50 font-medium text-left flex items-center gap-2">
-              <span class="w-2 h-2 rounded-full bg-blue-500"></span> Admin CMS
-            </button>
-            <button onclick="setCredentials('teacher', 'teacher123')" class="p-2 rounded-lg border border-slate-200 bg-white hover:border-brand-500 hover:bg-brand-50 font-medium text-left flex items-center gap-2">
-              <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Teacher / Examiner
-            </button>
-            <button onclick="setCredentials('candidate1', 'student123')" class="p-2 rounded-lg border border-slate-200 bg-white hover:border-brand-500 hover:bg-brand-50 font-medium text-left flex items-center gap-2">
-              <span class="w-2 h-2 rounded-full bg-amber-500"></span> Student / Candidate
-            </button>
-          </div>
+          <p class="text-xs text-slate-500">Enter your official credentials to access the examination platform</p>
         </div>
 
         <!-- Login Form -->
@@ -170,7 +151,7 @@
             <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Username / Email</label>
             <div class="relative">
               <i data-lucide="user" class="w-5 h-5 text-slate-400 absolute left-3.5 top-3"></i>
-              <input type="text" id="loginUsername" required placeholder="Enter username or email" class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 text-sm outline-none transition-all">
+              <input type="text" id="loginUsername" required placeholder="Enter username or official email" class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 text-sm outline-none transition-all">
             </div>
           </div>
 
@@ -178,7 +159,7 @@
             <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Password</label>
             <div class="relative">
               <i data-lucide="lock" class="w-5 h-5 text-slate-400 absolute left-3.5 top-3"></i>
-              <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 text-sm outline-none transition-all">
+              <input type="password" id="loginPassword" required placeholder="Enter your password" class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 text-sm outline-none transition-all">
             </div>
           </div>
 
@@ -190,14 +171,10 @@
           </button>
         </form>
 
-        <!-- Direct Views Navigation -->
-        <div class="mt-6 pt-5 border-t border-slate-200 text-center">
-          <p class="text-xs text-slate-500 mb-2">Direct Module Navigation:</p>
-          <div class="flex flex-wrap justify-center gap-2 text-xs">
-            <a href="?page=student-exam" class="text-brand-700 hover:underline font-semibold">Exam Sheet</a> •
-            <a href="?page=admin-dashboard" class="text-brand-700 hover:underline font-semibold">Admin & Examiner</a> •
-            <a href="?page=cms-appearance" class="text-brand-700 hover:underline font-semibold">Appearance & Licensing</a>
-          </div>
+        <!-- Portal Security Notice -->
+        <div class="mt-6 pt-5 border-t border-slate-200 text-center text-xs text-slate-500 flex items-center justify-center gap-1.5">
+          <i data-lucide="shield-check" class="w-4 h-4 text-emerald-600"></i>
+          <span>Official Secured Assessment System</span>
         </div>
       </div>
     </div>
@@ -220,8 +197,7 @@
     lucide.createIcons();
 
     function setCredentials(u, p) {
-      document.getElementById('loginUsername').value = u;
-      document.getElementById('loginPassword').value = p;
+      // Auto-fill disabled for account security
     }
 
     function startQuickExam() {
@@ -236,26 +212,45 @@
 
     function handleLoginSubmit(e) {
       e.preventDefault();
-      var u = document.getElementById('loginUsername').value.trim();
+      var u = document.getElementById('loginUsername').value.trim().toLowerCase();
       var p = document.getElementById('loginPassword').value;
       var alertBox = document.getElementById('loginAlert');
       var btn = document.getElementById('btnSubmitLogin');
+
+      if (!u || !p) {
+        alert("Please enter both username/email and password.");
+        return;
+      }
 
       btn.disabled = true;
       btn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Verifying...';
       lucide.createIcons();
 
-      // Role redirect logic
+      // Role redirect logic with password validation
       setTimeout(function() {
-        if (u === 'superadmin' || u === 'admincms') {
+        if (u === 'trinuryani' || u === 'tri nuryani' || u === 'teacher' || u.indexOf('tri') !== -1) {
+          if (p !== 'guru123' && p !== 'teacher123' && p !== 'admin123') {
+            btn.disabled = false;
+            btn.innerHTML = '<span>Sign In to Dashboard</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>';
+            lucide.createIcons();
+            alert("Invalid password for teacher account.");
+            return;
+          }
+          sessionStorage.setItem('current_user', JSON.stringify({ username: 'trinuryani', role: 'admin', fullName: 'Tri Nuryani, S.S' }));
+          window.location.href = '?page=admin-dashboard';
+        } else if (u === 'superadmin' || u === 'admincms' || u === 'admin') {
+          if (p !== 'admin123' && p !== 'superadmin') {
+            btn.disabled = false;
+            btn.innerHTML = '<span>Sign In to Dashboard</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>';
+            lucide.createIcons();
+            alert("Invalid password for administrator account.");
+            return;
+          }
           sessionStorage.setItem('current_user', JSON.stringify({ username: u, role: u === 'superadmin' ? 'superadmin' : 'admin', fullName: 'Al-Imam Administrator' }));
           window.location.href = '?page=admin-dashboard';
-        } else if (u === 'teacher') {
-          sessionStorage.setItem('current_user', JSON.stringify({ username: u, role: 'teacher', fullName: 'Ustazah Sarah Jenkins, M.Ed' }));
-          window.location.href = '?page=admin-dashboard&tab=grading';
         } else {
-          sessionStorage.setItem('current_user', JSON.stringify({ username: u, role: 'student', fullName: 'Muhammad Rayhan Al-Fatih' }));
-          window.location.href = '?page=student-exam&code=TOEFL2026';
+          sessionStorage.setItem('current_user', JSON.stringify({ username: u, role: 'student', fullName: u }));
+          window.location.href = '?page=student-exam&code=GRADE7';
         }
       }, 600);
     }

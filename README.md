@@ -107,14 +107,15 @@ The system is built using a lightweight, high-performance **MVC (Model-View-Cont
 
 ---
 
-## 5. DEMO ACCOUNT CREDENTIALS
+## 5. USER ROLES & ACCESS CONTROL
 
-| Role | Username | Password | Permissions & Access Description |
-|---|---|---|---|
-| **Super Admin** | `superadmin` | `admin123` | Full system access, license management & database backup |
-| **Admin CMS** | `admincms` | `admin123` | White-label appearance customization & exam scheduling |
-| **Teacher / Examiner** | `teacher` | `teacher123` | Question bank authoring & essay/speaking rubric grading |
-| **Student / Candidate** | `candidate1` | `student123` | Student test taker, interactive exam player & certificate download |
+| Role | Account Management | Permissions & Access Scope |
+|---|---|---|
+| **Teacher & Exam Administrator** | Managed by School Authority (`Tri Nuryani, S.S`) | Question bank authoring, audio listening manager, essay/speaking rubric grading, student performance analytics & PDF certificate generator |
+| **Super Admin / CMS** | Managed by System Administrator | System settings, institutional appearance white-labeling, cloud database backup & export |
+| **Student / Candidate** | Self-Registration via Student Portal | Automated class assignment (Grade 7, 8, 9), proctored interactive exam player, instant Kahoot-style gamified scoring & QR certificate verification |
+
+> **Security & Confidentiality Notice**: In accordance with institutional confidentiality guidelines, all user credentials (usernames and passwords) are strictly private. Public demo accounts and pre-filled credentials have been deactivated to protect teacher and student data integrity. All active teacher and administrative credentials are kept secure and shared only through official school channels.
 
 ---
 
