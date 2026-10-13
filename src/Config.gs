@@ -82,11 +82,24 @@ var CONFIG = {
     CUSTOM: "Custom Institutional Exam"
   },
 
-  // SMP Class Categories
+  // Google Spreadsheet Database Integration
+  SPREADSHEET_ID: "151L_zDaJblEZmn-xXMFdlZXZTaH2hg68-oK23Difih0",
+  SPREADSHEET_URL: "https://docs.google.com/spreadsheets/d/151L_zDaJblEZmn-xXMFdlZXZTaH2hg68-oK23Difih0/edit?gid=2073180032#gid=2073180032",
+
+  // SMP Class Categories & Official Class Groups
   GRADE_LEVELS: [
     { id: "Grade 7", code: "GRADE_7", name: "Grade 7 (Kelas 7 SMP)", defaultExamCode: "GRADE7" },
     { id: "Grade 8", code: "GRADE_8", name: "Grade 8 (Kelas 8 SMP)", defaultExamCode: "GRADE8" },
     { id: "Grade 9", code: "GRADE_9", name: "Grade 9 (Kelas 9 SMP)", defaultExamCode: "GRADE9" }
+  ],
+
+  OFFICIAL_CLASSES: [
+    { id: "7-ustman", name: "7 Ustman", grade: "Grade 7", examCode: "GRADE7" },
+    { id: "7-aisyah", name: "7 Aisyah", grade: "Grade 7", examCode: "GRADE7" },
+    { id: "8-ummar", name: "8 Ummar", grade: "Grade 8", examCode: "GRADE8" },
+    { id: "8-khodijah", name: "8 Khodijah", grade: "Grade 8", examCode: "GRADE8" },
+    { id: "9-abu", name: "9 Abu", grade: "Grade 9", examCode: "GRADE9" },
+    { id: "9-ummu", name: "9 Ummu", grade: "Grade 9", examCode: "GRADE9" }
   ],
 
   // Dynamic Assessment Section Weights (Standard English Rubric)
@@ -179,7 +192,7 @@ var CONFIG = {
  */
 function getDatabaseSpreadsheet() {
   var props = PropertiesService.getScriptProperties();
-  var sheetId = props.getProperty("SPREADSHEET_ID");
+  var sheetId = props.getProperty("SPREADSHEET_ID") || CONFIG.SPREADSHEET_ID || "151L_zDaJblEZmn-xXMFdlZXZTaH2hg68-oK23Difih0";
   if (sheetId) {
     try {
       return SpreadsheetApp.openById(sheetId);

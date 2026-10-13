@@ -251,11 +251,36 @@ var ExaminationModel = (function () {
     ];
   }
 
+  function recordSubmission(record, answers, rawScores, proctoringLogs) {
+    var sheet = getSubmissionSheet();
+    if (sheet) {
+      sheet.appendRow([
+        record.id || ("SUB-" + Utilities.getUuid().substring(0, 8)),
+        record.examId || "EXAM-GENERIC",
+        record.studentId || "ANONYMOUS",
+        record.studentName || "Anonymous Candidate",
+        record.sessionToken || "",
+        record.startedAt || new Date().toISOString(),
+        record.submittedAt || new Date().toISOString(),
+        "completed",
+        typeof answers === "string" ? answers : JSON.stringify(answers || {}),
+        typeof rawScores === "string" ? rawScores : JSON.stringify(rawScores || {}),
+        typeof proctoringLogs === "string" ? proctoringLogs : JSON.stringify(proctoringLogs || []),
+        record.violationsCount || 0,
+        record.calculatedScore || record.scaledScore || 0,
+        record.scaledScore || 0,
+        record.gradeStatus || "Passed"
+      ]);
+    }
+    return { success: true, submissionId: record.id };
+  }
+
   return {
     getAllExams: getAllExams,
     findExamByCode: findExamByCode,
     startSession: startSession,
     logViolation: logViolation,
+    recordSubmission: recordSubmission,
     getMockExams: getMockExams
   };
 })();

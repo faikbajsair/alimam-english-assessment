@@ -152,9 +152,16 @@ var ExamController = (function () {
       violationsCount: (payload.proctoring && payload.proctoring.blurStrikes) || 0
     };
 
+    // Record submission into DB_Submissions spreadsheet
+    try {
+      ExaminationModel.recordSubmission(submissionRecord, answers, scoreResult, payload.proctoringLogs || []);
+    } catch (e) {
+      console.warn("Failed to record submission in sheet:", e.message);
+    }
+
     var certData = GradeModel.generateCertificateData(
       submissionRecord,
-      { id: session.studentId, fullName: session.studentName, classGroup: "Al-Imam Examination Batch" },
+      { id: session.studentId, fullName: session.studentName, classGroup: (session.classGroup || "Al-Imam Examination Batch") },
       { id: session.examId, title: session.examTitle, type: examType }
     );
 

@@ -198,11 +198,23 @@ var UserModel = (function () {
         createdAt: new Date().toISOString()
       },
       {
+        id: "USR-TRINURYANI",
+        username: "trinuryani",
+        email: "tri.nuryani@alimamischool.com",
+        passwordHash: hashPassword("guru123"),
+        fullName: "Bu Tri Nuryani, S.Pd (English Teacher & Assessment Admin)",
+        role: "admin",
+        classGroup: "English Department Head & Senior Examiner",
+        phone: "+6281234567800",
+        status: "active",
+        createdAt: new Date().toISOString()
+      },
+      {
         id: "USR-ADMIN01",
         username: "admincms",
         email: "admin@alimamischool.com",
         passwordHash: hashPassword("admin123"),
-        fullName: "Siti Rahmawati, S.Kom (Admin CMS)",
+        fullName: "Siti Rahmawati, S.Kom (CMS Admin)",
         role: "admin",
         classGroup: "IT & Academic Staff",
         phone: "+6281234567891",
@@ -212,10 +224,10 @@ var UserModel = (function () {
       {
         id: "USR-TEACH01",
         username: "teacher",
-        email: "english.head@alimamischool.com",
+        email: "guru@alimamischool.com",
         passwordHash: hashPassword("teacher123"),
-        fullName: "Ustazah Sarah Jenkins, M.Ed (Examiner)",
-        role: "teacher",
+        fullName: "Bu Tri Nuryani, S.Pd (English Teacher)",
+        role: "admin",
         classGroup: "English Department",
         phone: "+6281234567892",
         status: "active",
@@ -224,11 +236,11 @@ var UserModel = (function () {
       {
         id: "USR-STUD01",
         username: "candidate1",
-        email: "muhammad.rayhan@student.alimam.ac.id",
+        email: "rayhan@student.alimam.ac.id",
         passwordHash: hashPassword("student123"),
         fullName: "Muhammad Rayhan Al-Fatih",
         role: "student",
-        classGroup: "Grade 7 - Abu Bakar",
+        classGroup: "7 Ustman",
         phone: "+6281234567893",
         status: "active",
         createdAt: new Date().toISOString()
@@ -236,11 +248,11 @@ var UserModel = (function () {
       {
         id: "USR-STUD02",
         username: "candidate2",
-        email: "aisha.zahra@student.alimam.ac.id",
+        email: "aisha@student.alimam.ac.id",
         passwordHash: hashPassword("student123"),
         fullName: "Aisha Zahra Nurhaliza",
         role: "student",
-        classGroup: "Grade 8 - Utsman",
+        classGroup: "8 Ummar",
         phone: "+6281234567894",
         status: "active",
         createdAt: new Date().toISOString()
@@ -248,11 +260,11 @@ var UserModel = (function () {
       {
         id: "USR-STUD03",
         username: "candidate3",
-        email: "bilal.habashi@student.alimam.ac.id",
+        email: "bilal@student.alimam.ac.id",
         passwordHash: hashPassword("student123"),
         fullName: "Bilal Ibnu Rabah",
         role: "student",
-        classGroup: "Grade 9 - Khalid bin Walid",
+        classGroup: "9 Abu",
         phone: "+6281234567895",
         status: "active",
         createdAt: new Date().toISOString()

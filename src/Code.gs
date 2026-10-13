@@ -106,6 +106,63 @@ function doPost(e) {
         response = CmsController.saveAppearanceSettings(payload);
         break;
 
+      case "saveSubmission":
+      case "recordSubmission":
+        response = ExaminationModel.recordSubmission(
+          payload.submission || payload,
+          payload.answers || {},
+          payload.scoreResult || {},
+          payload.proctoringLogs || []
+        );
+        break;
+
+      case "syncQuestions":
+        response = QuestionModel.bulkImportQuestions(payload.questions || []);
+        break;
+
+      case "syncStudents":
+        var students = payload.students || [];
+        var createdCount = 0;
+        students.forEach(function (st) {
+          try {
+            UserModel.createUser({
+              username: st.username || st.email,
+              email: st.email || "",
+              fullName: st.name || st.fullName || st.username,
+              role: st.role || "student",
+              classGroup: st.classGroup || st.grade || "7 Ustman",
+              password: st.password || "student123"
+            });
+            createdCount++;
+          } catch (e) {}
+        });
+        response = { success: true, count: createdCount, message: "Synchronized " + createdCount + " students." };
+        break;
+
+      case "syncAll":
+        var qCount = (payload.questions && payload.questions.length) ? QuestionModel.bulkImportQuestions(payload.questions).importedCount : 0;
+        var sCount = 0;
+        if (payload.students && Array.isArray(payload.students)) {
+          payload.students.forEach(function (st) {
+            try {
+              UserModel.createUser({
+                username: st.username || st.email,
+                email: st.email || "",
+                fullName: st.name || st.fullName || st.username,
+                role: st.role || "student",
+                classGroup: st.classGroup || st.grade || "7 Ustman",
+                password: st.password || "student123"
+              });
+              sCount++;
+            } catch (e) {}
+          });
+        }
+        if (payload.submission) {
+          ExaminationModel.recordSubmission(payload.submission, payload.answers || {}, payload.scoreResult || {}, []);
+        }
+        response = { success: true, questionsSynced: qCount, studentsSynced: sCount, message: "Full database synchronization completed." };
+        break;
+
       case "validateLicense":
         response = CmsController.validateLicense(payload.licenseKey);
         break;
