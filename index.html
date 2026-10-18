@@ -1714,30 +1714,6 @@
                 <div class="text-[11px] text-slate-500 font-semibold">QR Code Validated</div>
               </div>
             </div>
-
-            <!-- Quick Exam Code Entry -->
-            <div class="p-6 bg-gradient-to-br from-brand-950 via-slate-900 to-slate-950 rounded-3xl text-white shadow-2xl border border-emerald-900/50 space-y-3.5">
-              <div class="flex items-center justify-between">
-                <h2 class="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-2">
-                  <i data-lucide="key" class="w-4 h-4"></i> Quick Exam Access with Token
-                </h2>
-                <span class="text-[10px] text-slate-400 font-semibold">SMP Al-Imam Assessment Center</span>
-              </div>
-              <div class="flex flex-col sm:flex-row gap-3">
-                <input type="text" id="landingExamToken" value="${AppState.activeExamCode || 'GRADE7'}" placeholder="e.g. GRADE7, GRADE8, GRADE9, TOEFL2026" class="uppercase font-mono tracking-widest text-slate-900 px-4 py-3 rounded-2xl flex-grow focus:outline-none focus:ring-2 focus:ring-emerald-400 text-sm font-bold bg-white">
-                <button onclick="handleQuickTokenStart()" class="bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-black px-6 py-3 rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2 text-xs sm:text-sm whitespace-nowrap cursor-pointer">
-                  Start Exam <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                </button>
-              </div>
-              <!-- Quick tokens pills -->
-              <div class="flex flex-wrap items-center gap-1.5 pt-1 text-[11px]">
-                <span class="text-slate-400 text-[10px] font-semibold mr-1">Select Grade / Exam:</span>
-                <button type="button" onclick="document.getElementById('landingExamToken').value='GRADE7'; handleQuickTokenStart();" class="px-2.5 py-1 rounded-lg bg-blue-900/70 hover:bg-blue-800 text-blue-300 border border-blue-600/60 font-mono font-bold cursor-pointer transition-colors text-xs">GRADE7 (Grade 7)</button>
-                <button type="button" onclick="document.getElementById('landingExamToken').value='GRADE8'; handleQuickTokenStart();" class="px-2.5 py-1 rounded-lg bg-emerald-900/70 hover:bg-emerald-800 text-emerald-300 border border-emerald-600/60 font-mono font-bold cursor-pointer transition-colors text-xs">GRADE8 (Grade 8)</button>
-                <button type="button" onclick="document.getElementById('landingExamToken').value='GRADE9'; handleQuickTokenStart();" class="px-2.5 py-1 rounded-lg bg-purple-900/70 hover:bg-purple-800 text-purple-300 border border-purple-600/60 font-mono font-bold cursor-pointer transition-colors text-xs">GRADE9 (Grade 9)</button>
-                <button type="button" onclick="document.getElementById('landingExamToken').value='TOEFL2026'; handleQuickTokenStart();" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 font-mono font-bold cursor-pointer transition-colors text-xs">TOEFL2026</button>
-              </div>
-            </div>
           </div>
 
           <!-- Right Login & Registration Portal -->
@@ -2112,21 +2088,6 @@
         SoundFX.playWrong();
         showToast("Account not found. Please check your credentials or register a new student account.");
       }, 450);
-    }
-
-    function handleQuickTokenStart() {
-      const token = document.getElementById("landingExamToken").value.trim().toUpperCase();
-      if (!token) {
-        alert("Please enter an exam token code first.");
-        return;
-      }
-      AppState.activeExamCode = token;
-      if (!AppState.currentUser) {
-        scrollToPortal();
-        showToast("Please sign in or register your student account first to take the exam.");
-        return;
-      }
-      navigateTo("exam", { code: token });
     }
 
     // ================= VIEW 2: STUDENT EXAM PLAYER =================
@@ -6559,7 +6520,6 @@
     window.getStudentCurrentRank = getStudentCurrentRank;
     window.submitSpaExam = submitSpaExam;
     window.showToast = showToast;
-    window.handleQuickTokenStart = handleQuickTokenStart;
     window.openAddQuestionSpaModal = openAddQuestionSpaModal;
     window.closeAddQuestionSpaModal = closeAddQuestionSpaModal;
     window.updateModalImagePreview = updateModalImagePreview;
