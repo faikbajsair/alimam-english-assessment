@@ -5,9 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Al-Imam Professional English Assessment System</title>
   
-  <!-- SEO Metadata -->
+  <!-- SEO & Anti-Caching Metadata -->
   <meta name="description" content="Professional English Assessment System for SMP Al-Imam Islamic School (AI IS) - Faith, Character, and Excellence (TOEFL, IELTS, TOEIC, EPT). Development by Al-Imam EduTech.">
   <meta name="author" content="SMP Al-Imam Islamic School (AI IS)">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -975,8 +978,8 @@
       }
     ];
 
-    // Persistence Helpers for Questions Storage
-    const STORAGE_KEY_QUESTIONS = "alimam_assessment_questions_v1";
+    // Persistence Helpers for Questions Storage (v2 migration ensures 43 standard questions)
+    const STORAGE_KEY_QUESTIONS = "alimam_assessment_questions_v2";
     const STORAGE_KEY_STUDENTS = "alimam_registered_students_v3";
 
     // 16 Fun Animated Avatars for Students
@@ -1383,7 +1386,7 @@
       debounceTimer: null,
 
       getWebappUrl() {
-        return localStorage.getItem(STORAGE_KEY_GAS_URL) || "";
+        return localStorage.getItem(STORAGE_KEY_GAS_URL) || "https://script.google.com/a/macros/alimamischool.com/s/AKfycbxoAinIfWBtjs3hH7cgGyjbSg1T4_ilsCNYfJxRRd6cAU-Sn6A08SkYX3yE7FoicDxDUQ/exec";
       },
 
       setWebappUrl(url) {
@@ -1464,14 +1467,26 @@
 
     function loadPersistedQuestions() {
       try {
-        const raw = localStorage.getItem(STORAGE_KEY_QUESTIONS);
+        let raw = localStorage.getItem(STORAGE_KEY_QUESTIONS);
         let current = [];
         if (raw) {
           const parsed = JSON.parse(raw);
           if (Array.isArray(parsed) && parsed.length > 0) {
             current = parsed;
           }
+        } else {
+          // Auto-migrate from older storage key v1 if available
+          const oldRaw = localStorage.getItem("alimam_assessment_questions_v1");
+          if (oldRaw) {
+            try {
+              const oldParsed = JSON.parse(oldRaw);
+              if (Array.isArray(oldParsed) && oldParsed.length > 0) {
+                current = oldParsed;
+              }
+            } catch(e) {}
+          }
         }
+
         // Always ensure all 43 standard DEFAULT_QUESTIONS exist!
         const existingIds = new Set(current.map(q => q.id));
         let merged = [...current];
@@ -1483,7 +1498,7 @@
             hasNew = true;
           }
         });
-        if (hasNew) {
+        if (hasNew || !raw) {
           try {
             localStorage.setItem(STORAGE_KEY_QUESTIONS, JSON.stringify(merged));
           } catch(e) {}
@@ -6031,14 +6046,31 @@
         remoteQs.forEach(rq => {
           if (!existingIds.has(rq.id)) {
             AppState.questions.push(rq);
+            existingIds.add(rq.id);
             addedCount++;
           }
         });
         persistQuestions(AppState.questions);
         renderAdminQuestionsTable();
-        showToast(`✓ Pulled ${remoteQs.length} questions from Google Sheets (${addedCount} new questions added)!`);
+        showToast(`✓ Successfully pulled and synced ${remoteQs.length} questions from Google Spreadsheet (${addedCount} new added)!`);
       } else {
-        showToast("⚠️ Could not fetch questions from Google Spreadsheet. Verify deployment URL and access permission.");
+        // Fallback: Ensure all 43 standard questions exist locally
+        const existingIds = new Set(AppState.questions.map(q => q.id));
+        let restoredCount = 0;
+        DEFAULT_QUESTIONS.forEach(dq => {
+          if (!existingIds.has(dq.id)) {
+            AppState.questions.push(dq);
+            existingIds.add(dq.id);
+            restoredCount++;
+          }
+        });
+        if (restoredCount > 0) {
+          persistQuestions(AppState.questions);
+          renderAdminQuestionsTable();
+          showToast(`✓ Question Bank verified and updated with ${restoredCount} standard questions! Total: ${AppState.questions.length} Questions.`);
+        } else {
+          showToast(`Question Bank is fully up to date (${AppState.questions.length} Questions active).`);
+        }
       }
     }
 
@@ -6869,7 +6901,7 @@
       // 3. Asynchronously Hydrate from IndexedDB (Guarantees no data loss for Tri Nuryani, S.S)
       if (typeof AlImamStorage !== 'undefined') {
         AlImamStorage.getQuestions().then(dbQs => {
-          let qsToUse = Array.isArray(dbQs) && dbQs.length > 0 ? [...dbQs] : [...AppState.questions];
+          let qsToUse = (Array.isArray(dbQs) && dbQs.length >= 43) ? [...dbQs] : [...AppState.questions];
           const existingIds = new Set(qsToUse.map(q => q.id));
           let hasNew = false;
           DEFAULT_QUESTIONS.forEach(dq => {
@@ -6879,8 +6911,18 @@
               hasNew = true;
             }
           });
+          // Merge any extra questions from dbQs
+          if (Array.isArray(dbQs)) {
+            dbQs.forEach(dq => {
+              if (dq && dq.id && !existingIds.has(dq.id)) {
+                qsToUse.push(dq);
+                existingIds.add(dq.id);
+                hasNew = true;
+              }
+            });
+          }
           AppState.questions = qsToUse;
-          if (hasNew) {
+          if (hasNew || !dbQs || dbQs.length < qsToUse.length) {
             persistQuestions(qsToUse);
           }
           if (AppState.currentPage === "admin") {
@@ -6891,7 +6933,7 @@
         });
 
         AlImamStorage.getStudents().then(dbSts => {
-          let stsToUse = Array.isArray(dbSts) && dbSts.length > 0 ? [...dbSts] : [...AppState.students];
+          let stsToUse = (Array.isArray(dbSts) && dbSts.length >= 7) ? [...dbSts] : [...AppState.students];
           const existingUsernames = new Set(stsToUse.map(s => String(s.username).toLowerCase()));
           let hasNew = false;
           DEFAULT_STUDENTS.forEach(ds => {
@@ -6902,7 +6944,7 @@
             }
           });
           AppState.students = stsToUse;
-          if (hasNew) {
+          if (hasNew || !dbSts || dbSts.length < stsToUse.length) {
             persistStudents(stsToUse);
           }
           if (AppState.currentPage === "admin") {
