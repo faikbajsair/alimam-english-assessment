@@ -4,25 +4,42 @@
  */
 
 function isiSemuaDataKeSpreadsheetSekarang() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var now = new Date().toISOString();
+  try {
+    var SPREADSHEET_ID = "151L_zDaJblEZmn-xXMFdlZXZTaH2hg68-oK23Difih0";
+    var ss = null;
 
-  // 1. ISI AKUN KE SHEET "DB_Users"
-  var userSheet = ss.getSheetByName("DB_Users");
-  if (!userSheet) {
-    userSheet = ss.insertSheet("DB_Users");
-  }
-  if (userSheet.getLastRow() === 0) {
-    var uHeaders = ["id", "username", "email", "passwordHash", "fullName", "role", "classGroup", "phone", "status", "createdAt", "lastLogin"];
-    userSheet.appendRow(uHeaders);
-    userSheet.getRange(1, 1, 1, uHeaders.length).setFontWeight("bold").setBackground("#059669").setFontColor("#ffffff");
-    userSheet.setFrozenRows(1);
-  }
+    try {
+      ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+    } catch (e1) {
+      Logger.log("openById gagal: " + e1.message);
+      try {
+        ss = SpreadsheetApp.getActiveSpreadsheet();
+      } catch (e2) {}
+    }
 
-  var existingUsersData = userSheet.getDataRange().getValues();
-  var existingUsernames = existingUsersData.slice(1).map(function(r) { return String(r[1]).toLowerCase().trim(); });
+    if (!ss) {
+      Logger.log("ERROR: Spreadsheet dengan ID " + SPREADSHEET_ID + " tidak dapat dibuka. Pastikan akun Google yang aktif memiliki izin edit.");
+      return;
+    }
 
-  var usersList = [
+    var now = new Date().toISOString();
+
+    // 1. ISI AKUN KE SHEET "DB_Users"
+    var userSheet = ss.getSheetByName("DB_Users");
+    if (!userSheet) {
+      userSheet = ss.insertSheet("DB_Users");
+    }
+    if (userSheet.getLastRow() === 0) {
+      var uHeaders = ["id", "username", "email", "passwordHash", "fullName", "role", "classGroup", "phone", "status", "createdAt", "lastLogin"];
+      userSheet.appendRow(uHeaders);
+      userSheet.getRange(1, 1, 1, uHeaders.length).setFontWeight("bold").setBackground("#059669").setFontColor("#ffffff");
+      userSheet.setFrozenRows(1);
+    }
+
+    var existingUsersData = userSheet.getDataRange().getValues();
+    var existingUsernames = existingUsersData.slice(1).map(function(r) { return String(r[1]).toLowerCase().trim(); });
+
+    var usersList = [
   {
     "id": "USR-TRINURYANI",
     "username": "trinuryani",
@@ -1333,4 +1350,7 @@ function isiSemuaDataKeSpreadsheetSekarang() {
   Logger.log("User Baru Ditambahkan: " + addedUsers);
   Logger.log("Soal Baru Ditambahkan: " + addedQs);
   Logger.log("Total Soal di Sheet Sekarang: " + (qSheet.getLastRow() - 1));
+  } catch (err) {
+    Logger.log("ERROR RUNTIME: " + err.message + " \nStack: " + err.stack);
+  }
 }
