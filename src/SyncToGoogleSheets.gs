@@ -160,6 +160,17 @@ function isiSemuaDataKeSpreadsheetSekarang() {
     "classGroup": "9 Ummu",
     "phone": "+6281234567817",
     "status": "active"
+  },
+  {
+    "id": "USR-ALISHA01",
+    "username": "alishamalaikaarifianto",
+    "email": "alishamalaikaarifianto@alimamischool.com",
+    "password": "student123",
+    "fullName": "Alisha Malaika Arifianto",
+    "role": "student",
+    "classGroup": "7 Aisyah",
+    "phone": "+6281234567818",
+    "status": "active"
   }
 ];
 
