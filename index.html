@@ -1090,10 +1090,29 @@
     function loadRegisteredStudents() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY_STUDENTS);
+        let current = [];
         if (raw) {
           const parsed = JSON.parse(raw);
-          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            current = parsed;
+          }
         }
+        const existingUsernames = new Set(current.map(s => String(s.username).toLowerCase()));
+        let merged = [...current];
+        let hasNew = false;
+        DEFAULT_STUDENTS.forEach(ds => {
+          if (!existingUsernames.has(String(ds.username).toLowerCase())) {
+            merged.push(ds);
+            existingUsernames.add(String(ds.username).toLowerCase());
+            hasNew = true;
+          }
+        });
+        if (hasNew) {
+          try {
+            localStorage.setItem(STORAGE_KEY_STUDENTS, JSON.stringify(merged));
+          } catch(e) {}
+        }
+        return merged;
       } catch (e) {
         console.warn("Failed to load students from localStorage:", e);
       }
@@ -1446,12 +1465,30 @@
     function loadPersistedQuestions() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY_QUESTIONS);
+        let current = [];
         if (raw) {
           const parsed = JSON.parse(raw);
           if (Array.isArray(parsed) && parsed.length > 0) {
-            return parsed;
+            current = parsed;
           }
         }
+        // Always ensure all 43 standard DEFAULT_QUESTIONS exist!
+        const existingIds = new Set(current.map(q => q.id));
+        let merged = [...current];
+        let hasNew = false;
+        DEFAULT_QUESTIONS.forEach(dq => {
+          if (!existingIds.has(dq.id)) {
+            merged.push(dq);
+            existingIds.add(dq.id);
+            hasNew = true;
+          }
+        });
+        if (hasNew) {
+          try {
+            localStorage.setItem(STORAGE_KEY_QUESTIONS, JSON.stringify(merged));
+          } catch(e) {}
+        }
+        return merged;
       } catch (e) {
         console.warn("Failed to read questions from localStorage:", e);
       }
@@ -4222,7 +4259,7 @@
                 <span>Total Candidates</span>
                 <i data-lucide="users" class="w-4 h-4 text-brand-600"></i>
               </div>
-              <div class="text-2xl sm:text-3xl font-black text-slate-900">${AppState.students ? AppState.students.length : 142} <span class="text-xs text-slate-400 font-normal">Students</span></div>
+              <div class="text-2xl sm:text-3xl font-black text-slate-900" id="kpiTotalCandidatesCount">${AppState.students ? AppState.students.length : (loadRegisteredStudents().length)} <span class="text-xs text-slate-400 font-normal">Students</span></div>
               <div class="text-[11px] text-emerald-600 font-semibold">6 Official Classes Registered</div>
             </div>
 
@@ -5815,6 +5852,9 @@
       const tbody = document.getElementById("spaStudentTableBody");
       if (!tbody) return;
 
+      const kpiCandidates = document.getElementById("kpiTotalCandidatesCount");
+      if (kpiCandidates) kpiCandidates.innerHTML = `${(AppState.students || loadRegisteredStudents()).length} <span class="text-xs text-slate-400 font-normal">Students</span>`;
+
       const classFilter = document.getElementById("spaStudentClassFilter") ? document.getElementById("spaStudentClassFilter").value : "ALL";
       const searchKeyword = document.getElementById("spaStudentSearch") ? document.getElementById("spaStudentSearch").value.toLowerCase().trim() : "";
 
@@ -6829,22 +6869,44 @@
       // 3. Asynchronously Hydrate from IndexedDB (Guarantees no data loss for Tri Nuryani, S.S)
       if (typeof AlImamStorage !== 'undefined') {
         AlImamStorage.getQuestions().then(dbQs => {
-          if (dbQs && Array.isArray(dbQs) && dbQs.length > 0) {
-            AppState.questions = dbQs;
-            if (AppState.currentPage === "admin") {
-              renderAdminQuestionsTable();
-            } else if (AppState.currentPage === "exam") {
-              renderExamPlayerView(document.getElementById("appRoot"));
+          let qsToUse = Array.isArray(dbQs) && dbQs.length > 0 ? [...dbQs] : [...AppState.questions];
+          const existingIds = new Set(qsToUse.map(q => q.id));
+          let hasNew = false;
+          DEFAULT_QUESTIONS.forEach(dq => {
+            if (!existingIds.has(dq.id)) {
+              qsToUse.push(dq);
+              existingIds.add(dq.id);
+              hasNew = true;
             }
+          });
+          AppState.questions = qsToUse;
+          if (hasNew) {
+            persistQuestions(qsToUse);
+          }
+          if (AppState.currentPage === "admin") {
+            renderAdminQuestionsTable();
+          } else if (AppState.currentPage === "exam") {
+            renderExamPlayerView(document.getElementById("appRoot"));
           }
         });
 
         AlImamStorage.getStudents().then(dbSts => {
-          if (dbSts && Array.isArray(dbSts) && dbSts.length > 0) {
-            AppState.students = dbSts;
-            if (AppState.currentPage === "admin") {
-              renderAdminStudentsTable();
+          let stsToUse = Array.isArray(dbSts) && dbSts.length > 0 ? [...dbSts] : [...AppState.students];
+          const existingUsernames = new Set(stsToUse.map(s => String(s.username).toLowerCase()));
+          let hasNew = false;
+          DEFAULT_STUDENTS.forEach(ds => {
+            if (!existingUsernames.has(String(ds.username).toLowerCase())) {
+              stsToUse.push(ds);
+              existingUsernames.add(String(ds.username).toLowerCase());
+              hasNew = true;
             }
+          });
+          AppState.students = stsToUse;
+          if (hasNew) {
+            persistStudents(stsToUse);
+          }
+          if (AppState.currentPage === "admin") {
+            renderAdminStudentsTable();
           }
         });
       }
