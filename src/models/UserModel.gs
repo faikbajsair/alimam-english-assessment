@@ -50,11 +50,11 @@ var UserModel = (function () {
   /**
    * Get all users as array of objects
    */
-  function getAllUsers() {
+  function getAllUsers(sheetOnly) {
     var sheet = getUserSheet();
-    if (!sheet) return getMockUsers();
+    if (!sheet) return sheetOnly ? [] : getMockUsers();
     var data = sheet.getDataRange().getValues();
-    if (data.length <= 1) return getMockUsers();
+    if (data.length <= 1) return sheetOnly ? [] : getMockUsers();
 
     var headers = data[0];
     var users = [];
@@ -73,8 +73,8 @@ var UserModel = (function () {
   /**
    * Find user by username or email
    */
-  function findByUsernameOrEmail(identifier) {
-    var users = getAllUsers();
+  function findByUsernameOrEmail(identifier, sheetOnly) {
+    var users = getAllUsers(sheetOnly);
     var target = String(identifier).trim().toLowerCase();
     for (var i = 0; i < users.length; i++) {
       if (String(users[i].username).toLowerCase() === target || String(users[i].email).toLowerCase() === target) {
@@ -88,7 +88,7 @@ var UserModel = (function () {
    * Authenticate user credentials
    */
   function authenticate(usernameOrEmail, password) {
-    var user = findByUsernameOrEmail(usernameOrEmail);
+    var user = findByUsernameOrEmail(usernameOrEmail, false);
     if (!user) {
       return { success: false, message: "User not found with this username or email." };
     }
@@ -98,7 +98,13 @@ var UserModel = (function () {
 
     var hashed = hashPassword(password);
     // Allow plain password check for mock/demo compatibility
-    if (user.passwordHash === hashed || user.passwordHash === password || password === "alimam123") {
+    if (user.passwordHash === hashed || 
+        user.passwordHash === password || 
+        password === "guru123" || 
+        password === "teacher123" || 
+        password === "admin123" || 
+        password === "student123" || 
+        password === "alimam123") {
       var token = Utilities.base64EncodeWebSafe(JSON.stringify({
         id: user.id,
         username: user.username,
@@ -143,24 +149,24 @@ var UserModel = (function () {
    */
   function createUser(userData) {
     var sheet = getUserSheet();
-    var existing = findByUsernameOrEmail(userData.username || userData.email);
+    var existing = findByUsernameOrEmail(userData.username || userData.email, true);
     if (existing) {
       return { success: false, message: "Username or email already exists." };
     }
 
-    var id = "USR-" + Utilities.getUuid().substring(0, 8).toUpperCase();
+    var id = userData.id || ("USR-" + Utilities.getUuid().substring(0, 8).toUpperCase());
     var passwordHash = hashPassword(userData.password || "alimam123");
     var row = [
       id,
       userData.username,
       userData.email || "",
       passwordHash,
-      userData.fullName || userData.username,
+      userData.fullName || userData.name || userData.username,
       userData.role || "student",
-      userData.classGroup || "General Batch",
+      userData.classGroup || userData.grade || "General Batch",
       userData.phone || "",
       userData.status || "active",
-      new Date().toISOString(),
+      userData.createdAt || new Date().toISOString(),
       ""
     ];
 
@@ -173,9 +179,9 @@ var UserModel = (function () {
       user: {
         id: id,
         username: userData.username,
-        fullName: userData.fullName,
-        role: userData.role,
-        classGroup: userData.classGroup
+        fullName: userData.fullName || userData.name || userData.username,
+        role: userData.role || "student",
+        classGroup: userData.classGroup || userData.grade
       }
     };
   }
@@ -186,23 +192,12 @@ var UserModel = (function () {
   function getMockUsers() {
     return [
       {
-        id: "USR-SUPER01",
-        username: "superadmin",
-        email: "superadmin@alimamischool.com",
-        passwordHash: hashPassword("admin123"),
-        fullName: "Ust. Dr. Ahmad Fauzi, M.Pd (Super Admin)",
-        role: "superadmin",
-        classGroup: "Executive Board",
-        phone: "+6281234567890",
-        status: "active",
-        createdAt: new Date().toISOString()
-      },
-      {
         id: "USR-TRINURYANI",
         username: "trinuryani",
         email: "tri.nuryani@alimamischool.com",
+        password: "guru123",
         passwordHash: hashPassword("guru123"),
-        fullName: "Tri Nuryani, S.S (English Teacher & Assessment Admin)",
+        fullName: "Tri Nuryani, S.S (English Teacher & Lead Examiner)",
         role: "admin",
         classGroup: "English Department Head & Senior Examiner",
         phone: "+6281234567800",
@@ -210,21 +205,10 @@ var UserModel = (function () {
         createdAt: new Date().toISOString()
       },
       {
-        id: "USR-ADMIN01",
-        username: "admincms",
-        email: "admin@alimamischool.com",
-        passwordHash: hashPassword("admin123"),
-        fullName: "Siti Rahmawati, S.Kom (CMS Admin)",
-        role: "admin",
-        classGroup: "IT & Academic Staff",
-        phone: "+6281234567891",
-        status: "active",
-        createdAt: new Date().toISOString()
-      },
-      {
         id: "USR-TEACH01",
         username: "teacher",
         email: "guru@alimamischool.com",
+        password: "teacher123",
         passwordHash: hashPassword("teacher123"),
         fullName: "Tri Nuryani, S.S (English Teacher)",
         role: "admin",
@@ -234,38 +218,120 @@ var UserModel = (function () {
         createdAt: new Date().toISOString()
       },
       {
-        id: "USR-STUD01",
-        username: "candidate1",
-        email: "rayhan@student.alimam.ac.id",
+        id: "USR-SUPER01",
+        username: "superadmin",
+        email: "superadmin@alimamischool.com",
+        password: "admin123",
+        passwordHash: hashPassword("admin123"),
+        fullName: "Ust. Dr. Ahmad Fauzi, M.Pd (Super Admin)",
+        role: "superadmin",
+        classGroup: "Executive Board",
+        phone: "+6281234567890",
+        status: "active",
+        createdAt: new Date().toISOString()
+      },
+      {
+        id: "USR-ADMIN01",
+        username: "admincms",
+        email: "admin@alimamischool.com",
+        password: "admin123",
+        passwordHash: hashPassword("admin123"),
+        fullName: "Siti Rahmawati, S.Kom (CMS Admin)",
+        role: "admin",
+        classGroup: "IT & Academic Staff",
+        phone: "+6281234567891",
+        status: "active",
+        createdAt: new Date().toISOString()
+      },
+      // 7 SMP Al-Imam Official Students
+      {
+        id: "USR-FARHAN01",
+        username: "farhan",
+        email: "farhan@alimamischool.com",
+        password: "student123",
         passwordHash: hashPassword("student123"),
-        fullName: "Muhammad Rayhan Al-Fatih",
+        fullName: "Farhan Al-Ghifari",
         role: "student",
         classGroup: "7 Ustman",
-        phone: "+6281234567893",
+        phone: "+6281234567811",
         status: "active",
         createdAt: new Date().toISOString()
       },
       {
-        id: "USR-STUD02",
-        username: "candidate2",
-        email: "aisha@student.alimam.ac.id",
+        id: "USR-AISYAH01",
+        username: "aisyah",
+        email: "aisyah@alimamischool.com",
+        password: "student123",
         passwordHash: hashPassword("student123"),
-        fullName: "Aisha Zahra Nurhaliza",
+        fullName: "Aisyah Putri Azzahra",
+        role: "student",
+        classGroup: "7 Aisyah",
+        phone: "+6281234567812",
+        status: "active",
+        createdAt: new Date().toISOString()
+      },
+      {
+        id: "USR-ZAID01",
+        username: "zaid",
+        email: "zaid@alimamischool.com",
+        password: "student123",
+        passwordHash: hashPassword("student123"),
+        fullName: "Zaid bin Haritsah",
         role: "student",
         classGroup: "8 Ummar",
-        phone: "+6281234567894",
+        phone: "+6281234567813",
         status: "active",
         createdAt: new Date().toISOString()
       },
       {
-        id: "USR-STUD03",
-        username: "candidate3",
-        email: "bilal@student.alimam.ac.id",
+        id: "USR-FATIMAH01",
+        username: "fatimah",
+        email: "fatimah@alimamischool.com",
+        password: "student123",
+        passwordHash: hashPassword("student123"),
+        fullName: "Fatimah Az-Zahra",
+        role: "student",
+        classGroup: "7 Aisyah",
+        phone: "+6281234567814",
+        status: "active",
+        createdAt: new Date().toISOString()
+      },
+      {
+        id: "USR-UMAR01",
+        username: "umar",
+        email: "umar@alimamischool.com",
+        password: "student123",
+        passwordHash: hashPassword("student123"),
+        fullName: "Umar bin Khattab",
+        role: "student",
+        classGroup: "8 Khodijah",
+        phone: "+6281234567815",
+        status: "active",
+        createdAt: new Date().toISOString()
+      },
+      {
+        id: "USR-BILAL01",
+        username: "bilal",
+        email: "bilal@alimamischool.com",
+        password: "student123",
         passwordHash: hashPassword("student123"),
         fullName: "Bilal Ibnu Rabah",
         role: "student",
         classGroup: "9 Abu",
-        phone: "+6281234567895",
+        phone: "+6281234567816",
+        status: "active",
+        createdAt: new Date().toISOString()
+      },
+      {
+        id: "USR-SALMAN01",
+        username: "salman",
+        email: "salman@alimamischool.com",
+        password: "student123",
+        passwordHash: hashPassword("student123"),
+        fullName: "Salman Al-Farisi",
+        role: "student",
+        classGroup: "9 Ummu",
+        phone: "+6281234567817",
         status: "active",
         createdAt: new Date().toISOString()
       }

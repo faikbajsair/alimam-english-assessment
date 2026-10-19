@@ -201,36 +201,65 @@ function createJsonResponse(data) {
 }
 
 /**
- * Initial Setup Function: Run this once from GAS Script Editor to initialize sheets & seed data
+ * Full Sync & Setup Function:
+ * Run this function from the GAS Script Editor to guarantee that:
+ * 1. DB_Users is seeded with Tri Nuryani, S.S, admin accounts, and all 7 students.
+ * 2. DB_Questions is seeded with all 43 questions (TOEFL, Grade 7, Grade 8, Grade 9).
+ * 3. DB_Exams is seeded with standard examination packages.
  */
-function initialSetupDatabase() {
+function syncAllMockDataToDatabase() {
   var ss = getDatabaseSpreadsheet();
   if (!ss) {
     console.error("Spreadsheet initialization failed: No active spreadsheet linked.");
-    return;
+    return { success: false, message: "No active spreadsheet linked." };
   }
 
-  // 1. Initialize Users Sheet
-  var userSheet = ss.getSheetByName(CONFIG.SHEETS.USERS);
-  if (!userSheet) {
-    UserModel.getMockUsers().forEach(function (u) {
-      UserModel.createUser(u);
+  // 1. Sync Users into DB_Users
+  var userSheet = UserModel.getUserSheet();
+  if (userSheet) {
+    var existingUsers = UserModel.getAllUsers(true);
+    var existingUsernames = existingUsers.map(function(u) { return String(u.username).toLowerCase(); });
+    var mockUsers = UserModel.getMockUsers();
+    var addedUsers = 0;
+    mockUsers.forEach(function (u) {
+      if (existingUsernames.indexOf(String(u.username).toLowerCase()) === -1) {
+        UserModel.createUser(u);
+        addedUsers++;
+      }
     });
+    console.log("Users synced: " + addedUsers + " new users added to DB_Users.");
   }
 
-  // 2. Initialize Questions Sheet
-  var qSheet = ss.getSheetByName(CONFIG.SHEETS.QUESTIONS);
-  if (!qSheet) {
-    QuestionModel.bulkImportQuestions(QuestionModel.getMockQuestions());
+  // 2. Sync Questions into DB_Questions (All 43 Questions)
+  var qSheet = QuestionModel.getQuestionSheet();
+  if (qSheet) {
+    var existingQs = QuestionModel.getAllQuestions(true);
+    var existingIds = existingQs.map(function(q) { return String(q.id).trim().toUpperCase(); });
+    var existingPrompts = existingQs.map(function(q) { return String(q.prompt).trim().toLowerCase(); });
+    var mockQs = QuestionModel.getMockQuestions();
+    var addedQs = 0;
+    mockQs.forEach(function (q) {
+      var isDuplicate = existingIds.indexOf(String(q.id).trim().toUpperCase()) !== -1 ||
+                        existingPrompts.indexOf(String(q.prompt).trim().toLowerCase()) !== -1;
+      if (!isDuplicate) {
+        QuestionModel.addQuestion(q);
+        addedQs++;
+      }
+    });
+    console.log("Questions synced: " + addedQs + " new questions added to DB_Questions.");
   }
 
-  // 3. Initialize Exams Sheet
+  // 3. Sync Exams into DB_Exams
   var examSheet = ss.getSheetByName(CONFIG.SHEETS.EXAMS);
   if (!examSheet) {
-    var exams = ExaminationModel.getMockExams();
     examSheet = ss.insertSheet(CONFIG.SHEETS.EXAMS);
     var h = ["id", "title", "code", "type", "description", "durationMinutes", "sectionsJson", "totalQuestions", "passScore", "status", "scheduledStart", "scheduledEnd", "weightsJson", "createdAt"];
     examSheet.appendRow(h);
+    examSheet.getRange(1, 1, 1, h.length).setFontWeight("bold").setBackground("#059669").setFontColor("#ffffff");
+    examSheet.setFrozenRows(1);
+  }
+  if (examSheet.getLastRow() <= 1) {
+    var exams = ExaminationModel.getMockExams();
     exams.forEach(function (ex) {
       examSheet.appendRow([
         ex.id, ex.title, ex.code, ex.type, ex.description, ex.durationMinutes,
@@ -240,5 +269,13 @@ function initialSetupDatabase() {
     });
   }
 
-  console.log("Al-Imam Assessment Database Successfully Initialized & Seeded!");
+  console.log("Al-Imam Assessment Database Successfully Initialized & Seeded with All Users and 43 Questions!");
+  return { success: true, message: "Database synced successfully." };
+}
+
+/**
+ * Standard Initial Setup Function (alias to syncAllMockDataToDatabase)
+ */
+function initialSetupDatabase() {
+  return syncAllMockDataToDatabase();
 }

@@ -1392,6 +1392,22 @@
         }
       },
 
+      async fetchQuestionsFromEndpoint() {
+        const url = this.getWebappUrl();
+        if (!url) return null;
+        try {
+          const fetchUrl = url + (url.includes('?') ? '&' : '?') + 'action=getQuestions';
+          const res = await fetch(fetchUrl);
+          const data = await res.json();
+          if (data && data.success && Array.isArray(data.questions)) {
+            return data.questions;
+          }
+        } catch (err) {
+          console.warn("[GoogleSheetsSync] Remote fetch error:", err);
+        }
+        return null;
+      },
+
       syncQuestion(question) {
         return this.postToEndpoint("addQuestion", { question });
       },
@@ -4184,8 +4200,11 @@
                 <a href="https://docs.google.com/spreadsheets/d/151L_zDaJblEZmn-xXMFdlZXZTaH2hg68-oK23Difih0/edit?gid=2073180032#gid=2073180032" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition-all shadow-md">
                   <i data-lucide="external-link" class="w-3.5 h-3.5"></i> Open Google Spreadsheet ↗
                 </a>
-                <button onclick="triggerSyncAllDataToSheets()" class="px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs border border-white/20 flex items-center gap-1.5 transition-all cursor-pointer">
+                <button onclick="triggerSyncAllDataToSheets()" class="px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs border border-white/20 flex items-center gap-1.5 transition-all cursor-pointer" title="Push all data to Google Sheets">
                   <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Sync Now ⚡
+                </button>
+                <button onclick="triggerPullQuestionsFromSheets()" class="px-3.5 py-2.5 rounded-xl bg-emerald-700/80 hover:bg-emerald-600 text-white font-bold text-xs border border-emerald-500/50 flex items-center gap-1.5 transition-all cursor-pointer" title="Pull latest questions from Google Sheets">
+                  <i data-lucide="download-cloud" class="w-3.5 h-3.5"></i> Pull from Sheets 📥
                 </button>
               </div>
             </div>
@@ -5953,6 +5972,33 @@
         showToast("✓ Synchronization to Google Spreadsheet completed!");
       } else {
         showToast("✓ Data securely saved in IndexedDB! Click 'Open Google Spreadsheet' to view sheet.");
+      }
+    }
+
+    async function triggerPullQuestionsFromSheets() {
+      const url = GoogleSheetsSync.getWebappUrl();
+      if (!url) {
+        showToast("⚠️ Configure Google Apps Script Web App URL first in 'Spreadsheet Live Database' tab.");
+        const tabBtn = document.querySelector('[data-tab="sheets"]');
+        if (tabBtn) tabBtn.click();
+        return;
+      }
+      showToast("Fetching latest questions from Google Spreadsheet...");
+      const remoteQs = await GoogleSheetsSync.fetchQuestionsFromEndpoint();
+      if (remoteQs && Array.isArray(remoteQs) && remoteQs.length > 0) {
+        const existingIds = new Set(AppState.questions.map(q => q.id));
+        let addedCount = 0;
+        remoteQs.forEach(rq => {
+          if (!existingIds.has(rq.id)) {
+            AppState.questions.push(rq);
+            addedCount++;
+          }
+        });
+        persistQuestions(AppState.questions);
+        renderAdminQuestionsTable();
+        showToast(`✓ Pulled ${remoteQs.length} questions from Google Sheets (${addedCount} new questions added)!`);
+      } else {
+        showToast("⚠️ Could not fetch questions from Google Spreadsheet. Verify deployment URL and access permission.");
       }
     }
 
