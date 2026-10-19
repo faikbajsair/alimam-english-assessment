@@ -36,16 +36,28 @@ function doGet(e) {
   var page = (e && e.parameter && e.parameter.page) || "index";
   var template;
 
+  function loadTemplateFile(name) {
+    try {
+      return HtmlService.createTemplateFromFile(name);
+    } catch (err1) {
+      try {
+        return HtmlService.createTemplateFromFile("views/" + name);
+      } catch (err2) {
+        return HtmlService.createTemplateFromFile("index");
+      }
+    }
+  }
+
   if (page === "exam" || page === "student-exam") {
-    template = HtmlService.createTemplateFromFile("views/student-exam");
+    template = loadTemplateFile("student-exam");
   } else if (page === "admin" || page === "admin-dashboard") {
-    template = HtmlService.createTemplateFromFile("views/admin-dashboard");
+    template = loadTemplateFile("admin-dashboard");
   } else if (page === "cms" || page === "cms-appearance") {
-    template = HtmlService.createTemplateFromFile("views/cms-appearance");
+    template = loadTemplateFile("cms-appearance");
   } else if (page === "guide" || page === "onboarding-guide") {
-    template = HtmlService.createTemplateFromFile("views/onboarding-guide");
+    template = loadTemplateFile("onboarding-guide");
   } else {
-    template = HtmlService.createTemplateFromFile("views/index");
+    template = loadTemplateFile("index");
   }
 
   template.config = CONFIG;
@@ -189,7 +201,16 @@ function doPost(e) {
  * Helper to include partial HTML files in GAS templates
  */
 function include(filename) {
-  return HtmlService.createHtmlOutputFromFile(filename).getContent();
+  var clean = filename.replace(/^views\//, "").replace(/\.html$/, "");
+  try {
+    return HtmlService.createHtmlOutputFromFile(clean).getContent();
+  } catch (e1) {
+    try {
+      return HtmlService.createHtmlOutputFromFile(filename).getContent();
+    } catch (e2) {
+      return "";
+    }
+  }
 }
 
 /**
