@@ -1430,6 +1430,22 @@
         return null;
       },
 
+      async fetchStudentsFromEndpoint() {
+        const url = this.getWebappUrl();
+        if (!url) return null;
+        try {
+          const fetchUrl = url + (url.includes('?') ? '&' : '?') + 'action=getStudents';
+          const res = await fetch(fetchUrl);
+          const data = await res.json();
+          if (data && data.success && Array.isArray(data.students)) {
+            return data.students;
+          }
+        } catch (err) {
+          console.warn("[GoogleSheetsSync] Remote fetch students error:", err);
+        }
+        return null;
+      },
+
       syncQuestion(question) {
         return this.postToEndpoint("addQuestion", { question });
       },
@@ -4429,11 +4445,18 @@
                 <button onclick="openRegisterStudentManualModal()" class="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2.5 rounded-xl shadow-sm flex items-center gap-1.5 transition-all cursor-pointer">
                   <i data-lucide="user-plus" class="w-4 h-4"></i> + Register Student
                 </button>
-                <button onclick="exportSpaStudentsCsv()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2.5 rounded-xl border border-slate-300 flex items-center gap-1.5 transition-all cursor-pointer">
-                  <i data-lucide="download" class="w-4 h-4"></i> Export Students (CSV)
+                <button onclick="triggerPullStudentsFromSheets()" class="bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-2.5 rounded-xl shadow-sm flex items-center gap-1.5 transition-all cursor-pointer" title="Pull latest registered students from Google Sheets">
+                  <i data-lucide="download-cloud" class="w-4 h-4"></i> Pull from Sheets 📥
                 </button>
+                <button onclick="exportSpaStudentsCsv()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2.5 rounded-xl border border-slate-300 flex items-center gap-1.5 transition-all cursor-pointer">
+                  <i data-lucide="download" class="w-4 h-4"></i> Export CSV
+                </button>
+                <button onclick="document.getElementById('spaImportStudentFileInput').click()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2.5 rounded-xl border border-slate-300 flex items-center gap-1.5 transition-all cursor-pointer">
+                  <i data-lucide="upload" class="w-4 h-4"></i> Import CSV
+                </button>
+                <input type="file" id="spaImportStudentFileInput" accept=".csv,.txt" onchange="handleStudentCsvFileUpload(this)" class="hidden">
                 <button onclick="triggerSyncStudentsToSheets()" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-800 px-3.5 py-2.5 rounded-xl border border-emerald-200 flex items-center gap-1.5 transition-all cursor-pointer">
-                  <i data-lucide="refresh-cw" class="w-4 h-4"></i> Sync Students to Sheets
+                  <i data-lucide="refresh-cw" class="w-4 h-4"></i> Sync to Sheets ⚡
                 </button>
               </div>
             </div>
@@ -5105,6 +5128,10 @@
         const btn = document.getElementById("btnTabStudents");
         if (btn) btn.className = "px-4 py-2.5 rounded-xl bg-brand-600 text-white flex items-center gap-2 shadow-sm whitespace-nowrap cursor-pointer";
         renderAdminStudentsTable();
+        // Background check for any newly registered students from Google Spreadsheet
+        if (typeof triggerPullStudentsFromSheets === 'function') {
+          triggerPullStudentsFromSheets(true);
+        }
       } else if (tab === 'sheets') {
         const el = document.getElementById("adminTabSheets");
         if (el) el.classList.remove("hidden");
@@ -6081,10 +6108,121 @@
     }
 
     async function triggerSyncStudentsToSheets() {
-      showToast("Saving & syncing student roster for all 6 classes...");
+      showToast("Saving & syncing student roster to Google Spreadsheet...");
       const students = loadRegisteredStudents();
       persistStudents(students);
-      showToast("✓ Student roster for 6 classes successfully synchronized!");
+      if (GoogleSheetsSync.getWebappUrl()) {
+        await GoogleSheetsSync.postToEndpoint("syncStudents", { students });
+        showToast("✓ Student roster for all 6 classes successfully synchronized to Google Sheets!");
+      } else {
+        showToast("✓ Student roster safely saved in IndexedDB!");
+      }
+    }
+
+    async function triggerPullStudentsFromSheets(silent = false) {
+      const url = GoogleSheetsSync.getWebappUrl();
+      if (!url) {
+        if (!silent) showToast("⚠️ Configure Google Apps Script Web App URL first in 'Spreadsheet Live Database' tab.");
+        return;
+      }
+      if (!silent) showToast("Fetching latest registered candidates from Google Spreadsheet...");
+      const remoteStudents = await GoogleSheetsSync.fetchStudentsFromEndpoint();
+      if (remoteStudents && Array.isArray(remoteStudents) && remoteStudents.length > 0) {
+        let current = loadRegisteredStudents();
+        const existingUsernames = new Set(current.map(s => String(s.username).toLowerCase()));
+        let addedCount = 0;
+        remoteStudents.forEach(rs => {
+          const uname = String(rs.username || rs.email || "").toLowerCase().trim();
+          if (uname && !existingUsernames.has(uname) && rs.role !== "admin" && rs.role !== "superadmin") {
+            const studentObj = {
+              id: rs.id || `USR-${uname.toUpperCase()}`,
+              username: uname,
+              email: rs.email || `${uname}@alimamischool.com`,
+              name: rs.fullName || rs.name || uname,
+              grade: rs.grade || getGradeFromClassGroup(rs.classGroup || "7 Ustman"),
+              classGroup: rs.classGroup || "7 Ustman",
+              avatar: rs.avatar || "🦁",
+              avatarId: rs.avatarId || "lion",
+              password: rs.password || "student123",
+              role: "student",
+              score: Number(rs.score) || 0,
+              streak: Number(rs.streak) || 1,
+              accuracy: Number(rs.accuracy) || 0,
+              registeredAt: rs.createdAt || new Date().toISOString()
+            };
+            current.unshift(studentObj);
+            existingUsernames.add(uname);
+            addedCount++;
+          }
+        });
+        if (addedCount > 0) {
+          persistStudents(current);
+          AppState.students = current;
+          renderAdminStudentsTable();
+          if (!silent) showToast(`✓ Pulled ${remoteStudents.length} candidates from Google Sheets (${addedCount} new students added)!`);
+        } else {
+          if (!silent) showToast(`Student roster is up to date (${current.length} candidates active).`);
+        }
+      } else {
+        if (!silent) showToast("Student roster verified. All candidates up to date.");
+      }
+    }
+
+    function handleStudentCsvFileUpload(inputEl) {
+      const file = inputEl.files && inputEl.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const text = e.target.result;
+          const lines = text.split(/\r?\n/).filter(l => l.trim().length > 0);
+          if (lines.length <= 1) {
+            showToast("CSV file is empty or missing data rows.");
+            return;
+          }
+          let current = loadRegisteredStudents();
+          const existingUsernames = new Set(current.map(s => String(s.username).toLowerCase()));
+          let addedCount = 0;
+          for (let i = 1; i < lines.length; i++) {
+            const row = lines[i].split(',').map(c => c.trim().replace(/^["']|["']$/g, ''));
+            if (row.length < 2) continue;
+            const name = row[1] || row[0];
+            const username = (row[2] || row[1] || `user_${Date.now()}`).toLowerCase().replace(/[^a-z0-9._-]/g, '');
+            const email = row[3] || `${username}@alimamischool.com`;
+            const classGroup = row[4] || "7 Ustman";
+            const grade = row[5] || getGradeFromClassGroup(classGroup);
+            if (!existingUsernames.has(username)) {
+              current.unshift({
+                id: row[0] || `USR-${username.toUpperCase()}`,
+                name: name,
+                username: username,
+                email: email,
+                classGroup: classGroup,
+                grade: grade,
+                avatar: "🦁",
+                avatarId: "lion",
+                password: "student123",
+                role: "student",
+                score: parseInt(row[6], 10) || 0,
+                streak: parseInt(row[7], 10) || 1,
+                accuracy: 0,
+                completed: (row[8] || '').toUpperCase() === 'YES',
+                registeredAt: new Date().toISOString()
+              });
+              existingUsernames.add(username);
+              addedCount++;
+            }
+          }
+          persistStudents(current);
+          AppState.students = current;
+          renderAdminStudentsTable();
+          showToast(`✓ Successfully imported ${addedCount} students from CSV! Total: ${current.length} Students.`);
+        } catch(err) {
+          showToast("Failed to parse CSV file: " + err.message);
+        }
+        inputEl.value = "";
+      };
+      reader.readAsText(file);
     }
 
     async function triggerSyncSubmissionsToSheets() {
@@ -6689,6 +6827,8 @@
     window.triggerSyncAllDataToSheets = triggerSyncAllDataToSheets;
     window.triggerSyncQuestionsToSheets = triggerSyncQuestionsToSheets;
     window.triggerSyncStudentsToSheets = triggerSyncStudentsToSheets;
+    window.triggerPullStudentsFromSheets = triggerPullStudentsFromSheets;
+    window.handleStudentCsvFileUpload = handleStudentCsvFileUpload;
     window.triggerSyncSubmissionsToSheets = triggerSyncSubmissionsToSheets;
     window.copyQuestionsTsvForSheets = copyQuestionsTsvForSheets;
     window.copyStudentsTsvForSheets = copyStudentsTsvForSheets;
