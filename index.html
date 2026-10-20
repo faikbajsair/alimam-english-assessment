@@ -999,7 +999,7 @@
 
     // Persistence Helpers for Questions Storage (v3 ensures latest questions including teacher's Q-LIST-671)
     const STORAGE_KEY_QUESTIONS = "alimam_assessment_questions_v3";
-    const STORAGE_KEY_STUDENTS = "alimam_registered_students_v3";
+    const STORAGE_KEY_STUDENTS = "alimam_registered_students_v4";
 
     // 16 Fun Animated Avatars for Students
     const AVATAR_LIST = [
@@ -1023,6 +1023,20 @@
 
     // Default Pre-Configured Student Database for SMP Al-Imam (Classes: 7 Ustman, 7 Aisyah, 8 Ummar, 8 Khodijah, 9 Abu, 9 Ummu)
     const DEFAULT_STUDENTS = [
+      {
+        username: "alishamalaikaarifianto",
+        email: "alishamalaikaarifianto@alimamischool.com",
+        name: "Alisha Malaika Arifianto",
+        grade: "Grade 7",
+        classGroup: "7 Aisyah",
+        avatar: "🌟",
+        avatarId: "star",
+        password: "student123",
+        role: "student",
+        score: 0,
+        streak: 1,
+        accuracy: 0
+      },
       {
         username: "rayhan",
         email: "rayhan@alimamischool.com",
@@ -1106,26 +1120,12 @@
         score: 8850,
         streak: 5,
         accuracy: 92
-      },
-      {
-        username: "alishamalaikaarifianto",
-        email: "alishamalaikaarifianto@alimamischool.com",
-        name: "Alisha Malaika Arifianto",
-        grade: "Grade 7",
-        classGroup: "7 Aisyah",
-        avatar: "🌟",
-        avatarId: "star",
-        password: "student123",
-        role: "student",
-        score: 0,
-        streak: 1,
-        accuracy: 0
       }
     ];
 
     function loadRegisteredStudents() {
       try {
-        const raw = localStorage.getItem(STORAGE_KEY_STUDENTS);
+        const raw = localStorage.getItem(STORAGE_KEY_STUDENTS) || localStorage.getItem("alimam_registered_students_v3");
         let current = [];
         if (raw) {
           const parsed = JSON.parse(raw);
@@ -1655,6 +1655,9 @@
 
     function getExamFilteredQuestions(examCode) {
       const code = (examCode || AppState.activeExamCode || "GRADE7").toUpperCase();
+      if (code === "ALL_SMP" || code === "ALL") {
+        return AppState.questions.filter(q => q.examType === "Grade 7" || q.examType === "Grade 8" || q.examType === "Grade 9");
+      }
       let targetType = "Grade 7";
       if (code === "GRADE8" || code.includes("8")) targetType = "Grade 8";
       else if (code === "GRADE9" || code.includes("9")) targetType = "Grade 9";
@@ -1880,6 +1883,47 @@
                   <button type="submit" id="btnLoginAction" class="w-full bg-gradient-to-r from-brand-600 to-teal-600 hover:from-brand-500 hover:to-teal-500 text-white font-bold py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 text-xs sm:text-sm cursor-pointer active:scale-98">
                     <span>Sign In & Enter Portal</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>
                   </button>
+
+                  <!-- 1-CLICK INSTANT LOGIN (SANGAT MUDAH & CEPAT) -->
+                  <div class="pt-3 border-t border-slate-200 space-y-2">
+                    <div class="flex items-center justify-between text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                      <span>⚡ Masuk Cepat 1-Klik (Tanpa Password):</span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                      <button type="button" onclick="quickLoginRole('teacher')" class="p-2.5 rounded-xl bg-purple-50 hover:bg-purple-100 border border-purple-200 text-left transition-all cursor-pointer flex items-center gap-2">
+                        <span class="text-xl">👩‍🏫</span>
+                        <div class="truncate">
+                          <div class="font-bold text-purple-950 text-xs truncate">Bu Tri Nuryani, S.S</div>
+                          <div class="text-[10px] text-purple-700 font-semibold">Guru & Pembuat Soal</div>
+                        </div>
+                      </button>
+
+                      <button type="button" onclick="quickLoginRole('admin')" class="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-300 text-left transition-all cursor-pointer flex items-center gap-2">
+                        <span class="text-xl">🛡️</span>
+                        <div class="truncate">
+                          <div class="font-bold text-slate-950 text-xs truncate">Pak Faik / Admin</div>
+                          <div class="text-[10px] text-slate-600 font-semibold">Administrator Utama</div>
+                        </div>
+                      </button>
+
+                      <button type="button" onclick="quickLoginRole('alisha')" class="p-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-left transition-all cursor-pointer flex items-center gap-2 col-span-2">
+                        <span class="text-xl">👧</span>
+                        <div class="truncate flex-grow">
+                          <div class="font-bold text-emerald-950 text-xs truncate">Alisha Malaika Arifianto (7 Aisyah)</div>
+                          <div class="text-[10px] text-emerald-700 font-semibold">Siswa Baru Terdaftar • Klik untuk Langsung Masuk Ruang Ujian 🚀</div>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-4 h-4 text-emerald-600 flex-shrink-0"></i>
+                      </button>
+                    </div>
+
+                    <div class="flex items-center justify-center gap-1.5 pt-1 text-[11px] text-slate-500">
+                      <span>Siswa lain:</span>
+                      <button type="button" onclick="quickLoginRole('farhan')" class="text-brand-600 hover:underline font-bold cursor-pointer">Farhan (7 Ustman)</button>
+                      <span>•</span>
+                      <button type="button" onclick="quickLoginRole('bilal')" class="text-brand-600 hover:underline font-bold cursor-pointer">Bilal (9 Abu)</button>
+                    </div>
+                  </div>
                 </form>
               </div>
 
@@ -2110,7 +2154,84 @@
       }, 600);
     }
 
-    // Quick Login Helper (disabled for security)
+    // Quick Login Helper for 1-Click Access
+    function quickLoginRole(role) {
+      if (role === "teacher") {
+        AppState.currentUser = { 
+          username: "trinuryani", 
+          role: "admin", 
+          name: "Tri Nuryani, S.S", 
+          title: "SMP English Teacher & Exam Administrator",
+          avatar: "👩‍🏫" 
+        };
+        sessionStorage.setItem("alimam_user", JSON.stringify(AppState.currentUser));
+        localStorage.setItem("alimam_user", JSON.stringify(AppState.currentUser));
+        SoundFX.playCorrect();
+        showToast("Selamat datang Bu Tri Nuryani, S.S! Masuk ke Dashboard Guru.");
+        navigateTo("admin");
+      } else if (role === "admin") {
+        AppState.currentUser = { 
+          username: "superadmin", 
+          role: "admin", 
+          name: "Pak Faik (Administrator Al-Imam)", 
+          title: "Administrator Utama",
+          avatar: "🛡️" 
+        };
+        sessionStorage.setItem("alimam_user", JSON.stringify(AppState.currentUser));
+        localStorage.setItem("alimam_user", JSON.stringify(AppState.currentUser));
+        SoundFX.playCorrect();
+        showToast("Selamat datang Administrator Utama!");
+        navigateTo("admin");
+      } else if (role === "alisha") {
+        const students = loadRegisteredStudents();
+        let alisha = students.find(s => s.username === "alishamalaikaarifianto" || (s.email && s.email.includes("alishamalaikaarifianto")));
+        if (!alisha) {
+          alisha = {
+            id: "USR-ALISHA01",
+            username: "alishamalaikaarifianto",
+            name: "Alisha Malaika Arifianto",
+            email: "alishamalaikaarifianto@alimamischool.com",
+            classGroup: "7 Aisyah",
+            grade: "Grade 7",
+            avatar: "🌟",
+            score: 0,
+            streak: 1,
+            completed: false
+          };
+          students.unshift(alisha);
+          persistStudents(students);
+        }
+        AppState.currentUser = alisha;
+        sessionStorage.setItem("alimam_user", JSON.stringify(alisha));
+        localStorage.setItem("alimam_user", JSON.stringify(alisha));
+        SoundFX.playCorrect();
+        showToast("Selamat datang Alisha Malaika Arifianto (7 Aisyah)! Membuka ruang ujian...");
+        navigateTo("exam", { code: "GRADE7" });
+      } else if (role === "farhan") {
+        loginAsStudentDemo("farhan");
+      } else if (role === "bilal") {
+        loginAsStudentDemo("bilal");
+      }
+    }
+
+    function switchExamPackage(code) {
+      AppState.activeExamCode = code || "GRADE7";
+      AppState.examSession.currentIndex = 0;
+      AppState.examSession.currentSection = "listening";
+      const activeQs = getExamFilteredQuestions(AppState.activeExamCode);
+      if (activeQs.length > 0 && activeQs[0].section) {
+        AppState.examSession.currentSection = activeQs[0].section;
+      }
+      renderExamPlayerView(document.getElementById("appRoot"));
+      let label = "Kelas 7";
+      if (code === "GRADE8") label = "Kelas 8";
+      else if (code === "GRADE9") label = "Kelas 9 (Termasuk Soal Bu Tri: Q-LIST-671)";
+      else if (code === "ALL_SMP") label = "Semua Soal SMP (34 Soal Lengkap)";
+      else if (code.includes("TOEFL")) label = "TOEFL ITP";
+      else if (code.includes("IELTS")) label = "IELTS Academic";
+      showToast(`Beralih ke Paket Ujian: ${label}`);
+    }
+
     function setCredentials(u, p) {
       showToast("Auto-fill is disabled to maintain account confidentiality.");
     }
@@ -2247,7 +2368,18 @@
                   <h1 class="text-xs sm:text-sm font-bold text-white leading-tight flex items-center gap-1.5">
                     <span class="truncate max-w-[140px] sm:max-w-none">${candidateName}</span>
                   </h1>
-                  <div class="text-[10px] text-emerald-400 font-semibold truncate">${candidateClass}</div>
+                  <div class="flex items-center gap-1.5 pt-0.5">
+                    <span class="text-[10px] text-emerald-400 font-semibold truncate">${candidateClass}</span>
+                    <span class="text-slate-600 text-[10px] hidden sm:inline">•</span>
+                    <select onchange="switchExamPackage(this.value)" title="Pilih Paket Ujian" class="bg-slate-800 text-amber-300 font-bold text-[10px] border border-slate-700 rounded-lg px-2 py-0.5 outline-none cursor-pointer">
+                      <option value="GRADE7" ${(examCode === 'GRADE7' || examCode.includes('7')) ? 'selected' : ''}>Paket Kelas 7 (11 Soal)</option>
+                      <option value="GRADE8" ${(examCode === 'GRADE8' || examCode.includes('8')) ? 'selected' : ''}>Paket Kelas 8 (11 Soal)</option>
+                      <option value="GRADE9" ${(examCode === 'GRADE9' || examCode.includes('9')) ? 'selected' : ''}>Paket Kelas 9 (12 Soal - Soal Bu Tri: Q-LIST-671)</option>
+                      <option value="ALL_SMP" ${examCode === 'ALL_SMP' ? 'selected' : ''}>Semua Soal SMP (34 Soal Lengkap)</option>
+                      <option value="TOEFL" ${examCode.includes('TOEFL') ? 'selected' : ''}>TOEFL ITP Diagnostic (10 Soal)</option>
+                      <option value="IELTS" ${examCode.includes('IELTS') ? 'selected' : ''}>IELTS Academic Simulation</option>
+                    </select>
+                  </div>
                 </div>
               </div>
             </div>
@@ -6063,7 +6195,9 @@
               ${(s.score || 0).toLocaleString()} <span class="text-[10px] text-slate-400 font-normal">PTS</span>
             </td>
             <td class="p-3.5 text-right whitespace-nowrap">
-              <button onclick="loginAsStudentDemo('${s.username}')" class="text-brand-600 hover:underline font-bold text-xs cursor-pointer">Student Login</button>
+              <button onclick="loginAsStudentDemo('${s.username}')" class="px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold text-xs cursor-pointer inline-flex items-center gap-1 shadow-xs transition-all" title="Uji coba masuk sebagai siswa ini">
+                <i data-lucide="play" class="w-3 h-3 text-emerald-600"></i> Uji Coba Ujian
+              </button>
             </td>
           </tr>
         `;
@@ -6989,6 +7123,8 @@
     window.navigateTo = navigateTo;
     window.scrollToPortal = scrollToPortal;
     window.setCredentials = setCredentials;
+    window.quickLoginRole = quickLoginRole;
+    window.switchExamPackage = switchExamPackage;
     window.handleLoginSubmit = handleLoginSubmit;
     window.handleLogin = handleLoginSubmit;
     window.quickFillLogin = setCredentials;
