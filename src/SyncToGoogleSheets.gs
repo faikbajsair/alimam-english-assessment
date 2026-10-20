@@ -1327,6 +1327,25 @@ function isiSemuaDataKeSpreadsheetSekarang() {
     "options": [],
     "correct": "Examiner Speaking Rubric",
     "points": 100
+  },
+  {
+    "id": "Q-LIST-671",
+    "examType": "Grade 9",
+    "section": "listening",
+    "type": "multiple_choice",
+    "passage": "Listening Comprehension: School Radio Interview with Dan",
+    "prompt": "Why does the interviewer speak to Dan?",
+    "audioUrl": "https://actions.google.com/sounds/v1/speech/announcement_chime.ogg",
+    "imageUrl": "",
+    "videoUrl": "",
+    "options": [
+      { "key": "A", "text": "To ask about his achievements and experience in the school project" },
+      { "key": "B", "text": "To invite him to join the student council committee" },
+      { "key": "C", "text": "To offer him an immediate part-time tutoring position" },
+      { "key": "D", "text": "To give a formal warning about his attendance record" }
+    ],
+    "correct": "A",
+    "points": 1
   }
 ];
 

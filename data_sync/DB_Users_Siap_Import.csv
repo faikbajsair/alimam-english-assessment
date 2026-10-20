@@ -1,0 +1,11 @@
+id,username,email,passwordHash,fullName,role,classGroup,phone,status,createdAt,lastLogin
+"USR-SUPERADMIN","superadmin","admin@alimamischool.com","admin123","Administrator Al-Imam","superadmin","Central Administration","+6281234567801","active","2026-10-19T08:38:22.561Z",""
+"USR-TRINURYANI","trinuryani","tri.nuryani@alimamischool.com","guru123","Tri Nuryani, S.S (English Teacher & Lead Examiner)","admin","English Department Head","+6281234567800","active","2026-10-19T08:38:22.566Z",""
+"USR-TEACH01","teacher","guru@alimamischool.com","teacher123","Tri Nuryani, S.S (English Teacher)","admin","Examiner Team","+6281234567802","active","2026-10-19T08:38:22.566Z",""
+"USR-RAYHAN01","rayhan","rayhan@alimamischool.com","student123","Muhammad Rayhan Al-Fatih","student","7 Ustman","+6281234567810","active","2026-10-19T08:38:22.566Z",""
+"USR-FATIMAH01","fatimah","fatimah@alimamischool.com","student123","Fatimah Az-Zahra","student","7 Aisyah","+6281234567814","active","2026-10-19T08:38:22.566Z",""
+"USR-ALISHA01","alishamalaikaarifianto","alishamalaikaarifianto@alimamischool.com","student123","Alisha Malaika Arifianto","student","7 Aisyah","+6281234567818","active","2026-10-19T08:38:22.566Z",""
+"USR-AISYAHP01","aisha","aisha@alimamischool.com","student123","Aisha Zahra Nurhaliza","student","8 Ummar","+6281234567812","active","2026-10-19T08:38:22.566Z",""
+"USR-UMAR01","umar","umar@alimamischool.com","student123","Umar bin Khattab","student","8 Khodijah","+6281234567815","active","2026-10-19T08:38:22.566Z",""
+"USR-BILAL01","bilal","bilal@alimamischool.com","student123","Bilal Ibnu Rabah","student","9 Abu","+6281234567816","active","2026-10-19T08:38:22.566Z",""
+"USR-SALMAN01","salman","salman@alimamischool.com","student123","Salman Al-Farisi","student","9 Ummu","+6281234567817","active","2026-10-19T08:38:22.566Z",""
