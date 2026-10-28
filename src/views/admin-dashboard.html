@@ -1549,6 +1549,8 @@
     }
 
     function openQuestionPreviewModal(q) {
+      stopPreviewMedia();
+      window.__activePreviewQuestion = q;
       var modal = document.getElementById("questionPreviewModal");
       var arena = document.getElementById("previewSimulationArena");
       var badge = document.getElementById("previewModalBadge");
@@ -1574,7 +1576,6 @@
           </div>
         `;
       } else if (q.audioUrl || q.section === 'listening') {
-        var pText = (q.prompt || 'Listening test audio').replace(/[`\\"]/g, ' ');
         var isAttached = !!(q.audioUrl && q.audioUrl.trim().length > 5);
         audioHtml = `
           <div class="p-4 bg-gradient-to-br from-emerald-950 via-slate-950 to-emerald-950 text-white rounded-2xl shadow-inner space-y-3 border border-emerald-800/80">
@@ -1585,7 +1586,7 @@
               <span class="px-2 py-0.5 rounded bg-emerald-900/90 text-emerald-300 text-[10px] font-mono font-bold">${isAttached ? 'Track Attached (MP3/WAV/OGG/M4A)' : 'AI Speech Synthesis'}</span>
             </div>
             <div class="flex items-center gap-3">
-              <button type="button" id="btnPreviewAudioPlay" onclick="testPreviewAudio('${q.audioUrl || ''}', '${pText}')" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow cursor-pointer">
+              <button type="button" id="btnPreviewAudioPlay" onclick="testPreviewAudio()" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow cursor-pointer">
                 <i id="btnPreviewAudioIcon" data-lucide="play" class="w-3.5 h-3.5"></i> <span id="btnPreviewAudioLabel">Play Audio Track</span>
               </button>
               <div class="flex-grow bg-emerald-900/40 rounded-full h-2 overflow-hidden border border-emerald-800">
@@ -1695,14 +1696,28 @@
         ${optionsHtml}
       `;
 
+      // Explicitly attach audio click handler to ensure 100% reliable execution without inline attribute escaping
+      var btnPreviewAudio = document.getElementById("btnPreviewAudioPlay");
+      if (btnPreviewAudio) {
+        btnPreviewAudio.onclick = function(e) {
+          if (e) e.preventDefault();
+          testPreviewAudio();
+        };
+      }
+
       modal.style.display = "flex";
       modal.classList.remove("hidden");
       lucide.createIcons();
     }
 
     var activePreviewAudio = null;
+    var previewTtsTimer = null;
 
     function stopPreviewMedia() {
+      if (previewTtsTimer) {
+        clearInterval(previewTtsTimer);
+        previewTtsTimer = null;
+      }
       if (activePreviewAudio) {
         try {
           activePreviewAudio.pause();
@@ -1716,9 +1731,11 @@
       var icon = document.getElementById("btnPreviewAudioIcon");
       var label = document.getElementById("btnPreviewAudioLabel");
       var bar = document.getElementById("previewAudioProgressBar");
+      var timeLabel = document.getElementById("previewAudioTime");
       if (icon) icon.setAttribute("data-lucide", "play");
       if (label) label.innerText = "Play Audio Track";
       if (bar) bar.style.width = "0%";
+      if (timeLabel) timeLabel.innerText = "00:00 / 00:20";
       lucide.createIcons();
     }
 
@@ -1761,13 +1778,22 @@
       }
     }
 
-    function testPreviewAudio(url, promptText) {
+    function testPreviewAudio(optUrl, optPrompt) {
       if (activePreviewAudio || (('speechSynthesis' in window) && window.speechSynthesis.speaking)) {
         stopPreviewMedia();
         return;
       }
 
-      var normUrl = normalizeAudioUrl(url);
+      var q = window.__activePreviewQuestion || {};
+      var targetUrl = (typeof optUrl === 'string' && optUrl.trim().length > 0) ? optUrl : (q.audioUrl || '');
+      var passageText = q.passage ? String(q.passage).trim() : '';
+      var promptText = (typeof optPrompt === 'string' && optPrompt.trim().length > 0)
+        ? optPrompt
+        : (q.prompt ? String(q.prompt).trim() : 'Listening audio assessment preview');
+
+      var fullSpeechText = passageText ? `${passageText}. \n\n ${promptText}` : promptText;
+
+      var normUrl = normalizeAudioUrl(targetUrl);
       var icon = document.getElementById("btnPreviewAudioIcon");
       var label = document.getElementById("btnPreviewAudioLabel");
       var bar = document.getElementById("previewAudioProgressBar");
@@ -1775,9 +1801,16 @@
 
       if (normUrl && normUrl.trim().length > 5 && !isSoundCloudUrl(normUrl)) {
         var audio = new Audio();
-        audio.crossOrigin = "anonymous";
+        // Remove crossOrigin restriction so cross-origin audio hosts without CORS headers can play
         activePreviewAudio = audio;
-        audio.src = normUrl;
+
+        audio.addEventListener('loadedmetadata', function() {
+          if (audio.duration && !isNaN(audio.duration) && isFinite(audio.duration)) {
+            var dur = Math.floor(audio.duration);
+            var durM = Math.floor(dur / 60).toString().padStart(2, '0') + ':' + (dur % 60).toString().padStart(2, '0');
+            if (timeLabel) timeLabel.innerText = `00:00 / ${durM}`;
+          }
+        });
 
         audio.addEventListener('timeupdate', function() {
           if (audio.duration && !isNaN(audio.duration) && isFinite(audio.duration)) {
@@ -1800,45 +1833,95 @@
         audio.addEventListener('error', function(err) {
           console.warn("Direct preview audio failed, falling back to TTS:", err);
           activePreviewAudio = null;
-          playPreviewTts(promptText);
+          playPreviewTts(fullSpeechText);
         });
 
-        audio.play().then(function() {
-          if (icon) icon.setAttribute("data-lucide", "square");
-          if (label) label.innerText = "Stop Audio";
-          lucide.createIcons();
-        }).catch(function(err) {
-          console.warn("Audio play catch fallback to TTS:", err);
-          activePreviewAudio = null;
-          playPreviewTts(promptText);
-        });
+        audio.src = normUrl;
+        var playPromise = audio.play();
+        if (playPromise !== undefined) {
+          playPromise.then(function() {
+            if (icon) icon.setAttribute("data-lucide", "square");
+            if (label) label.innerText = "Stop Audio";
+            lucide.createIcons();
+          }).catch(function(err) {
+            console.warn("Audio play catch fallback to TTS:", err);
+            activePreviewAudio = null;
+            playPreviewTts(fullSpeechText);
+          });
+        }
       } else {
-        playPreviewTts(promptText);
+        playPreviewTts(fullSpeechText);
       }
     }
 
     function playPreviewTts(promptText) {
-      if (!('speechSynthesis' in window)) return;
+      if (!('speechSynthesis' in window)) {
+        alert("Your browser does not support audio speech synthesis.");
+        return;
+      }
       window.speechSynthesis.cancel();
-      var utt = new SpeechSynthesisUtterance(promptText || "Listening audio assessment preview");
+      if (previewTtsTimer) {
+        clearInterval(previewTtsTimer);
+        previewTtsTimer = null;
+      }
+
+      var text = (promptText || "Listening audio assessment preview").replace(/[\*\#\_]/g, ' ');
+      var utt = new SpeechSynthesisUtterance(text);
       utt.lang = 'en-US';
       utt.rate = 0.90;
+
+      var voices = window.speechSynthesis.getVoices();
+      var engVoice = voices.find(function(v) {
+        return v.lang.startsWith('en') && (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Samantha') || v.name.includes('Daniel') || v.name.includes('Karen') || v.name.includes('US') || v.name.includes('UK'));
+      }) || voices.find(function(v) { return v.lang.startsWith('en'); });
+      if (engVoice) utt.voice = engVoice;
+
       var icon = document.getElementById("btnPreviewAudioIcon");
       var label = document.getElementById("btnPreviewAudioLabel");
       var bar = document.getElementById("previewAudioProgressBar");
+      var timeLabel = document.getElementById("previewAudioTime");
+
+      var wordCount = text.trim().split(/\s+/).length;
+      var estimatedSec = Math.max(8, Math.ceil((wordCount / 110) * 60) + 1);
 
       utt.onstart = function() {
         if (icon) icon.setAttribute("data-lucide", "square");
         if (label) label.innerText = "Stop Voice";
-        if (bar) bar.style.width = "50%";
         lucide.createIcons();
+
+        var durM = Math.floor(estimatedSec / 60).toString().padStart(2, '0') + ':' + (estimatedSec % 60).toString().padStart(2, '0');
+        if (timeLabel) timeLabel.innerText = `00:00 / ${durM}`;
+        if (bar) bar.style.width = "0%";
+
+        var startTime = Date.now();
+        previewTtsTimer = setInterval(function() {
+          var elapsedSec = (Date.now() - startTime) / 1000;
+          var pct = Math.min(100, (elapsedSec / estimatedSec) * 100);
+          if (bar) bar.style.width = pct + "%";
+          if (timeLabel) {
+            var curM = Math.floor(elapsedSec / 60).toString().padStart(2, '0') + ':' + (Math.floor(elapsedSec % 60)).toString().padStart(2, '0');
+            timeLabel.innerText = `${curM} / ${durM}`;
+          }
+        }, 200);
       };
+
       utt.onend = function() {
+        if (previewTtsTimer) {
+          clearInterval(previewTtsTimer);
+          previewTtsTimer = null;
+        }
         stopPreviewMedia();
       };
-      utt.onerror = function() {
+
+      utt.onerror = function(e) {
+        console.warn("TTS Error:", e);
+        if (previewTtsTimer) {
+          clearInterval(previewTtsTimer);
+          previewTtsTimer = null;
+        }
         stopPreviewMedia();
       };
+
       window.speechSynthesis.speak(utt);
     }
 

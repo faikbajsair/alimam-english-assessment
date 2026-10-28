@@ -1249,7 +1249,7 @@
         if (normAudioUrl && typeof normAudioUrl === 'string' && normAudioUrl.trim().length > 5) {
           this.isSpeech = false;
           var audio = new Audio();
-          audio.crossOrigin = "anonymous";
+          // Remove crossOrigin restriction to allow playback from cross-origin audio hosts without CORS headers
           this.html5Audio = audio;
 
           audio.addEventListener('loadedmetadata', function() {
