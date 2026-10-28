@@ -520,7 +520,7 @@
       </div>
 
       <form id="addQuestionForm" onsubmit="handleAddQuestionSubmit(event)" class="space-y-4 text-xs">
-        <div class="grid grid-cols-2 gap-3">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div>
             <label class="block font-bold text-slate-700 uppercase mb-1">Category / Grade Level</label>
             <select id="modalExamType" class="w-full p-2.5 rounded-xl border border-slate-300 font-semibold outline-none bg-slate-50">
@@ -538,12 +538,21 @@
           </div>
           <div>
             <label class="block font-bold text-slate-700 uppercase mb-1">Section</label>
-            <select id="modalSection" class="w-full p-2.5 rounded-xl border border-slate-300 font-semibold outline-none">
+            <select id="modalSection" onchange="handleDashboardSectionTypeChange()" class="w-full p-2.5 rounded-xl border border-slate-300 font-semibold outline-none">
               <option value="listening">Listening</option>
               <option value="structure">Structure</option>
               <option value="reading">Reading</option>
               <option value="writing">Writing</option>
               <option value="speaking">Speaking</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 uppercase mb-1">Question Type</label>
+            <select id="modalType" onchange="handleDashboardSectionTypeChange()" class="w-full p-2.5 rounded-xl border border-slate-300 font-semibold outline-none bg-slate-50">
+              <option value="multiple_choice">Multiple Choice</option>
+              <option value="true_false">True or False (Benar / Salah)</option>
+              <option value="essay">Task Essay</option>
+              <option value="speaking_record">Speaking Audio Record</option>
             </select>
           </div>
         </div>
@@ -612,15 +621,34 @@
           <textarea id="modalPrompt" rows="2" required placeholder="Write the question prompt here..." class="w-full p-2.5 rounded-xl border border-slate-300 outline-none"></textarea>
         </div>
 
-        <div class="space-y-2">
-          <label class="block font-bold text-slate-700 uppercase">Answer Options A, B, C, D</label>
-          <input type="text" id="optA" placeholder="Option A" class="w-full p-2 rounded-lg border border-slate-300">
-          <input type="text" id="optB" placeholder="Option B" class="w-full p-2 rounded-lg border border-slate-300">
-          <input type="text" id="optC" placeholder="Option C" class="w-full p-2 rounded-lg border border-slate-300">
-          <input type="text" id="optD" placeholder="Option D" class="w-full p-2 rounded-lg border border-slate-300">
+        <div id="fieldOptions" class="space-y-2.5">
+          <div class="flex flex-wrap items-center justify-between gap-2 pb-1 border-b border-slate-200/80">
+            <label class="block font-bold text-slate-700 uppercase flex items-center gap-1.5">
+              <i data-lucide="list" class="w-4 h-4 text-brand-600"></i>
+              <span id="fieldOptionsTitle">Answer Choices</span>
+              <span id="badgeOptionsCount" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-brand-100 text-brand-800 font-bold border border-brand-200">4 Choices (A-D)</span>
+            </label>
+            <div class="flex items-center gap-1.5">
+              <button type="button" id="btnAddOptionBtn" onclick="addDashboardDynamicOptionRow()" class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold rounded-lg border border-emerald-300 flex items-center gap-1 transition-all cursor-pointer shadow-xs">
+                <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add Option (+E, +F...)
+              </button>
+              <span id="quickPresetBtns" class="flex items-center gap-1">
+                <button type="button" onclick="setDashboardQuickOptionCount(5)" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold rounded-lg border border-slate-300 transition-all cursor-pointer" title="Quickly set 5 options (A-E)">
+                  5 Options (A-E)
+                </button>
+                <button type="button" onclick="setDashboardQuickOptionCount(4)" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold rounded-lg border border-slate-300 transition-all cursor-pointer" title="Quickly set 4 options (A-D)">
+                  4 Options (A-D)
+                </button>
+              </span>
+            </div>
+          </div>
+          
+          <div id="dynamicOptionsList" class="space-y-2">
+            <!-- Populated dynamically via renderDashboardDynamicOptions() -->
+          </div>
         </div>
 
-        <div>
+        <div id="fieldCorrectContainer">
           <label class="block font-bold text-slate-700 uppercase mb-1">Correct Answer Key / Rubric</label>
           <select id="modalCorrect" class="w-full p-2.5 rounded-xl border border-slate-300 font-bold outline-none">
             <option value="A">Option A</option>
@@ -2076,6 +2104,262 @@
       reader.readAsDataURL(file);
     }
 
+    // ================= DYNAMIC QUESTION OPTIONS & TRUE/FALSE BUILDER =================
+    function getDashboardCurrentDynamicOptions() {
+      var inputs = document.querySelectorAll("#dynamicOptionsList .dynamic-opt-input");
+      var list = [];
+      inputs.forEach(function(inp, idx) {
+        var key = inp.getAttribute("data-opt-key") || String.fromCharCode(65 + idx);
+        list.push({ key: key, text: inp.value });
+      });
+      return list;
+    }
+
+    function renderDashboardDynamicOptions(options, type) {
+      var container = document.getElementById("dynamicOptionsList");
+      if (!container) return;
+
+      var typeEl = document.getElementById("modalType");
+      var currentType = type || (typeEl ? typeEl.value : "multiple_choice");
+      var isTrueFalse = currentType === "true_false";
+
+      var opts = options;
+      if (!opts || !Array.isArray(opts) || opts.length === 0) {
+        if (isTrueFalse) {
+          opts = [
+            { key: "A", text: "True" },
+            { key: "B", text: "False" }
+          ];
+        } else {
+          opts = [
+            { key: "A", text: "" },
+            { key: "B", text: "" },
+            { key: "C", text: "" },
+            { key: "D", text: "" }
+          ];
+        }
+      }
+
+      var titleEl = document.getElementById("fieldOptionsTitle");
+      var countBadge = document.getElementById("badgeOptionsCount");
+      var btnAdd = document.getElementById("btnAddOptionBtn");
+      var quickBtns = document.getElementById("quickPresetBtns");
+
+      if (isTrueFalse) {
+        if (titleEl) titleEl.innerText = "Answer Choices (True or False)";
+        if (countBadge) {
+          countBadge.innerText = opts.length + " Choices (" + opts.map(function(o) { return o.text || o.key; }).join(' / ') + ")";
+          countBadge.className = "text-[10px] font-mono px-2 py-0.5 rounded-full bg-teal-100 text-teal-800 font-bold border border-teal-200";
+        }
+        if (btnAdd) {
+          btnAdd.innerHTML = '<i data-lucide="plus" class="w-3.5 h-3.5"></i> Add Option (+Not Given)';
+        }
+        if (quickBtns) quickBtns.classList.add("hidden");
+      } else {
+        if (titleEl) titleEl.innerText = "Answer Choices (Multiple Choice)";
+        var lastKey = String.fromCharCode(64 + opts.length);
+        if (countBadge) {
+          countBadge.innerText = opts.length + " Choices (A-" + lastKey + ")";
+          countBadge.className = "text-[10px] font-mono px-2 py-0.5 rounded-full bg-brand-100 text-brand-800 font-bold border border-brand-200";
+        }
+        if (btnAdd) {
+          btnAdd.innerHTML = '<i data-lucide="plus" class="w-3.5 h-3.5"></i> Add Option (+' + String.fromCharCode(65 + opts.length) + ')';
+        }
+        if (quickBtns) quickBtns.classList.remove("hidden");
+      }
+
+      var badgeColors = [
+        "bg-red-100 text-red-700 border-red-300",
+        "bg-blue-100 text-blue-700 border-blue-300",
+        "bg-amber-100 text-amber-700 border-amber-300",
+        "bg-emerald-100 text-emerald-700 border-emerald-300",
+        "bg-purple-100 text-purple-700 border-purple-300",
+        "bg-pink-100 text-pink-700 border-pink-300",
+        "bg-cyan-100 text-cyan-700 border-cyan-300",
+        "bg-indigo-100 text-indigo-700 border-indigo-300"
+      ];
+
+      container.innerHTML = opts.map(function(opt, idx) {
+        var key = String.fromCharCode(65 + idx);
+        var textVal = "";
+        if (typeof opt === "string") {
+          textVal = opt;
+        } else if (opt && opt.text !== undefined) {
+          textVal = opt.text;
+        }
+        textVal = (textVal || "").replace(/"/g, '&quot;');
+
+        var colorClass = isTrueFalse 
+          ? (idx === 0 ? "bg-emerald-100 text-emerald-800 border-emerald-300" : (idx === 1 ? "bg-rose-100 text-rose-800 border-rose-300" : "bg-amber-100 text-amber-800 border-amber-300"))
+          : badgeColors[idx % badgeColors.length];
+
+        var symbolText = isTrueFalse
+          ? (idx === 0 ? "✓ True" : (idx === 1 ? "✗ False" : "? " + key))
+          : key;
+
+        var placeholder = isTrueFalse
+          ? (idx === 0 ? "True (Benar)" : (idx === 1 ? "False (Salah)" : "Not Given"))
+          : "Option " + key + " text...";
+
+        var canDelete = opts.length > 2;
+
+        return '<div class="flex items-center gap-2 p-1.5 rounded-xl bg-white border border-slate-200 hover:border-slate-300 transition-colors shadow-2xs" data-opt-idx="' + idx + '">' +
+          '<span class="px-2.5 h-8 rounded-lg border font-bold text-xs flex items-center justify-center flex-shrink-0 ' + colorClass + '">' +
+            symbolText +
+          '</span>' +
+          '<input type="text" id="opt' + key + '" data-opt-key="' + key + '" value="' + textVal + '" placeholder="' + placeholder + '" class="dynamic-opt-input flex-grow p-2 rounded-lg border border-slate-200 outline-none focus:border-brand-500 text-xs font-medium bg-slate-50/50 focus:bg-white transition-all">' +
+          (canDelete ? '<button type="button" onclick="removeDashboardDynamicOptionRow(' + idx + ')" class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer" title="Remove ' + key + '"><i data-lucide="trash-2" class="w-4 h-4"></i></button>' : '<div class="w-8"></div>') +
+        '</div>';
+      }).join('');
+
+      lucide.createIcons();
+      updateDashboardModalCorrectDropdown();
+    }
+
+    function addDashboardDynamicOptionRow() {
+      var current = getDashboardCurrentDynamicOptions();
+      var nextKey = String.fromCharCode(65 + current.length);
+      var typeEl = document.getElementById("modalType");
+      var type = typeEl ? typeEl.value : "multiple_choice";
+      if (type === "true_false" && current.length === 2) {
+        current.push({ key: nextKey, text: "Not Given" });
+      } else {
+        current.push({ key: nextKey, text: "" });
+      }
+      renderDashboardDynamicOptions(current, type);
+      setTimeout(function() {
+        var lastInput = document.getElementById("opt" + nextKey);
+        if (lastInput) lastInput.focus();
+      }, 50);
+    }
+
+    function removeDashboardDynamicOptionRow(idx) {
+      var current = getDashboardCurrentDynamicOptions();
+      if (current.length <= 2) {
+        alert("Minimal harus memiliki 2 pilihan jawaban.");
+        return;
+      }
+      current.splice(idx, 1);
+      var rekeyed = current.map(function(opt, i) {
+        return {
+          key: String.fromCharCode(65 + i),
+          text: opt.text
+        };
+      });
+      var typeEl = document.getElementById("modalType");
+      var type = typeEl ? typeEl.value : "multiple_choice";
+      renderDashboardDynamicOptions(rekeyed, type);
+    }
+
+    function setDashboardQuickOptionCount(targetCount) {
+      var current = getDashboardCurrentDynamicOptions();
+      var updated = [];
+      for (var i = 0; i < targetCount; i++) {
+        var key = String.fromCharCode(65 + i);
+        updated.push({
+          key: key,
+          text: (current[i] && current[i].text) || ""
+        });
+      }
+      var typeEl = document.getElementById("modalType");
+      var type = typeEl ? typeEl.value : "multiple_choice";
+      renderDashboardDynamicOptions(updated, type);
+    }
+
+    function updateDashboardModalCorrectDropdown(selectedValue) {
+      var select = document.getElementById("modalCorrect");
+      if (!select) return;
+
+      var typeEl = document.getElementById("modalType");
+      var type = typeEl ? typeEl.value : "multiple_choice";
+      var currentVal = selectedValue || select.value || "A";
+      var opts = getDashboardCurrentDynamicOptions();
+
+      select.innerHTML = "";
+
+      if (type === "true_false") {
+        opts.forEach(function(opt, idx) {
+          var optEl = document.createElement("option");
+          optEl.value = opt.key;
+          var label = opt.text || (idx === 0 ? "True" : (idx === 1 ? "False" : "Not Given"));
+          optEl.innerText = opt.key + ": " + label + " (" + (idx === 0 ? 'Pernyataan Benar' : (idx === 1 ? 'Pernyataan Salah' : 'Tidak Disebutkan')) + ")";
+          select.appendChild(optEl);
+        });
+      } else {
+        opts.forEach(function(opt, idx) {
+          var optEl = document.createElement("option");
+          optEl.value = opt.key;
+          var snippet = opt.text ? ' - "' + opt.text.substring(0, 30) + (opt.text.length > 30 ? '...' : '') + '"' : '';
+          optEl.innerText = "Option " + opt.key + " (Pilihan " + (idx + 1) + ")" + snippet;
+          select.appendChild(optEl);
+        });
+      }
+
+      var optStdRubric = document.createElement("option");
+      optStdRubric.value = "Standard Rubric";
+      optStdRubric.innerText = "Standard Rubric (Essay)";
+      select.appendChild(optStdRubric);
+
+      var optExamRubric = document.createElement("option");
+      optExamRubric.value = "Examiner Rubric";
+      optExamRubric.innerText = "Examiner Rubric (Speaking)";
+      select.appendChild(optExamRubric);
+
+      var validValues = Array.from(select.options).map(function(o) { return o.value; });
+      if (validValues.includes(currentVal)) {
+        select.value = currentVal;
+      } else if (currentVal === "True" || currentVal === "true") {
+        select.value = "A";
+      } else if (currentVal === "False" || currentVal === "false") {
+        select.value = "B";
+      } else {
+        select.value = validValues[0] || "A";
+      }
+    }
+
+    function handleDashboardSectionTypeChange() {
+      var secEl = document.getElementById("modalSection");
+      var typeEl = document.getElementById("modalType");
+      if (!secEl || !typeEl) return;
+      var sec = secEl.value;
+      var type = typeEl.value;
+      var fieldOptions = document.getElementById("fieldOptions");
+
+      if (sec === "writing" || type === "essay") {
+        if (fieldOptions) fieldOptions.classList.add("hidden");
+        document.getElementById("modalCorrect").value = "Standard Rubric";
+      } else if (sec === "speaking" || type === "speaking_record") {
+        if (fieldOptions) fieldOptions.classList.add("hidden");
+        document.getElementById("modalCorrect").value = "Examiner Rubric";
+      } else if (type === "true_false") {
+        if (fieldOptions) fieldOptions.classList.remove("hidden");
+        var currentOpts = getDashboardCurrentDynamicOptions();
+        var isAlreadyTf = currentOpts.length >= 2 && (currentOpts[0].text || '').toLowerCase().includes("true");
+        if (!isAlreadyTf) {
+          renderDashboardDynamicOptions([
+            { key: "A", text: "True" },
+            { key: "B", text: "False" }
+          ], "true_false");
+        } else {
+          renderDashboardDynamicOptions(currentOpts, "true_false");
+        }
+      } else {
+        if (fieldOptions) fieldOptions.classList.remove("hidden");
+        var currentOpts = getDashboardCurrentDynamicOptions();
+        var isTf = currentOpts.length === 2 && (currentOpts[0].text || '').toLowerCase().includes("true");
+        if (isTf || currentOpts.length === 0) {
+          renderDashboardDynamicOptions([
+            { key: "A", text: "" },
+            { key: "B", text: "" },
+            { key: "C", text: "" },
+            { key: "D", text: "" }
+          ], "multiple_choice");
+        } else {
+          renderDashboardDynamicOptions(currentOpts, "multiple_choice");
+        }
+      }
+    }
+
     function openAddQuestionModal(editId) {
       stopAllAudioAndMedia();
       editingQuestionId = editId || null;
@@ -2087,22 +2371,17 @@
         if (q) {
           document.getElementById('modalExamType').value = q.examType || 'TOEFL_ITP';
           document.getElementById('modalSection').value = q.section || 'listening';
+          if (document.getElementById('modalType')) document.getElementById('modalType').value = q.type || 'multiple_choice';
           document.getElementById('modalPrompt').value = q.prompt || '';
-          document.getElementById('modalCorrect').value = q.correct || 'A';
           document.getElementById('modalAudioUrl').value = q.audioUrl || '';
           document.getElementById('modalImageUrl').value = q.imageUrl || '';
           document.getElementById('modalVideoUrl').value = q.videoUrl || '';
           document.getElementById('modalPassage').value = q.passage || '';
           updateDashboardAudioPreview();
           updateDashboardImagePreview();
-          var optA = document.getElementById('optA');
-          var optB = document.getElementById('optB');
-          var optC = document.getElementById('optC');
-          var optD = document.getElementById('optD');
-          if (optA) optA.value = (q.options && q.options[0] && q.options[0].text) || '';
-          if (optB) optB.value = (q.options && q.options[1] && q.options[1].text) || '';
-          if (optC) optC.value = (q.options && q.options[2] && q.options[2].text) || '';
-          if (optD) optD.value = (q.options && q.options[3] && q.options[3].text) || '';
+          handleDashboardSectionTypeChange();
+          renderDashboardDynamicOptions(q.options, q.type || 'multiple_choice');
+          updateDashboardModalCorrectDropdown(q.correct || 'A');
         }
       } else {
         if (form) form.reset();
@@ -2113,6 +2392,9 @@
         document.getElementById('modalVideoUrl').value = '';
         updateDashboardAudioPreview();
         updateDashboardImagePreview();
+        handleDashboardSectionTypeChange();
+        renderDashboardDynamicOptions([], 'multiple_choice');
+        updateDashboardModalCorrectDropdown('A');
       }
       modal.style.display = 'flex';
       modal.classList.remove('hidden');
@@ -2164,25 +2446,32 @@
       var correct = document.getElementById('modalCorrect').value;
       var examType = document.getElementById('modalExamType').value;
       var section = document.getElementById('modalSection').value;
+      var type = (document.getElementById('modalType') && document.getElementById('modalType').value) || 'multiple_choice';
       var passage = document.getElementById('modalPassage').value;
 
-      var optA = document.getElementById('optA') ? document.getElementById('optA').value : '';
-      var optB = document.getElementById('optB') ? document.getElementById('optB').value : '';
-      var optC = document.getElementById('optC') ? document.getElementById('optC').value : '';
-      var optD = document.getElementById('optD') ? document.getElementById('optD').value : '';
-
-      var options = [
-        { key: 'A', text: optA || 'Option A' },
-        { key: 'B', text: optB || 'Option B' },
-        { key: 'C', text: optC || 'Option C' },
-        { key: 'D', text: optD || 'Option D' }
-      ];
+      var options = getDashboardCurrentDynamicOptions();
+      if (options.length === 0) {
+        if (type === "true_false") {
+          options = [
+            { key: 'A', text: 'True' },
+            { key: 'B', text: 'False' }
+          ];
+        } else {
+          options = [
+            { key: 'A', text: 'Option A' },
+            { key: 'B', text: 'Option B' },
+            { key: 'C', text: 'Option C' },
+            { key: 'D', text: 'Option D' }
+          ];
+        }
+      }
 
       if (editingQuestionId) {
         var idx = masterQuestions.findIndex(function(q) { return q.id === editingQuestionId; });
         if (idx !== -1) {
           masterQuestions[idx].examType = examType;
           masterQuestions[idx].section = section;
+          masterQuestions[idx].type = type;
           masterQuestions[idx].prompt = prompt;
           masterQuestions[idx].correct = correct;
           masterQuestions[idx].audioUrl = audioUrl;
@@ -2196,7 +2485,7 @@
           id: "Q-" + Math.floor(1000 + Math.random() * 9000),
           examType: examType,
           section: section,
-          type: "Multiple Choice",
+          type: type,
           prompt: prompt,
           correct: correct,
           audioUrl: audioUrl,

@@ -212,6 +212,149 @@ function isiSemuaDataKeSpreadsheetSekarang() {
 
   var allQuestions = [
   {
+    "id": "Q-TF-G7-01",
+    "examType": "Grade 7",
+    "section": "reading",
+    "type": "true_false",
+    "passage": "School Library Notice: The school library is open from 07:30 to 16:00 every weekday. Students are permitted to borrow a maximum of three books at a time for up to two weeks.",
+    "prompt": "According to the library notice, students are allowed to borrow up to five books simultaneously.",
+    "audioUrl": "",
+    "imageUrl": "",
+    "videoUrl": "",
+    "options": [
+      {
+        "key": "A",
+        "text": "True"
+      },
+      {
+        "key": "B",
+        "text": "False"
+      }
+    ],
+    "correct": "B",
+    "points": 1
+  },
+  {
+    "id": "Q-TF-G8-02",
+    "examType": "Grade 8",
+    "section": "listening",
+    "type": "true_false",
+    "passage": "Interview with Dan: Young App Developer",
+    "prompt": "Dan stated that he began learning how to code when he was eleven years old after seeing his brother make mobile applications.",
+    "audioUrl": "https://actions.google.com/sounds/v1/speech/announcement_chime.ogg",
+    "imageUrl": "",
+    "videoUrl": "",
+    "options": [
+      {
+        "key": "A",
+        "text": "True"
+      },
+      {
+        "key": "B",
+        "text": "False"
+      }
+    ],
+    "correct": "A",
+    "points": 1
+  },
+  {
+    "id": "Q-TF-IELTS-03",
+    "examType": "IELTS_ACADEMIC",
+    "section": "reading",
+    "type": "true_false",
+    "passage": "Renewable Energy Transitions: Over the past decade, photovoltaic solar panel efficiency has risen from 14% to over 22%. Although the initial capital investment remains significant, commercial buildings recoup the installation expenditure within five to seven years.",
+    "prompt": "Commercial buildings usually recover the financial investment of solar panels in less than eight years.",
+    "audioUrl": "",
+    "imageUrl": "",
+    "videoUrl": "",
+    "options": [
+      {
+        "key": "A",
+        "text": "True"
+      },
+      {
+        "key": "B",
+        "text": "False"
+      },
+      {
+        "key": "C",
+        "text": "Not Given"
+      }
+    ],
+    "correct": "A",
+    "points": 1
+  },
+  {
+    "id": "Q-MC5-G9-01",
+    "examType": "Grade 9",
+    "section": "structure",
+    "type": "multiple_choice",
+    "passage": "Advanced Grammar: Conditional Inversion",
+    "prompt": "Had the school administration _______ the solar energy proposal earlier, the campus would have qualified for the municipal green building grant.",
+    "audioUrl": "",
+    "imageUrl": "",
+    "videoUrl": "",
+    "options": [
+      {
+        "key": "A",
+        "text": "approve"
+      },
+      {
+        "key": "B",
+        "text": "approved"
+      },
+      {
+        "key": "C",
+        "text": "approving"
+      },
+      {
+        "key": "D",
+        "text": "were approved"
+      },
+      {
+        "key": "E",
+        "text": "had approved"
+      }
+    ],
+    "correct": "B",
+    "points": 1
+  },
+  {
+    "id": "Q-MC5-TOEFL-02",
+    "examType": "TOEFL_ITP",
+    "section": "structure",
+    "type": "multiple_choice",
+    "passage": "Scientific History: The Germ Theory",
+    "prompt": "Not until the late nineteenth century _______ widespread acceptance among physicians and medical researchers.",
+    "audioUrl": "",
+    "imageUrl": "",
+    "videoUrl": "",
+    "options": [
+      {
+        "key": "A",
+        "text": "the germ theory of disease gained"
+      },
+      {
+        "key": "B",
+        "text": "did the germ theory of disease gain"
+      },
+      {
+        "key": "C",
+        "text": "gaining the germ theory of disease"
+      },
+      {
+        "key": "D",
+        "text": "was the germ theory of disease gained"
+      },
+      {
+        "key": "E",
+        "text": "the germ theory of disease had gained"
+      }
+    ],
+    "correct": "B",
+    "points": 1
+  },
+  {
     "id": "Q-LIST-01",
     "examType": "TOEFL_ITP",
     "section": "listening",

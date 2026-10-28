@@ -410,6 +410,98 @@
     // Initialize Question Bank
     var sampleQuestions = [
       {
+        id: "Q-TF-G7-01",
+        examType: "Grade 7",
+        section: "reading",
+        type: "true_false",
+        passage: "School Library Notice: The school library is open from 07:30 to 16:00 every weekday. Students are permitted to borrow a maximum of three books at a time for up to two weeks.",
+        prompt: "According to the library notice, students are allowed to borrow up to five books simultaneously.",
+        audioUrl: "",
+        imageUrl: "",
+        videoUrl: "",
+        options: [
+          { key: "A", text: "True" },
+          { key: "B", text: "False" }
+        ],
+        correct: "B",
+        points: 1
+      },
+      {
+        id: "Q-TF-G8-02",
+        examType: "Grade 8",
+        section: "listening",
+        type: "true_false",
+        passage: "Interview with Dan: Young App Developer",
+        prompt: "Dan stated that he began learning how to code when he was eleven years old after seeing his brother make mobile applications.",
+        audioUrl: "https://actions.google.com/sounds/v1/speech/announcement_chime.ogg",
+        imageUrl: "",
+        videoUrl: "",
+        options: [
+          { key: "A", text: "True" },
+          { key: "B", text: "False" }
+        ],
+        correct: "A",
+        points: 1
+      },
+      {
+        id: "Q-TF-IELTS-03",
+        examType: "IELTS_ACADEMIC",
+        section: "reading",
+        type: "true_false",
+        passage: "Renewable Energy Transitions: Over the past decade, photovoltaic solar panel efficiency has risen from 14% to over 22%. Although the initial capital investment remains significant, commercial buildings recoup the installation expenditure within five to seven years.",
+        prompt: "Commercial buildings usually recover the financial investment of solar panels in less than eight years.",
+        audioUrl: "",
+        imageUrl: "",
+        videoUrl: "",
+        options: [
+          { key: "A", text: "True" },
+          { key: "B", text: "False" },
+          { key: "C", text: "Not Given" }
+        ],
+        correct: "A",
+        points: 1
+      },
+      {
+        id: "Q-MC5-G9-01",
+        examType: "Grade 9",
+        section: "structure",
+        type: "multiple_choice",
+        passage: "Advanced Grammar: Conditional Inversion",
+        prompt: "Had the school administration _______ the solar energy proposal earlier, the campus would have qualified for the municipal green building grant.",
+        audioUrl: "",
+        imageUrl: "",
+        videoUrl: "",
+        options: [
+          { key: "A", text: "approve" },
+          { key: "B", text: "approved" },
+          { key: "C", text: "approving" },
+          { key: "D", text: "were approved" },
+          { key: "E", text: "had approved" }
+        ],
+        correct: "B",
+        points: 1
+      },
+      {
+        id: "Q-MC5-TOEFL-02",
+        examType: "TOEFL_ITP",
+        section: "structure",
+        type: "multiple_choice",
+        passage: "Scientific History: The Germ Theory",
+        prompt: "Not until the late nineteenth century _______ widespread acceptance among physicians and medical researchers.",
+        audioUrl: "",
+        imageUrl: "",
+        videoUrl: "",
+        options: [
+          { key: "A", text: "the germ theory of disease gained" },
+          { key: "B", text: "did the germ theory of disease gain" },
+          { key: "C", text: "gaining the germ theory of disease" },
+          { key: "D", text: "was the germ theory of disease gained" },
+          { key: "E", text: "the germ theory of disease had gained" }
+        ],
+        correct: "B",
+        points: 1
+      },
+      {
         id: "Q-LIST-01",
         section: "listening",
         type: "multiple_choice",
@@ -715,22 +807,98 @@
       var arena = document.getElementById('answerOptionsArena');
       arena.innerHTML = '';
 
-      if (q.type === 'multiple_choice') {
-        q.options.forEach(function(opt) {
+      if (q.type === 'true_false') {
+        var opts = (q.options && q.options.length > 0) ? q.options : [
+          { key: "A", text: "True" },
+          { key: "B", text: "False" }
+        ];
+
+        var tfContainer = document.createElement('div');
+        tfContainer.className = 'grid grid-cols-1 sm:grid-cols-' + Math.min(3, opts.length) + ' gap-3.5';
+
+        opts.forEach(function(opt) {
+          var isTrue = opt.key.toUpperCase() === 'A' || opt.text.toUpperCase().includes('TRUE');
+          var isFalse = opt.key.toUpperCase() === 'B' || opt.text.toUpperCase().includes('FALSE');
+          var isSelected = (state.answers[q.id] === opt.key) || (state.answers[q.id] === opt.text);
+
+          var theme = isTrue ? {
+            name: 'True',
+            sub: 'Benar',
+            icon: 'check-circle-2',
+            badgeBg: 'bg-emerald-600',
+            activeBorder: 'border-emerald-500 bg-emerald-50/90 ring-2 ring-emerald-400 shadow-md',
+            idleBorder: 'border-slate-200 bg-white hover:border-emerald-300 hover:bg-emerald-50/30'
+          } : isFalse ? {
+            name: 'False',
+            sub: 'Salah',
+            icon: 'x-circle',
+            badgeBg: 'bg-rose-600',
+            activeBorder: 'border-rose-500 bg-rose-50/90 ring-2 ring-rose-400 shadow-md',
+            idleBorder: 'border-slate-200 bg-white hover:border-rose-300 hover:bg-rose-50/30'
+          } : {
+            name: opt.text || 'Not Given',
+            sub: 'Tidak Dinyatakan',
+            icon: 'help-circle',
+            badgeBg: 'bg-sky-600',
+            activeBorder: 'border-sky-500 bg-sky-50/90 ring-2 ring-sky-400 shadow-md',
+            idleBorder: 'border-slate-200 bg-white hover:border-sky-300 hover:bg-sky-50/30'
+          };
+
+          var card = document.createElement('div');
+          card.className = 'p-5 rounded-2xl border-2 transition-all cursor-pointer flex flex-col items-center justify-center text-center gap-2.5 ' +
+            (isSelected ? theme.activeBorder : theme.idleBorder);
+          card.onclick = function() { selectAnswer(q.id, opt.key); };
+
+          card.innerHTML = `
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-white font-bold shadow-sm transition-transform active:scale-95 ${theme.badgeBg}">
+              <i data-lucide="${theme.icon}" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <div class="text-base sm:text-lg font-black text-slate-900 tracking-tight">${opt.text || theme.name}</div>
+              <div class="text-[11px] font-semibold text-slate-500">${theme.sub}</div>
+            </div>
+            <div class="mt-1 px-3 py-0.5 rounded-full text-[10px] font-bold font-mono ${isSelected ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-600'}">
+              Option ${opt.key}
+            </div>
+          `;
+          tfContainer.appendChild(card);
+        });
+
+        arena.appendChild(tfContainer);
+      } else if (q.type === 'multiple_choice') {
+        var mcPalette = [
+          { badge: "bg-red-500 text-white border-red-600", active: "bg-red-50/80 border-red-500 ring-2 ring-red-400/60 shadow-sm" },
+          { badge: "bg-sky-500 text-white border-sky-600", active: "bg-sky-50/80 border-sky-500 ring-2 ring-sky-400/60 shadow-sm" },
+          { badge: "bg-amber-500 text-white border-amber-600", active: "bg-amber-50/80 border-amber-500 ring-2 ring-amber-400/60 shadow-sm" },
+          { badge: "bg-emerald-600 text-white border-emerald-700", active: "bg-emerald-50/80 border-emerald-500 ring-2 ring-emerald-400/60 shadow-sm" },
+          { badge: "bg-purple-600 text-white border-purple-700", active: "bg-purple-50/80 border-purple-500 ring-2 ring-purple-400/60 shadow-sm" },
+          { badge: "bg-pink-600 text-white border-pink-700", active: "bg-pink-50/80 border-pink-500 ring-2 ring-pink-400/60 shadow-sm" },
+          { badge: "bg-teal-600 text-white border-teal-700", active: "bg-teal-50/80 border-teal-500 ring-2 ring-teal-400/60 shadow-sm" },
+          { badge: "bg-indigo-600 text-white border-indigo-700", active: "bg-indigo-50/80 border-indigo-500 ring-2 ring-indigo-400/60 shadow-sm" }
+        ];
+
+        var optGrid = document.createElement('div');
+        optGrid.className = 'grid grid-cols-1 gap-3';
+
+        (q.options || []).forEach(function(opt, idx) {
+          var pal = mcPalette[idx % mcPalette.length];
           var isSelected = state.answers[q.id] === opt.key;
           var div = document.createElement('div');
-          div.className = 'p-3.5 sm:p-4 rounded-2xl border transition-all cursor-pointer flex items-start gap-3 ' +
-            (isSelected ? 'bg-emerald-50 border-brand-500 shadow-sm' : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50');
+          div.className = 'p-3.5 sm:p-4 rounded-2xl border transition-all cursor-pointer flex items-start gap-3.5 ' +
+            (isSelected ? pal.active : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50/80');
           div.onclick = function() { selectAnswer(q.id, opt.key); };
 
           div.innerHTML = `
-            <div class="w-7 h-7 rounded-xl flex items-center justify-center font-bold text-xs flex-shrink-0 transition-all ${
-              isSelected ? 'bg-brand-600 text-white shadow' : 'bg-slate-100 text-slate-700 border border-slate-300'
+            <div class="w-8 h-8 rounded-xl flex items-center justify-center font-bold text-xs flex-shrink-0 transition-transform active:scale-95 shadow-sm ${
+              isSelected ? pal.badge : 'bg-slate-100 text-slate-700 border border-slate-300'
             }">${opt.key}</div>
-            <div class="text-xs sm:text-sm text-slate-800 pt-0.5 leading-relaxed">${opt.text}</div>
+            <div class="text-xs sm:text-sm text-slate-800 pt-1 leading-relaxed flex-1">${opt.text}</div>
+            ${isSelected ? '<i data-lucide="check-circle" class="w-5 h-5 text-emerald-600 flex-shrink-0 self-center"></i>' : ''}
           `;
-          arena.appendChild(div);
+          optGrid.appendChild(div);
         });
+
+        arena.appendChild(optGrid);
       } else if (q.type === 'essay') {
         var val = state.answers[q.id] || '';
         var words = val.trim() ? val.trim().split(/\s+/).length : 0;
@@ -1251,19 +1419,65 @@
       }
     }
 
+    // Robust Answer Matching supporting keys (A, B, C, D, E, F...) and True/False semantics
+    function isAnswerCorrect(q, ans) {
+      if (!q || ans === undefined || ans === null) return false;
+      var sAns = String(ans).trim();
+      var sCor = String(q.correct || q.correctAnswer || '').trim();
+      if (!sCor) return false;
+      if (sAns === sCor || sAns.toUpperCase() === sCor.toUpperCase()) return true;
+
+      // True / False semantic matching
+      if (q.type === 'true_false' || (q.options && q.options.length <= 3 && q.options[0] && q.options[0].text && q.options[0].text.toUpperCase().includes('TRUE'))) {
+        var sAnsUp = sAns.toUpperCase();
+        var sCorUp = sCor.toUpperCase();
+        if ((sCorUp === 'A' || sCorUp === 'TRUE') && (sAnsUp === 'A' || sAnsUp === 'TRUE')) return true;
+        if ((sCorUp === 'B' || sCorUp === 'FALSE') && (sAnsUp === 'B' || sAnsUp === 'FALSE')) return true;
+        if ((sCorUp === 'C' || sCorUp === 'NOT GIVEN') && (sAnsUp === 'C' || sAnsUp === 'NOT GIVEN')) return true;
+      }
+
+      if (q.options && Array.isArray(q.options)) {
+        var matchedOpt = q.options.find(function(o) { return o.key.toUpperCase() === sAns.toUpperCase(); });
+        if (matchedOpt && matchedOpt.text.trim().toUpperCase() === sCor.toUpperCase()) return true;
+
+        var correctOpt = q.options.find(function(o) { return o.key.toUpperCase() === sCor.toUpperCase(); });
+        if (correctOpt && (correctOpt.text.trim().toUpperCase() === sAns.toUpperCase() || correctOpt.key.toUpperCase() === sAns.toUpperCase())) return true;
+      }
+      return false;
+    }
+
     function submitExamNow() {
       if (typeof ExamAudioManager !== 'undefined') ExamAudioManager.stop();
       clearInterval(state.timerInterval);
       
-      // Calculate Converted TOEFL Scale
-      var score = 577;
+      // Calculate Converted TOEFL Scale based on answers
+      var totalScored = 0;
+      var totalCorrect = 0;
+      state.questions.forEach(function(q) {
+        if (q.type === 'multiple_choice' || q.type === 'true_false') {
+          totalScored++;
+          if (isAnswerCorrect(q, state.answers[q.id])) {
+            totalCorrect++;
+          }
+        }
+      });
+
+      var percentage = totalScored > 0 ? (totalCorrect / totalScored) : 0.85;
+      var convertedToefl = Math.min(677, Math.max(310, Math.round(310 + (percentage * 367))));
+      var cefr = convertedToefl >= 627 ? 'CEFR C1' : convertedToefl >= 543 ? 'CEFR B2' : convertedToefl >= 460 ? 'CEFR B1' : 'CEFR A2';
+
+      var scoreEl = document.getElementById('modalFinalScore');
+      if (scoreEl) scoreEl.innerText = convertedToefl + ' / 677 (TOEFL Scale)';
+      var cefrEl = document.getElementById('modalCefrBadge');
+      if (cefrEl) cefrEl.innerText = cefr;
+
       var modal = document.getElementById('resultModal');
       modal.classList.remove('hidden');
 
       // Generate Verification QR Code
       new QRious({
         element: document.getElementById('qrCanvas'),
-        value: "https://alimamischool.com/verify?cert=CERT/AL-IMAM/2026/SUB-001",
+        value: "https://alimamischool.com/verify?cert=CERT/AL-IMAM/2026/SUB-" + Math.floor(100 + Math.random() * 900) + "&score=" + convertedToefl,
         size: 140
       });
 

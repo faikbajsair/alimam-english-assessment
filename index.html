@@ -202,6 +202,98 @@
     // Default Master Question Bank Template
     const DEFAULT_QUESTIONS = [
       {
+        id: "Q-TF-G7-01",
+        examType: "Grade 7",
+        section: "reading",
+        type: "true_false",
+        passage: "School Library Notice: The school library is open from 07:30 to 16:00 every weekday. Students are permitted to borrow a maximum of three books at a time for up to two weeks.",
+        prompt: "According to the library notice, students are allowed to borrow up to five books simultaneously.",
+        audioUrl: "",
+        imageUrl: "",
+        videoUrl: "",
+        options: [
+          { key: "A", text: "True" },
+          { key: "B", text: "False" }
+        ],
+        correct: "B",
+        points: 1
+      },
+      {
+        id: "Q-TF-G8-02",
+        examType: "Grade 8",
+        section: "listening",
+        type: "true_false",
+        passage: "Interview with Dan: Young App Developer",
+        prompt: "Dan stated that he began learning how to code when he was eleven years old after seeing his brother make mobile applications.",
+        audioUrl: "https://actions.google.com/sounds/v1/speech/announcement_chime.ogg",
+        imageUrl: "",
+        videoUrl: "",
+        options: [
+          { key: "A", text: "True" },
+          { key: "B", text: "False" }
+        ],
+        correct: "A",
+        points: 1
+      },
+      {
+        id: "Q-TF-IELTS-03",
+        examType: "IELTS_ACADEMIC",
+        section: "reading",
+        type: "true_false",
+        passage: "Renewable Energy Transitions: Over the past decade, photovoltaic solar panel efficiency has risen from 14% to over 22%. Although the initial capital investment remains significant, commercial buildings recoup the installation expenditure within five to seven years.",
+        prompt: "Commercial buildings usually recover the financial investment of solar panels in less than eight years.",
+        audioUrl: "",
+        imageUrl: "",
+        videoUrl: "",
+        options: [
+          { key: "A", text: "True" },
+          { key: "B", text: "False" },
+          { key: "C", text: "Not Given" }
+        ],
+        correct: "A",
+        points: 1
+      },
+      {
+        id: "Q-MC5-G9-01",
+        examType: "Grade 9",
+        section: "structure",
+        type: "multiple_choice",
+        passage: "Advanced Grammar: Conditional Inversion",
+        prompt: "Had the school administration _______ the solar energy proposal earlier, the campus would have qualified for the municipal green building grant.",
+        audioUrl: "",
+        imageUrl: "",
+        videoUrl: "",
+        options: [
+          { key: "A", text: "approve" },
+          { key: "B", text: "approved" },
+          { key: "C", text: "approving" },
+          { key: "D", text: "were approved" },
+          { key: "E", text: "had approved" }
+        ],
+        correct: "B",
+        points: 1
+      },
+      {
+        id: "Q-MC5-TOEFL-02",
+        examType: "TOEFL_ITP",
+        section: "structure",
+        type: "multiple_choice",
+        passage: "Scientific History: The Germ Theory",
+        prompt: "Not until the late nineteenth century _______ widespread acceptance among physicians and medical researchers.",
+        audioUrl: "",
+        imageUrl: "",
+        videoUrl: "",
+        options: [
+          { key: "A", text: "the germ theory of disease gained" },
+          { key: "B", text: "did the germ theory of disease gain" },
+          { key: "C", text: "gaining the germ theory of disease" },
+          { key: "D", text: "was the germ theory of disease gained" },
+          { key: "E", text: "the germ theory of disease had gained" }
+        ],
+        correct: "B",
+        points: 1
+      },
+      {
         id: "Q-LIST-01",
         examType: "TOEFL_ITP",
         section: "listening",
@@ -2671,29 +2763,118 @@
                 `;
               })() : ''}
 
-              <!-- STANDARD MULTIPLE CHOICE & ERROR IDENTIFICATION (KAHOOT STYLED) -->
+              <!-- TYPE: TRUE OR FALSE (DEDICATED KAHOOT INTERACTIVE CARDS) -->
+              ${q.type === 'true_false' ? (() => {
+                const isSelectedTrue = session.answers[q.id] === 'A' || session.answers[q.id] === 'True';
+                const isSelectedFalse = session.answers[q.id] === 'B' || session.answers[q.id] === 'False';
+                const isSelectedNotGiven = session.answers[q.id] === 'C' || session.answers[q.id] === 'Not Given';
+                const hasNotGiven = q.options && q.options.length >= 3;
+
+                return `
+                  <div class="space-y-4">
+                    <div class="flex items-center justify-between text-xs font-semibold text-slate-500">
+                      <span class="flex items-center gap-1.5">
+                        <i data-lucide="check-square" class="w-4 h-4 text-brand-600"></i>
+                        Pernyataan Benar atau Salah • True or False Statement
+                      </span>
+                      <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-teal-100 text-teal-800 border border-teal-200">True / False</span>
+                    </div>
+
+                    <h2 class="text-sm sm:text-base font-bold text-slate-900 leading-snug">
+                      ${q.prompt.replace(/\n/g, '<br>')}
+                    </h2>
+
+                    <div class="grid grid-cols-1 ${hasNotGiven ? 'sm:grid-cols-3' : 'sm:grid-cols-2'} gap-3.5 pt-2">
+                      <!-- TRUE CARD -->
+                      <div onclick="selectExamAnswer('${q.id}', 'A')" class="p-5 sm:p-6 rounded-2xl border-2 transition-all cursor-pointer flex flex-col items-center justify-center text-center gap-2.5 shadow-sm active:scale-98 ${
+                        isSelectedTrue 
+                          ? 'bg-gradient-to-br from-emerald-500 to-teal-600 text-white border-emerald-600 ring-4 ring-emerald-300/50 shadow-lg scale-[1.02]' 
+                          : 'bg-white border-emerald-200/90 hover:border-emerald-400 hover:bg-emerald-50/50 text-slate-800'
+                      }">
+                        <div class="w-12 h-12 rounded-2xl flex items-center justify-center font-black text-xl flex-shrink-0 transition-transform ${
+                          isSelectedTrue ? 'bg-white text-emerald-600 shadow scale-110' : 'bg-emerald-100 text-emerald-700'
+                        }">
+                          ✓
+                        </div>
+                        <div>
+                          <div class="font-black text-base sm:text-lg tracking-wide ${isSelectedTrue ? 'text-white' : 'text-emerald-950'}">TRUE</div>
+                          <div class="text-[11px] font-medium opacity-90 ${isSelectedTrue ? 'text-emerald-50' : 'text-slate-500'}">Pernyataan Benar (Agrees with Facts)</div>
+                        </div>
+                      </div>
+
+                      <!-- FALSE CARD -->
+                      <div onclick="selectExamAnswer('${q.id}', 'B')" class="p-5 sm:p-6 rounded-2xl border-2 transition-all cursor-pointer flex flex-col items-center justify-center text-center gap-2.5 shadow-sm active:scale-98 ${
+                        isSelectedFalse 
+                          ? 'bg-gradient-to-br from-rose-500 to-red-600 text-white border-rose-600 ring-4 ring-rose-300/50 shadow-lg scale-[1.02]' 
+                          : 'bg-white border-rose-200/90 hover:border-rose-400 hover:bg-rose-50/50 text-slate-800'
+                      }">
+                        <div class="w-12 h-12 rounded-2xl flex items-center justify-center font-black text-xl flex-shrink-0 transition-transform ${
+                          isSelectedFalse ? 'bg-white text-rose-600 shadow scale-110' : 'bg-rose-100 text-rose-700'
+                        }">
+                          ✗
+                        </div>
+                        <div>
+                          <div class="font-black text-base sm:text-lg tracking-wide ${isSelectedFalse ? 'text-white' : 'text-rose-950'}">FALSE</div>
+                          <div class="text-[11px] font-medium opacity-90 ${isSelectedFalse ? 'text-rose-50' : 'text-slate-500'}">Pernyataan Salah (Contradicts Facts)</div>
+                        </div>
+                      </div>
+
+                      ${hasNotGiven ? `
+                        <!-- NOT GIVEN CARD -->
+                        <div onclick="selectExamAnswer('${q.id}', 'C')" class="p-5 sm:p-6 rounded-2xl border-2 transition-all cursor-pointer flex flex-col items-center justify-center text-center gap-2.5 shadow-sm active:scale-98 ${
+                          isSelectedNotGiven 
+                            ? 'bg-gradient-to-br from-amber-500 to-orange-600 text-white border-amber-600 ring-4 ring-amber-300/50 shadow-lg scale-[1.02]' 
+                            : 'bg-white border-amber-200/90 hover:border-amber-400 hover:bg-amber-50/50 text-slate-800'
+                        }">
+                          <div class="w-12 h-12 rounded-2xl flex items-center justify-center font-black text-xl flex-shrink-0 transition-transform ${
+                            isSelectedNotGiven ? 'bg-white text-amber-600 shadow scale-110' : 'bg-amber-100 text-amber-700'
+                          }">
+                            ?
+                          </div>
+                          <div>
+                            <div class="font-black text-base sm:text-lg tracking-wide ${isSelectedNotGiven ? 'text-white' : 'text-amber-950'}">NOT GIVEN</div>
+                            <div class="text-[11px] font-medium opacity-90 ${isSelectedNotGiven ? 'text-amber-50' : 'text-slate-500'}">Informasi Tidak Disebutkan</div>
+                          </div>
+                        </div>
+                      ` : ''}
+                    </div>
+                  </div>
+                `;
+              })() : ''}
+
+              <!-- STANDARD MULTIPLE CHOICE (SUPPORTS 2, 3, 4, 5, 6, 7+ CHOICES) & ERROR IDENTIFICATION -->
               ${(q.type === 'multiple_choice' || q.type === 'error_identification') ? `
                 <div>
+                  <div class="flex items-center justify-between text-xs font-semibold text-slate-500 mb-2">
+                    <span>Select the best answer from the ${(q.options && q.options.length) || 4} choices below</span>
+                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-slate-100 text-slate-700 border border-slate-200">${(q.options && q.options.length) || 4} Choices</span>
+                  </div>
+
                   <h2 class="text-sm sm:text-base font-bold text-slate-900 leading-snug mb-4">
                     ${q.prompt.replace(/\n/g, '<br>')}
                   </h2>
 
                   <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    ${q.options.map((opt, optIdx) => {
+                    ${(q.options || []).map((opt, optIdx) => {
                       const isSelected = session.answers[q.id] === opt.key;
                       const shapes = [
                         { symbol: "▲", color: "bg-red-500 text-white" },
                         { symbol: "◆", color: "bg-blue-500 text-white" },
                         { symbol: "●", color: "bg-amber-500 text-white" },
-                        { symbol: "■", color: "bg-emerald-500 text-white" }
+                        { symbol: "■", color: "bg-emerald-500 text-white" },
+                        { symbol: "★", color: "bg-purple-600 text-white" },
+                        { symbol: "⬟", color: "bg-pink-600 text-white" },
+                        { symbol: "✦", color: "bg-cyan-600 text-white" },
+                        { symbol: "⬡", color: "bg-indigo-600 text-white" }
                       ];
                       const shape = shapes[optIdx % shapes.length];
                       return `
                         <div onclick="selectExamAnswer('${q.id}', '${opt.key}')" class="p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center gap-3.5 shadow-sm active:scale-98 ${
                           isSelected ? 'bg-brand-50 border-brand-500 ring-2 ring-brand-400/40 shadow-md' : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50'
                         }">
-                          <div class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-sm flex-shrink-0 ${shape.color} shadow-sm">
-                            ${shape.symbol}
+                          <div class="w-10 h-10 rounded-xl flex items-center justify-center font-black text-xs flex-shrink-0 ${shape.color} shadow-sm gap-1">
+                            <span>${shape.symbol}</span>
+                            <span class="text-[11px] font-bold opacity-90">${opt.key}</span>
                           </div>
                           <div class="text-xs sm:text-sm text-slate-800 font-semibold flex-grow text-left">${opt.text}</div>
                         </div>
@@ -3153,13 +3334,41 @@
       lucide.createIcons();
     }
 
+    // Helper: Robust Answer Verification (Supports Keys A/B/C/D/E/F..., True/False text and values)
+    function isAnswerCorrect(q, ans) {
+      if (!q || ans === undefined || ans === null) return false;
+      const sAns = String(ans).trim();
+      const sCor = String(q.correct).trim();
+      if (sAns === sCor || sAns.toUpperCase() === sCor.toUpperCase()) return true;
+
+      // True / False semantic matching
+      if (q.type === 'true_false' || (q.options && q.options.length <= 3 && q.options[0] && q.options[0].text && q.options[0].text.toUpperCase().includes('TRUE'))) {
+        const sAnsUp = sAns.toUpperCase();
+        const sCorUp = sCor.toUpperCase();
+        if ((sCorUp === 'A' || sCorUp === 'TRUE') && (sAnsUp === 'A' || sAnsUp === 'TRUE')) return true;
+        if ((sCorUp === 'B' || sCorUp === 'FALSE') && (sAnsUp === 'B' || sAnsUp === 'FALSE')) return true;
+        if ((sCorUp === 'C' || sCorUp === 'NOT GIVEN') && (sAnsUp === 'C' || sAnsUp === 'NOT GIVEN')) return true;
+      }
+
+      // Check if answer matches option key or option text
+      if (q.options && Array.isArray(q.options)) {
+        const matchedOpt = q.options.find(o => o.key.toUpperCase() === sAns.toUpperCase());
+        if (matchedOpt && matchedOpt.text.trim().toUpperCase() === sCor.toUpperCase()) return true;
+
+        const correctOpt = q.options.find(o => o.key.toUpperCase() === sCor.toUpperCase());
+        if (correctOpt && (correctOpt.text.trim().toUpperCase() === sAns.toUpperCase() || correctOpt.key.toUpperCase() === sAns.toUpperCase())) return true;
+      }
+
+      return false;
+    }
+
     // Exam Player Handlers with Kahoot Instant Reaction
     function selectExamAnswer(qId, key) {
       const session = AppState.examSession;
       session.answers[qId] = key;
 
       const q = AppState.questions.find(item => item.id === qId);
-      const isCorrect = q && (q.correct === key);
+      const isCorrect = isAnswerCorrect(q, key);
 
       if (isCorrect) {
         session.streak = (session.streak || 0) + 1;
@@ -3214,14 +3423,15 @@
         ];
         const encText = encouragements[Math.floor(Math.random() * encouragements.length)];
 
-        const correctOpt = q && q.options && q.options.find(o => o.key === q.correct);
+        const correctOpt = q && q.options && q.options.find(o => o.key === q.correct || o.text.toUpperCase() === String(q.correct).toUpperCase());
+        const correctTextDisplay = correctOpt ? correctOpt.text : (q && q.type === 'true_false' ? (q.correct === 'A' ? 'True' : (q.correct === 'B' ? 'False' : q.correct)) : (q ? q.correct : 'A'));
         session.kahootReaction = {
           isCorrect: false,
           points: 0,
           streak: 0,
           title: encText,
           correctKey: q ? q.correct : "A",
-          correctText: correctOpt ? correctOpt.text : "",
+          correctText: correctTextDisplay,
           explanation: q ? q.explanation : null
         };
       }
@@ -4132,10 +4342,10 @@
         const ans = AppState.examSession.answers[q.id];
         if (q.section === "listening") {
           listTotal += (q.points || 1);
-          if (ans === q.correct) listCorrect += (q.points || 1);
+          if (isAnswerCorrect(q, ans)) listCorrect += (q.points || 1);
         } else if (q.section === "structure") {
           strucTotal += (q.points || 1);
-          if (ans === q.correct) strucCorrect += (q.points || 1);
+          if (isAnswerCorrect(q, ans)) strucCorrect += (q.points || 1);
         } else if (q.section === "reading") {
           if (q.type === "cloze_text") {
             const clozeDefs = q.clozeAnswers || {};
@@ -4154,7 +4364,7 @@
             readCorrect += (q.points ? (subCorrect / totalBlanks) * q.points : subCorrect);
           } else {
             readTotal += (q.points || 1);
-            if (ans === q.correct) readCorrect += (q.points || 1);
+            if (isAnswerCorrect(q, ans)) readCorrect += (q.points || 1);
           }
         }
       });
@@ -5079,6 +5289,7 @@
                   <label class="block font-bold text-slate-700 uppercase mb-1">Question Type</label>
                   <select id="modalType" onchange="handleSectionTypeChange()" class="w-full p-2.5 rounded-xl border border-slate-300 font-semibold outline-none focus:border-brand-500 bg-slate-50">
                     <option value="multiple_choice">Multiple Choice</option>
+                    <option value="true_false">True or False (Benar / Salah)</option>
                     <option value="sentence_blank">Sentence Completion (Missing Word & Hint)</option>
                     <option value="cloze_text">Paragraph Cloze Test (Typed Story Blanks)</option>
                     <option value="error_identification">Error Identification</option>
@@ -5179,29 +5390,35 @@
                 <p class="text-[11px] text-slate-500">Provide the story text in 'Reading Passage' above and mark blanks with [1], [2], [3], etc.</p>
               </div>
 
-              <div id="fieldOptions" class="space-y-2">
-                <label class="block font-bold text-slate-700 uppercase">Answer Choices (A, B, C, D / 1, 2, 3, 4)</label>
-                <div class="grid grid-cols-1 gap-2">
-                  <div class="flex items-center gap-2">
-                    <span class="font-bold text-slate-500 w-5">A:</span>
-                    <input type="text" id="optA" placeholder="Option A text" class="w-full p-2 rounded-lg border border-slate-300 outline-none focus:border-brand-500">
+              <div id="fieldOptions" class="space-y-2.5">
+                <div class="flex flex-wrap items-center justify-between gap-2 pb-1 border-b border-slate-200/80">
+                  <label class="block font-bold text-slate-700 uppercase flex items-center gap-1.5">
+                    <i data-lucide="list" class="w-4 h-4 text-brand-600"></i>
+                    <span id="fieldOptionsTitle">Answer Choices</span>
+                    <span id="badgeOptionsCount" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-brand-100 text-brand-800 font-bold border border-brand-200">4 Choices (A-D)</span>
+                  </label>
+                  <div class="flex items-center gap-1.5">
+                    <button type="button" id="btnAddOptionBtn" onclick="addDynamicOptionRow()" class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold rounded-lg border border-emerald-300 flex items-center gap-1 transition-all cursor-pointer shadow-xs">
+                      <i data-lucide="plus" class="w-3.5 h-3.5"></i> Tambah Pilihan (+E, +F...)
+                    </button>
+                    <span id="quickPresetBtns" class="flex items-center gap-1">
+                      <button type="button" onclick="setQuickOptionCount(5)" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold rounded-lg border border-slate-300 transition-all cursor-pointer" title="Quickly set 5 options (A, B, C, D, E)">
+                        5 Options (A-E)
+                      </button>
+                      <button type="button" onclick="setQuickOptionCount(4)" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold rounded-lg border border-slate-300 transition-all cursor-pointer" title="Quickly set 4 options (A, B, C, D)">
+                        4 Options (A-D)
+                      </button>
+                    </span>
                   </div>
-                  <div class="flex items-center gap-2">
-                    <span class="font-bold text-slate-500 w-5">B:</span>
-                    <input type="text" id="optB" placeholder="Option B text" class="w-full p-2 rounded-lg border border-slate-300 outline-none focus:border-brand-500">
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <span class="font-bold text-slate-500 w-5">C:</span>
-                    <input type="text" id="optC" placeholder="Option C text" class="w-full p-2 rounded-lg border border-slate-300 outline-none focus:border-brand-500">
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <span class="font-bold text-slate-500 w-5">D:</span>
-                    <input type="text" id="optD" placeholder="Option D text" class="w-full p-2 rounded-lg border border-slate-300 outline-none focus:border-brand-500">
-                  </div>
+                </div>
+
+                <!-- Dynamic Option Inputs Container -->
+                <div id="dynamicOptionsList" class="space-y-2">
+                  <!-- Populated dynamically via renderDynamicOptions() -->
                 </div>
               </div>
 
-              <div class="grid grid-cols-2 gap-3">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div id="fieldCorrectContainer">
                   <label class="block font-bold text-slate-700 uppercase mb-1">Answer Key / Evaluation Rubric</label>
                   <select id="modalCorrect" class="w-full p-2.5 rounded-xl border border-slate-300 font-bold outline-none focus:border-brand-500 bg-slate-50">
@@ -5448,6 +5665,220 @@
       stopAllAudioAndMedia();
     }
 
+    // ================= DYNAMIC QUESTION OPTIONS & TRUE/FALSE BUILDER =================
+    function getCurrentDynamicOptions() {
+      const inputs = document.querySelectorAll("#dynamicOptionsList .dynamic-opt-input");
+      const list = [];
+      inputs.forEach((inp, idx) => {
+        const key = inp.getAttribute("data-opt-key") || String.fromCharCode(65 + idx);
+        list.push({ key: key, text: inp.value });
+      });
+      return list;
+    }
+
+    function renderDynamicOptions(options, type) {
+      const container = document.getElementById("dynamicOptionsList");
+      if (!container) return;
+
+      const currentType = type || (document.getElementById("modalType") ? document.getElementById("modalType").value : "multiple_choice");
+      const isTrueFalse = currentType === "true_false";
+
+      let opts = options;
+      if (!opts || !Array.isArray(opts) || opts.length === 0) {
+        if (isTrueFalse) {
+          opts = [
+            { key: "A", text: "True" },
+            { key: "B", text: "False" }
+          ];
+        } else {
+          opts = [
+            { key: "A", text: "" },
+            { key: "B", text: "" },
+            { key: "C", text: "" },
+            { key: "D", text: "" }
+          ];
+        }
+      }
+
+      const titleEl = document.getElementById("fieldOptionsTitle");
+      const countBadge = document.getElementById("badgeOptionsCount");
+      const btnAdd = document.getElementById("btnAddOptionBtn");
+      const quickBtns = document.getElementById("quickPresetBtns");
+
+      if (isTrueFalse) {
+        if (titleEl) titleEl.innerText = "Pilihan Jawaban (True or False)";
+        if (countBadge) {
+          countBadge.innerText = `${opts.length} Pilihan (${opts.map(o => o.text || o.key).join(' / ')})`;
+          countBadge.className = "text-[10px] font-mono px-2 py-0.5 rounded-full bg-teal-100 text-teal-800 font-bold border border-teal-200";
+        }
+        if (btnAdd) {
+          btnAdd.innerHTML = `<i data-lucide="plus" class="w-3.5 h-3.5"></i> Add Option (+Not Given)`;
+        }
+        if (quickBtns) quickBtns.classList.add("hidden");
+      } else {
+        if (titleEl) titleEl.innerText = "Pilihan Jawaban (Multiple Choice)";
+        const lastKey = String.fromCharCode(64 + opts.length);
+        if (countBadge) {
+          countBadge.innerText = `${opts.length} Pilihan (A-${lastKey})`;
+          countBadge.className = "text-[10px] font-mono px-2 py-0.5 rounded-full bg-brand-100 text-brand-800 font-bold border border-brand-200";
+        }
+        if (btnAdd) {
+          btnAdd.innerHTML = `<i data-lucide="plus" class="w-3.5 h-3.5"></i> Tambah Pilihan (+${String.fromCharCode(65 + opts.length)})`;
+        }
+        if (quickBtns) quickBtns.classList.remove("hidden");
+      }
+
+      const badgeColors = [
+        "bg-red-100 text-red-700 border-red-300",
+        "bg-blue-100 text-blue-700 border-blue-300",
+        "bg-amber-100 text-amber-700 border-amber-300",
+        "bg-emerald-100 text-emerald-700 border-emerald-300",
+        "bg-purple-100 text-purple-700 border-purple-300",
+        "bg-pink-100 text-pink-700 border-pink-300",
+        "bg-cyan-100 text-cyan-700 border-cyan-300",
+        "bg-indigo-100 text-indigo-700 border-indigo-300"
+      ];
+
+      container.innerHTML = opts.map((opt, idx) => {
+        const key = String.fromCharCode(65 + idx);
+        let textVal = "";
+        if (typeof opt === "string") {
+          textVal = opt;
+        } else if (opt && opt.text !== undefined) {
+          textVal = opt.text;
+        }
+        textVal = (textVal || "").replace(/"/g, '&quot;');
+
+        const colorClass = isTrueFalse 
+          ? (idx === 0 ? "bg-emerald-100 text-emerald-800 border-emerald-300" : (idx === 1 ? "bg-rose-100 text-rose-800 border-rose-300" : "bg-amber-100 text-amber-800 border-amber-300"))
+          : badgeColors[idx % badgeColors.length];
+
+        const symbolText = isTrueFalse
+          ? (idx === 0 ? "✓ True" : (idx === 1 ? "✗ False" : "? " + key))
+          : key;
+
+        const placeholder = isTrueFalse
+          ? (idx === 0 ? "True (Benar)" : (idx === 1 ? "False (Salah)" : "Not Given / Informasi Tidak Ada"))
+          : `Teks Pilihan ${key} (Option ${key} text)...`;
+
+        const canDelete = opts.length > 2;
+
+        return `
+          <div class="flex items-center gap-2 p-1.5 rounded-xl bg-white border border-slate-200 hover:border-slate-300 transition-colors shadow-2xs" data-opt-idx="${idx}">
+            <span class="px-2.5 h-8 rounded-lg border font-bold text-xs flex items-center justify-center flex-shrink-0 ${colorClass}">
+              ${symbolText}
+            </span>
+            <input type="text" id="opt${key}" data-opt-key="${key}" value="${textVal}" placeholder="${placeholder}" class="dynamic-opt-input flex-grow p-2 rounded-lg border border-slate-200 outline-none focus:border-brand-500 text-xs sm:text-sm font-medium bg-slate-50/50 focus:bg-white transition-all">
+            ${canDelete ? `
+              <button type="button" onclick="removeDynamicOptionRow(${idx})" class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer" title="Hapus Pilihan ${key}">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+              </button>
+            ` : `
+              <div class="w-8"></div>
+            `}
+          </div>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+      updateModalCorrectDropdown();
+    }
+
+    function addDynamicOptionRow() {
+      const current = getCurrentDynamicOptions();
+      const nextKey = String.fromCharCode(65 + current.length);
+      const type = document.getElementById("modalType") ? document.getElementById("modalType").value : "multiple_choice";
+      if (type === "true_false" && current.length === 2) {
+        current.push({ key: nextKey, text: "Not Given" });
+      } else {
+        current.push({ key: nextKey, text: "" });
+      }
+      renderDynamicOptions(current, type);
+      setTimeout(() => {
+        const lastInput = document.getElementById(`opt${nextKey}`);
+        if (lastInput) lastInput.focus();
+      }, 50);
+    }
+
+    function removeDynamicOptionRow(idx) {
+      const current = getCurrentDynamicOptions();
+      if (current.length <= 2) {
+        showToast("Minimal harus memiliki 2 pilihan jawaban.");
+        return;
+      }
+      current.splice(idx, 1);
+      const rekeyed = current.map((opt, i) => ({
+        key: String.fromCharCode(65 + i),
+        text: opt.text
+      }));
+      const type = document.getElementById("modalType") ? document.getElementById("modalType").value : "multiple_choice";
+      renderDynamicOptions(rekeyed, type);
+    }
+
+    function setQuickOptionCount(targetCount) {
+      const current = getCurrentDynamicOptions();
+      const updated = [];
+      for (let i = 0; i < targetCount; i++) {
+        const key = String.fromCharCode(65 + i);
+        updated.push({
+          key: key,
+          text: (current[i] && current[i].text) || ""
+        });
+      }
+      const type = document.getElementById("modalType") ? document.getElementById("modalType").value : "multiple_choice";
+      renderDynamicOptions(updated, type);
+    }
+
+    function updateModalCorrectDropdown(selectedValue) {
+      const select = document.getElementById("modalCorrect");
+      if (!select) return;
+
+      const type = document.getElementById("modalType") ? document.getElementById("modalType").value : "multiple_choice";
+      const currentVal = selectedValue || select.value || "A";
+      const opts = getCurrentDynamicOptions();
+
+      select.innerHTML = "";
+
+      if (type === "true_false") {
+        opts.forEach((opt, idx) => {
+          const optEl = document.createElement("option");
+          optEl.value = opt.key;
+          const label = opt.text || (idx === 0 ? "True" : (idx === 1 ? "False" : "Not Given"));
+          optEl.innerText = `${opt.key}: ${label} (${idx === 0 ? 'Pernyataan Benar' : (idx === 1 ? 'Pernyataan Salah' : 'Tidak Disebutkan')})`;
+          select.appendChild(optEl);
+        });
+      } else if (type === "multiple_choice" || type === "error_identification" || type === "sentence_blank") {
+        opts.forEach((opt, idx) => {
+          const optEl = document.createElement("option");
+          optEl.value = opt.key;
+          const snippet = opt.text ? ` - "${opt.text.substring(0, 30)}${opt.text.length > 30 ? '...' : ''}"` : '';
+          optEl.innerText = `Option ${opt.key} (Pilihan ${idx + 1})${snippet}`;
+          select.appendChild(optEl);
+        });
+      }
+
+      const optStdRubric = document.createElement("option");
+      optStdRubric.value = "Standard Rubric";
+      optStdRubric.innerText = "Standard Rubric (Writing / Essay)";
+      select.appendChild(optStdRubric);
+
+      const optExamRubric = document.createElement("option");
+      optExamRubric.value = "Examiner Rubric";
+      optExamRubric.innerText = "Examiner Rubric (Speaking)";
+      select.appendChild(optExamRubric);
+
+      const validValues = Array.from(select.options).map(o => o.value);
+      if (validValues.includes(currentVal)) {
+        select.value = currentVal;
+      } else if (currentVal === "True" || currentVal === "true") {
+        select.value = "A";
+      } else if (currentVal === "False" || currentVal === "false") {
+        select.value = "B";
+      } else {
+        select.value = validValues[0] || "A";
+      }
+    }
+
     function openAddQuestionSpaModal(editingId) {
       stopAllAudioAndMedia();
       const modal = document.getElementById("addQuestionSpaModal");
@@ -5495,35 +5926,12 @@
           }
 
           handleSectionTypeChange();
+          renderDynamicOptions(q.options, q.type || "multiple_choice");
+          updateModalCorrectDropdown(q.correct || "A");
+
           updateModalAudioPreview();
           updateModalImagePreview();
           updateModalVideoPreview();
-
-          const optA = document.getElementById("optA");
-          const optB = document.getElementById("optB");
-          const optC = document.getElementById("optC");
-          const optD = document.getElementById("optD");
-
-          const getOptText = (opt) => {
-            if (!opt) return "";
-            if (typeof opt === "string") return opt;
-            return opt.text || "";
-          };
-
-          if (q.options && q.options.length > 0) {
-            if (optA) optA.value = getOptText(q.options[0]);
-            if (optB) optB.value = getOptText(q.options[1]);
-            if (optC) optC.value = getOptText(q.options[2]);
-            if (optD) optD.value = getOptText(q.options[3]);
-          } else {
-            if (optA) optA.value = "";
-            if (optB) optB.value = "";
-            if (optC) optC.value = "";
-            if (optD) optD.value = "";
-          }
-          
-          const correctEl = document.getElementById("modalCorrect");
-          if (correctEl) correctEl.value = q.correct || "A";
         }
       } else {
         if (title) title.innerText = "Add Question to Assessment Bank";
@@ -5545,19 +5953,13 @@
         if (videoUrlEl) videoUrlEl.value = "";
         const pointsEl = document.getElementById("modalPoints");
         if (pointsEl) pointsEl.value = 1;
-        const optA = document.getElementById("optA");
-        const optB = document.getElementById("optB");
-        const optC = document.getElementById("optC");
-        const optD = document.getElementById("optD");
-        if (optA) optA.value = "";
-        if (optB) optB.value = "";
-        if (optC) optC.value = "";
-        if (optD) optD.value = "";
         if (modalHints) modalHints.value = "";
         if (modalClozeAnswers) modalClozeAnswers.value = "";
-        const correctEl = document.getElementById("modalCorrect");
-        if (correctEl) correctEl.value = "A";
+        
         handleSectionTypeChange();
+        renderDynamicOptions([], "multiple_choice");
+        updateModalCorrectDropdown("A");
+
         updateModalAudioPreview();
         updateModalImagePreview();
         updateModalVideoPreview();
@@ -5796,10 +6198,32 @@
         if (fieldCloze) fieldCloze.classList.remove("hidden");
         if (fieldCorrect) fieldCorrect.classList.add("hidden");
         if (pointsInput && pointsInput.value === "1") pointsInput.value = "3";
+      } else if (type === "true_false") {
+        if (fieldOptions) fieldOptions.classList.remove("hidden");
+        const currentOpts = getCurrentDynamicOptions();
+        const isAlreadyTf = currentOpts.length >= 2 && (currentOpts[0].text || '').toLowerCase().includes("true");
+        if (!isAlreadyTf) {
+          renderDynamicOptions([
+            { key: "A", text: "True" },
+            { key: "B", text: "False" }
+          ], "true_false");
+        } else {
+          renderDynamicOptions(currentOpts, "true_false");
+        }
+        if (pointsInput && (pointsInput.value === "100" || pointsInput.value === "3")) pointsInput.value = "1";
       } else {
         if (fieldOptions) fieldOptions.classList.remove("hidden");
-        if (correctSelect && (correctSelect.value === "Standard Rubric" || correctSelect.value === "Examiner Rubric")) {
-          correctSelect.value = "A";
+        const currentOpts = getCurrentDynamicOptions();
+        const isTf = currentOpts.length >= 2 && (currentOpts[0].text || '').toLowerCase().includes("true");
+        if (isTf || currentOpts.length === 0) {
+          renderDynamicOptions([
+            { key: "A", text: "" },
+            { key: "B", text: "" },
+            { key: "C", text: "" },
+            { key: "D", text: "" }
+          ], "multiple_choice");
+        } else {
+          renderDynamicOptions(currentOpts, "multiple_choice");
         }
         if (pointsInput && (pointsInput.value === "100" || pointsInput.value === "3")) pointsInput.value = "1";
       }
@@ -5911,13 +6335,23 @@
       }
 
       let options = [];
-      if (type === "multiple_choice" || type === "error_identification" || type === "sentence_blank") {
-        options = [
-          { key: "A", text: document.getElementById("optA").value || "Option A" },
-          { key: "B", text: document.getElementById("optB").value || "Option B" },
-          { key: "C", text: document.getElementById("optC").value || "Option C" },
-          { key: "D", text: document.getElementById("optD").value || "Option D" }
-        ];
+      if (type === "multiple_choice" || type === "error_identification" || type === "sentence_blank" || type === "true_false") {
+        options = getCurrentDynamicOptions();
+        if (options.length === 0) {
+          if (type === "true_false") {
+            options = [
+              { key: "A", text: "True" },
+              { key: "B", text: "False" }
+            ];
+          } else {
+            options = [
+              { key: "A", text: "Option A" },
+              { key: "B", text: "Option B" },
+              { key: "C", text: "Option C" },
+              { key: "D", text: "Option D" }
+            ];
+          }
+        }
       }
 
       if (editingId) {
@@ -6067,8 +6501,10 @@
       }
 
       tbody.innerHTML = items.map(q => {
-        let typeBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700">Multiple Choice</span>`;
-        if (q.type === 'sentence_blank') {
+        let typeBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700">Multiple Choice (${(q.options && q.options.length) || 4} Choices)</span>`;
+        if (q.type === 'true_false') {
+          typeBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-teal-100 text-teal-800 border border-teal-200">True or False</span>`;
+        } else if (q.type === 'sentence_blank') {
           typeBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">Sentence Blank (Hint)</span>`;
         } else if (q.type === 'cloze_text') {
           typeBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-100 text-purple-800 border border-purple-200">Story Cloze (Typing)</span>`;
@@ -6556,12 +6992,22 @@
         hints = modalHintsEl.value.split('\n').map(h => h.trim()).filter(h => h.length > 0);
       }
 
-      let options = [
-        { key: "A", text: (document.getElementById("optA") && document.getElementById("optA").value) || "Option A" },
-        { key: "B", text: (document.getElementById("optB") && document.getElementById("optB").value) || "Option B" },
-        { key: "C", text: (document.getElementById("optC") && document.getElementById("optC").value) || "Option C" },
-        { key: "D", text: (document.getElementById("optD") && document.getElementById("optD").value) || "Option D" }
-      ];
+      let options = getCurrentDynamicOptions();
+      if (options.length === 0) {
+        if (type === "true_false") {
+          options = [
+            { key: "A", text: "True" },
+            { key: "B", text: "False" }
+          ];
+        } else {
+          options = [
+            { key: "A", text: "Option A" },
+            { key: "B", text: "Option B" },
+            { key: "C", text: "Option C" },
+            { key: "D", text: "Option D" }
+          ];
+        }
+      }
 
       const tempQ = {
         id: "PREVIEW-TEMP",
@@ -6753,18 +7199,65 @@
             <p class="text-[11px] text-slate-400">Examiner rubric grading queue active for this item.</p>
           </div>
         `;
-      } else {
+      } else if (q.type === 'true_false') {
         promptHtml = `
-          <h2 class="text-sm sm:text-base font-bold text-slate-900 leading-snug">
-            ${(q.prompt || '').replace(/\n/g, '<br>')}
-          </h2>
+          <div class="space-y-2 mb-2">
+            <div class="text-xs font-semibold text-slate-500 flex items-center justify-between">
+              <span>Pernyataan Benar atau Salah • True or False Statement</span>
+              <span class="text-[10px] font-mono font-bold text-teal-700 bg-teal-50 border border-teal-200 px-2.5 py-0.5 rounded-full">True / False</span>
+            </div>
+            <h2 class="text-sm sm:text-base font-bold text-slate-900 leading-snug">
+              ${(q.prompt || '').replace(/\n/g, '<br>')}
+            </h2>
+          </div>
+        `;
+        const hasNotGiven = q.options && q.options.length >= 3;
+        optionsHtml = `
+          <div class="grid grid-cols-1 ${hasNotGiven ? 'sm:grid-cols-3' : 'sm:grid-cols-2'} gap-3.5 pt-2">
+            <div onclick="selectPreviewOption('A', 'True')" id="previewOpt_A" class="p-4 rounded-2xl border-2 border-emerald-200 bg-emerald-50/50 hover:bg-emerald-100/70 transition-all cursor-pointer flex flex-col items-center justify-center text-center gap-2">
+              <div id="previewBadge_A" class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 font-black text-lg flex items-center justify-center shadow-xs">✓</div>
+              <div class="font-bold text-sm text-emerald-950">TRUE (Benar)</div>
+            </div>
+            <div onclick="selectPreviewOption('B', 'False')" id="previewOpt_B" class="p-4 rounded-2xl border-2 border-rose-200 bg-rose-50/50 hover:bg-rose-100/70 transition-all cursor-pointer flex flex-col items-center justify-center text-center gap-2">
+              <div id="previewBadge_B" class="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 font-black text-lg flex items-center justify-center shadow-xs">✗</div>
+              <div class="font-bold text-sm text-rose-950">FALSE (Salah)</div>
+            </div>
+            ${hasNotGiven ? `
+              <div onclick="selectPreviewOption('C', 'Not Given')" id="previewOpt_C" class="p-4 rounded-2xl border-2 border-amber-200 bg-amber-50/50 hover:bg-amber-100/70 transition-all cursor-pointer flex flex-col items-center justify-center text-center gap-2">
+                <div id="previewBadge_C" class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 font-black text-lg flex items-center justify-center shadow-xs">?</div>
+                <div class="font-bold text-sm text-amber-950">NOT GIVEN</div>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      } else {
+        const badgeColors = [
+          "bg-red-500 text-white",
+          "bg-blue-500 text-white",
+          "bg-amber-500 text-white",
+          "bg-emerald-500 text-white",
+          "bg-purple-600 text-white",
+          "bg-pink-600 text-white",
+          "bg-cyan-600 text-white",
+          "bg-indigo-600 text-white"
+        ];
+        promptHtml = `
+          <div class="space-y-1 mb-2">
+            <div class="text-xs font-semibold text-slate-500 flex items-center justify-between">
+              <span>Pilihan Ganda (${(q.options && q.options.length) || 4} Choices)</span>
+              <span class="text-[10px] font-mono font-bold text-brand-700 bg-brand-50 border border-brand-200 px-2 py-0.5 rounded-full">${(q.options && q.options.length) || 4} Options</span>
+            </div>
+            <h2 class="text-sm sm:text-base font-bold text-slate-900 leading-snug">
+              ${(q.prompt || '').replace(/\n/g, '<br>')}
+            </h2>
+          </div>
         `;
         optionsHtml = `
-          <div class="space-y-3 pt-2">
-            ${(q.options || []).map(opt => `
-              <div onclick="selectPreviewOption('${opt.key}')" id="previewOpt_${opt.key}" class="p-3.5 sm:p-4 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 transition-all cursor-pointer flex items-start gap-3">
-                <div id="previewBadge_${opt.key}" class="w-7 h-7 rounded-xl flex items-center justify-center font-bold text-xs flex-shrink-0 bg-slate-100 text-slate-700 border border-slate-300">${opt.key}</div>
-                <div class="text-xs sm:text-sm text-slate-800 pt-0.5">${opt.text}</div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+            ${(q.options || []).map((opt, optIdx) => `
+              <div onclick="selectPreviewOption('${opt.key}')" id="previewOpt_${opt.key}" class="p-3.5 sm:p-4 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 transition-all cursor-pointer flex items-center gap-3">
+                <div id="previewBadge_${opt.key}" class="w-8 h-8 rounded-xl flex items-center justify-center font-bold text-xs flex-shrink-0 ${badgeColors[optIdx % badgeColors.length]} shadow-xs">${opt.key}</div>
+                <div class="text-xs sm:text-sm text-slate-800 font-medium">${opt.text}</div>
               </div>
             `).join('')}
           </div>

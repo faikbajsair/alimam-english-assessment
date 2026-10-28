@@ -3,7 +3,8 @@
  * QuestionModel.gs - Question Bank, Section Management & Multi-Format Parsing
  *
  * Supported Question Types:
- * - multiple_choice : A/B/C/D/E with optional audio/image specimen
+ * - multiple_choice : Dynamic 2 to 8+ options (A/B/C/D/E/F/G...) with optional audio/image specimen
+ * - true_false      : True / False (Benar / Salah) binary choice or True/False/Not Given
  * - fill_blank      : C-Test or inline blank completion
  * - essay           : Long-form writing with word-count & scoring rubrics
  * - speaking_record : Audio recording prompt with time limit & audio playback
@@ -150,6 +151,159 @@ var QuestionModel = (function () {
    */
   function getMockQuestions() {
     return [
+  {
+    "id": "Q-TF-G7-01",
+    "examType": "Grade 7",
+    "section": "reading",
+    "type": "true_false",
+    "passage": "School Library Notice: The school library is open from 07:30 to 16:00 every weekday. Students are permitted to borrow a maximum of three books at a time for up to two weeks.",
+    "prompt": "According to the library notice, students are allowed to borrow up to five books simultaneously.",
+    "audioUrl": "",
+    "imageUrl": "",
+    "videoUrl": "",
+    "optionsJson": [
+      {
+        "key": "A",
+        "text": "True"
+      },
+      {
+        "key": "B",
+        "text": "False"
+      }
+    ],
+    "correctAnswer": "B",
+    "rubricJson": {},
+    "points": 1,
+    "tags": "Grade 7, reading, true_false"
+  },
+  {
+    "id": "Q-TF-G8-02",
+    "examType": "Grade 8",
+    "section": "listening",
+    "type": "true_false",
+    "passage": "Interview with Dan: Young App Developer",
+    "prompt": "Dan stated that he began learning how to code when he was eleven years old after seeing his brother make mobile applications.",
+    "audioUrl": "https://actions.google.com/sounds/v1/speech/announcement_chime.ogg",
+    "imageUrl": "",
+    "videoUrl": "",
+    "optionsJson": [
+      {
+        "key": "A",
+        "text": "True"
+      },
+      {
+        "key": "B",
+        "text": "False"
+      }
+    ],
+    "correctAnswer": "A",
+    "rubricJson": {},
+    "points": 1,
+    "tags": "Grade 8, listening, true_false"
+  },
+  {
+    "id": "Q-TF-IELTS-03",
+    "examType": "IELTS_ACADEMIC",
+    "section": "reading",
+    "type": "true_false",
+    "passage": "Renewable Energy Transitions: Over the past decade, photovoltaic solar panel efficiency has risen from 14% to over 22%. Although the initial capital investment remains significant, commercial buildings recoup the installation expenditure within five to seven years.",
+    "prompt": "Commercial buildings usually recover the financial investment of solar panels in less than eight years.",
+    "audioUrl": "",
+    "imageUrl": "",
+    "videoUrl": "",
+    "optionsJson": [
+      {
+        "key": "A",
+        "text": "True"
+      },
+      {
+        "key": "B",
+        "text": "False"
+      },
+      {
+        "key": "C",
+        "text": "Not Given"
+      }
+    ],
+    "correctAnswer": "A",
+    "rubricJson": {},
+    "points": 1,
+    "tags": "IELTS_ACADEMIC, reading, true_false"
+  },
+  {
+    "id": "Q-MC5-G9-01",
+    "examType": "Grade 9",
+    "section": "structure",
+    "type": "multiple_choice",
+    "passage": "Advanced Grammar: Conditional Inversion",
+    "prompt": "Had the school administration _______ the solar energy proposal earlier, the campus would have qualified for the municipal green building grant.",
+    "audioUrl": "",
+    "imageUrl": "",
+    "videoUrl": "",
+    "optionsJson": [
+      {
+        "key": "A",
+        "text": "approve"
+      },
+      {
+        "key": "B",
+        "text": "approved"
+      },
+      {
+        "key": "C",
+        "text": "approving"
+      },
+      {
+        "key": "D",
+        "text": "were approved"
+      },
+      {
+        "key": "E",
+        "text": "had approved"
+      }
+    ],
+    "correctAnswer": "B",
+    "rubricJson": {},
+    "points": 1,
+    "tags": "Grade 9, structure, 5_options"
+  },
+  {
+    "id": "Q-MC5-TOEFL-02",
+    "examType": "TOEFL_ITP",
+    "section": "structure",
+    "type": "multiple_choice",
+    "passage": "Scientific History: The Germ Theory",
+    "prompt": "Not until the late nineteenth century _______ widespread acceptance among physicians and medical researchers.",
+    "audioUrl": "",
+    "imageUrl": "",
+    "videoUrl": "",
+    "optionsJson": [
+      {
+        "key": "A",
+        "text": "the germ theory of disease gained"
+      },
+      {
+        "key": "B",
+        "text": "did the germ theory of disease gain"
+      },
+      {
+        "key": "C",
+        "text": "gaining the germ theory of disease"
+      },
+      {
+        "key": "D",
+        "text": "was the germ theory of disease gained"
+      },
+      {
+        "key": "E",
+        "text": "the germ theory of disease had gained"
+      }
+    ],
+    "correctAnswer": "B",
+    "rubricJson": {},
+    "points": 1,
+    "tags": "TOEFL_ITP, structure, 5_options"
+  },
   {
     "id": "Q-LIST-01",
     "examType": "TOEFL_ITP",
