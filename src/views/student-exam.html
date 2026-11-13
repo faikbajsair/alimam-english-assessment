@@ -655,13 +655,24 @@
         }
       });
 
-      // 3. Tab Switching & Window Blur Detector
+      // 3. Tab Switching & Window Blur Detector (With Grace Period & Cooldown)
+      state.gracePeriodUntil = Date.now() + 15000;
+      state.lastViolationTime = 0;
+
       window.addEventListener('blur', function() {
+        if (Date.now() < (state.gracePeriodUntil || 0)) return;
+        if (state.isRequestingMedia) return;
+        if (Date.now() - (state.lastViolationTime || 0) < 4000) return;
+        state.lastViolationTime = Date.now();
         triggerSecurityViolation('tab_switch');
       });
 
       document.addEventListener('visibilitychange', function() {
         if (document.hidden) {
+          if (Date.now() < (state.gracePeriodUntil || 0)) return;
+          if (state.isRequestingMedia) return;
+          if (Date.now() - (state.lastViolationTime || 0) < 4000) return;
+          state.lastViolationTime = Date.now();
           triggerSecurityViolation('visibility_hidden');
         }
       });
@@ -677,7 +688,7 @@
 
       if (state.strikes >= state.maxStrikes) {
         setTimeout(function() {
-          alert("Maximum strike limit (3x) reached. Your exam has been automatically submitted by the system.");
+          alert("Peringatan keamanan (3x strikes) telah tercapai. Ujian Anda otomatis dikumpulkan oleh sistem.");
           submitExamNow();
         }, 1500);
       }
