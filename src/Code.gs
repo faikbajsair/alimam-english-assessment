@@ -24,6 +24,9 @@ function doGet(e) {
     var section = e.parameter.section || "";
     return createJsonResponse({ success: true, questions: QuestionModel.getQuestionsBySection(examType, section) });
   }
+  if (action === "getSubmissions") {
+    return createJsonResponse({ success: true, submissions: ExaminationModel.getAllSubmissions() });
+  }
   if (action === "getStudents" || action === "getUsers") {
     return createJsonResponse({ success: true, students: UserModel.getAllUsers(false) });
   }

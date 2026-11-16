@@ -251,6 +251,36 @@ var ExaminationModel = (function () {
     ];
   }
 
+  function getAllSubmissions() {
+    var sheet = getSubmissionSheet();
+    if (!sheet) return [];
+    var data = sheet.getDataRange().getValues();
+    if (data.length <= 1) return [];
+    var submissions = [];
+    for (var i = 1; i < data.length; i++) {
+      var row = data[i];
+      if (!row[0]) continue;
+      submissions.push({
+        id: row[0],
+        examId: row[1],
+        studentId: row[2],
+        studentName: row[3],
+        sessionToken: row[4],
+        startedAt: row[5],
+        submittedAt: row[6],
+        status: row[7],
+        answers: row[8],
+        scores: row[9],
+        proctoringLogs: row[10],
+        violationsCount: row[11],
+        calculatedScore: row[12],
+        scaledScore: row[13],
+        gradeStatus: row[14]
+      });
+    }
+    return submissions;
+  }
+
   function recordSubmission(record, answers, rawScores, proctoringLogs) {
     var sheet = getSubmissionSheet();
     if (sheet) {
@@ -281,6 +311,7 @@ var ExaminationModel = (function () {
     startSession: startSession,
     logViolation: logViolation,
     recordSubmission: recordSubmission,
+    getAllSubmissions: getAllSubmissions,
     getMockExams: getMockExams
   };
 })();
