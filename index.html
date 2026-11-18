@@ -2818,8 +2818,22 @@
               </div>
             </div>
 
-            <!-- Right: Sound Toggle, Timer & Submit -->
-            <div class="flex items-center gap-2 sm:gap-3">
+            <!-- Right: Security HUD, Fullscreen, Sound Toggle, Timer & Submit -->
+            <div class="flex items-center gap-1.5 sm:gap-2.5">
+              <!-- Security Strike Indicator Badge -->
+              <div class="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-800 border ${session.strikes === 0 ? 'border-emerald-500/40 text-emerald-300' : session.strikes === 1 ? 'border-amber-500/50 text-amber-300' : 'border-red-500/60 text-red-300'}" title="Status Integritas & Peringatan Keamanan Proctoring">
+                <i data-lucide="shield-check" class="w-3.5 h-3.5 ${session.strikes === 0 ? 'text-emerald-400' : session.strikes === 1 ? 'text-amber-400' : 'text-red-400'}"></i>
+                <div>
+                  <div class="text-[8px] uppercase font-bold text-slate-400 leading-none">Security</div>
+                  <div id="playerStrikeCount" class="font-mono text-xs font-black leading-tight">${session.strikes} / 3 Strikes</div>
+                </div>
+              </div>
+
+              <!-- Fullscreen Button -->
+              <button onclick="toggleExamFullscreen()" id="btnFullscreenToggle" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-all cursor-pointer" title="Layar Penuh (Fullscreen)">
+                <i data-lucide="maximize" class="w-4 h-4 text-emerald-400"></i>
+              </button>
+
               <!-- Sound FX Mute Button -->
               <button onclick="SoundFX.toggleMute()" id="btnMuteToggle" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-all cursor-pointer" title="Toggle Sound FX">
                 <i data-lucide="${SoundFX.isMuted ? 'volume-x' : 'volume-2'}" id="audioMuteIcon" class="w-4 h-4 text-emerald-400"></i>
@@ -3400,21 +3414,54 @@
           })() : ''}
         </div>
 
-        <!-- Violation Modal -->
-        <div id="spaViolationModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden flex items-center justify-center p-4">
-          <div class="bg-white rounded-3xl max-w-md w-full p-6 text-center space-y-4 shadow-2xl border-4 border-red-500">
-            <div class="w-16 h-16 mx-auto rounded-2xl bg-red-100 text-red-600 flex items-center justify-center">
+        <!-- Violation Modal (Smart Proctoring v3.0) -->
+        <div id="spaViolationModal" class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md hidden flex items-center justify-center p-4">
+          <div class="bg-white rounded-3xl max-w-md w-full p-6 text-center space-y-4 shadow-2xl border-4 border-red-500 animate-bounce-in">
+            <div class="w-16 h-16 mx-auto rounded-2xl bg-red-100 text-red-600 flex items-center justify-center shadow-inner">
               <i data-lucide="alert-triangle" class="w-9 h-9"></i>
             </div>
-            <h2 class="text-xl font-black text-slate-900">EXAM INTEGRITY VIOLATION!</h2>
-            <p class="text-xs text-slate-600 leading-relaxed">
-              The system detected that you <strong>switched tabs, exited fullscreen, or opened another application window</strong>.
-            </p>
-            <div class="p-3 bg-red-50 rounded-2xl border border-red-200 text-red-800 text-xs font-bold font-mono">
-              Violation Status: <span id="modalStrikeSpan">${session.strikes}</span> / 3 Strikes
+            
+            <div class="space-y-1">
+              <span class="inline-block px-3 py-0.5 rounded-full bg-red-100 text-red-800 text-[10px] font-black uppercase tracking-wider">AI Proctoring Security Warning</span>
+              <h2 class="text-xl font-black text-slate-900">PERINGATAN INTEGRITAS UJIAN!</h2>
             </div>
-            <button onclick="closeViolationModal()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl shadow-lg transition-all text-xs sm:text-sm cursor-pointer">
-              I Understand & Return to Exam
+
+            <!-- Specific Violation Reason -->
+            <div class="p-3.5 bg-red-50 rounded-2xl border border-red-200 text-left space-y-1 text-xs">
+              <div class="text-[10px] text-red-700 font-bold uppercase tracking-wider flex items-center gap-1">
+                <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-red-600"></i> Alasan Pelanggaran Terdeteksi:
+              </div>
+              <div id="modalViolationReason" class="font-bold text-red-950 leading-relaxed">
+                Terdeteksi berpindah tab browser atau keluar dari mode layar penuh.
+              </div>
+            </div>
+
+            <!-- Strike Indicator Badges -->
+            <div class="space-y-1.5">
+              <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Status Akumulasi Peringatan:</div>
+              <div class="grid grid-cols-3 gap-2">
+                <div id="strikeBadge1" class="p-2 rounded-xl border text-center transition-all ${session.strikes >= 1 ? 'bg-amber-100 border-amber-400 text-amber-900 font-bold' : 'bg-slate-50 border-slate-200 text-slate-400'}">
+                  <div class="text-sm">⚠️</div>
+                  <div class="text-[10px]">Peringatan 1</div>
+                </div>
+                <div id="strikeBadge2" class="p-2 rounded-xl border text-center transition-all ${session.strikes >= 2 ? 'bg-orange-100 border-orange-500 text-orange-950 font-bold' : 'bg-slate-50 border-slate-200 text-slate-400'}">
+                  <div class="text-sm">🚨</div>
+                  <div class="text-[10px]">Peringatan 2</div>
+                </div>
+                <div id="strikeBadge3" class="p-2 rounded-xl border text-center transition-all ${session.strikes >= 3 ? 'bg-red-600 border-red-700 text-white font-black animate-pulse' : 'bg-slate-50 border-slate-200 text-slate-400'}">
+                  <div class="text-sm">🛑</div>
+                  <div class="text-[10px]">Peringatan 3</div>
+                </div>
+              </div>
+            </div>
+
+            <p class="text-[11px] text-slate-500 leading-relaxed">
+              Tetaplah berada di dalam tab ujian dan mode layar penuh. Jika mencapai <strong>3 kali peringatan</strong>, ujian akan otomatis dikumpulkan dan diserahkan ke sistem penguji.
+            </p>
+
+            <button onclick="closeViolationModal()" class="w-full bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-bold py-3.5 rounded-2xl shadow-lg transition-all text-xs sm:text-sm cursor-pointer flex items-center justify-center gap-2 active:scale-95">
+              <i data-lucide="maximize" class="w-4 h-4"></i>
+              <span>Saya Mengerti, Masuk Fullscreen & Lanjut Ujian</span>
             </button>
           </div>
         </div>
@@ -4689,65 +4736,218 @@
       }
     }
 
+    // ================= SMART PROCTORING & INTEGRITY ENGINE v3.0 =================
+    const SmartProctoring = {
+      isInitialized: false,
+      blurVerificationTimer: null,
+
+      init() {
+        if (this.isInitialized) return;
+        this.isInitialized = true;
+
+        // 1. Visibility Change (Tab Switch or Minimize) -> 100% indisputable violation
+        document.addEventListener("visibilitychange", () => {
+          if (!this.canCheckViolation()) return;
+          if (document.hidden) {
+            this.handleViolation("TAB_SWITCH", "Terdeteksi berpindah ke tab browser lain atau meminimalkan jendela ujian.");
+          } else {
+            if (this.blurVerificationTimer) {
+              clearTimeout(this.blurVerificationTimer);
+              this.blurVerificationTimer = null;
+            }
+          }
+        });
+
+        // 2. Fullscreen Change Listener -> Detect exiting fullscreen
+        const handleFullscreenChange = () => {
+          if (!this.canCheckViolation()) return;
+          const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
+          if (!isFs) {
+            this.handleViolation("EXIT_FULLSCREEN", "Terdeteksi keluar dari Mode Layar Penuh (Fullscreen). Ujian wajib dikerjakan dalam mode layar penuh.");
+          }
+        };
+        document.addEventListener("fullscreenchange", handleFullscreenChange);
+        document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
+
+        // 3. Smart Blur Listener -> With internal focus guard & 1.5s verification delay
+        window.addEventListener("blur", () => {
+          if (!this.canCheckViolation()) return;
+
+          // Guard A: Internal focus elements (audio player, select dropdown, button, iframe, input)
+          if (this.isInternalInteraction()) {
+            console.info("[SmartProctoring] Ignored internal element focus change.");
+            return;
+          }
+
+          // Guard B: Check if document still has focus according to browser
+          if (document.hasFocus && document.hasFocus()) {
+            return;
+          }
+
+          // Start a 1.5s verification delay: if user quickly returns, do NOT penalize with a strike!
+          if (this.blurVerificationTimer) clearTimeout(this.blurVerificationTimer);
+          this.blurVerificationTimer = setTimeout(() => {
+            if (!this.canCheckViolation()) return;
+            // Re-verify after 1.5s
+            if (!document.hasFocus() || document.hidden) {
+              this.handleViolation("WINDOW_BLUR", "Jendela ujian kehilangan fokus aktif (terdeteksi membuka aplikasi lain di luar browser).");
+            }
+            this.blurVerificationTimer = null;
+          }, 1500);
+        });
+
+        // 4. Focus Listener -> cancel blur timer immediately when user returns
+        window.addEventListener("focus", () => {
+          if (this.blurVerificationTimer) {
+            clearTimeout(this.blurVerificationTimer);
+            this.blurVerificationTimer = null;
+          }
+        });
+
+        // 5. Anti-Cheating Keyboard Shortcut Guard
+        window.addEventListener("keydown", (e) => {
+          if (AppState.currentPage !== "exam" || AppState.examSession.submitted) return;
+
+          const key = e.key ? e.key.toLowerCase() : "";
+          const isCtrlOrCmd = e.ctrlKey || e.metaKey;
+
+          // Block Ctrl/Cmd + T (New Tab), Ctrl/Cmd + N (New Window), Ctrl/Cmd + W (Close)
+          if (isCtrlOrCmd && (key === 't' || key === 'n' || key === 'w')) {
+            e.preventDefault();
+            e.stopPropagation();
+            SoundFX.playWrong();
+            this.handleViolation("SHORTCUT_BLOCKED", `Kombinasi tombol terlarang (Ctrl+${key.toUpperCase()}) ditekan untuk membuka tab/jendela baru.`);
+            return false;
+          }
+
+          // Block DevTools: F12, Ctrl+Shift+I, Cmd+Option+I, Ctrl+Shift+J
+          if (e.key === 'F12' || (isCtrlOrCmd && e.shiftKey && (key === 'i' || key === 'j' || key === 'c'))) {
+            e.preventDefault();
+            e.stopPropagation();
+            SoundFX.playWrong();
+            this.handleViolation("DEVTOOLS_ATTEMPT", "Percobaan membuka Inspect Element / Developer Tools diblokir.");
+            return false;
+          }
+
+          // Block Alt+Tab or Alt+F4
+          if (e.altKey && (key === 'tab' || key === 'f4')) {
+            e.preventDefault();
+            SoundFX.playWrong();
+            this.handleViolation("ALT_TAB_ATTEMPT", "Kombinasi tombol beralih aplikasi (Alt+Tab) terdeteksi.");
+            return false;
+          }
+        }, true);
+
+        // 6. Context Menu & Copy Paste Trap
+        document.addEventListener("contextmenu", (e) => {
+          if (AppState.currentPage === "exam" && !AppState.examSession.submitted) {
+            e.preventDefault();
+            showToast("⚠️ Klik kanan dinonaktifkan demi integritas ujian.");
+          }
+        });
+
+        document.addEventListener("copy", (e) => {
+          if (AppState.currentPage === "exam" && !AppState.examSession.submitted) {
+            e.preventDefault();
+            showToast("⚠️ Tindakan menyalin soal ujian tidak diperbolehkan.");
+          }
+        });
+      },
+
+      canCheckViolation() {
+        if (AppState.currentPage !== "exam" || AppState.examSession.submitted) return false;
+        const session = AppState.examSession;
+
+        // Grace period: 5s after entry, or grace time after closing modal
+        if (Date.now() < (session.gracePeriodUntil || 0)) return false;
+
+        // If currently in media permission prompt (microphone or camera)
+        if (AppState.isRequestingMediaPermission) return false;
+
+        // If violation modal is already showing, don't cascade strikes
+        const modal = document.getElementById("spaViolationModal");
+        if (modal && !modal.classList.contains("hidden")) return false;
+
+        return true;
+      },
+
+      isInternalInteraction() {
+        const active = document.activeElement;
+        if (!active) return false;
+        const tag = active.tagName.toLowerCase();
+        if (['input', 'textarea', 'select', 'button', 'audio', 'video', 'iframe'].includes(tag)) return true;
+        if (active.closest && (active.closest('#examAudioContainer') || active.closest('#speakingRecorderArena') || active.closest('.custom-scrollbar'))) return true;
+        return false;
+      },
+
+      handleViolation(type, message) {
+        if (!this.canCheckViolation()) return;
+
+        const session = AppState.examSession;
+        const now = Date.now();
+
+        // Enforce 3.5s cooldown between strikes
+        if (now - (session.lastViolationTime || 0) < 3500) {
+          return;
+        }
+        session.lastViolationTime = now;
+
+        triggerSpaViolation(type, message);
+      }
+    };
+
     function initSpaProctoringEvents() {
       const session = AppState.examSession;
-      // Entry Grace Period (Issue #1 fix): 15 seconds to let browser stabilize and permissions settle
-      session.gracePeriodUntil = Date.now() + 15000;
+      // Entry Grace Period: 5 seconds for initial camera/mic permissions & focus settling
+      session.gracePeriodUntil = Date.now() + 5000;
       session.lastViolationTime = 0;
 
-      window.onblur = () => {
-        handleProctoringSecurityEvent("window_blur");
-      };
-
-      document.onvisibilitychange = () => {
-        if (document.hidden) {
-          handleProctoringSecurityEvent("visibility_hidden");
-        }
-      };
+      // Initialize the centralized Smart Proctoring Engine
+      SmartProctoring.init();
     }
 
-    function handleProctoringSecurityEvent(eventType) {
-      if (AppState.currentPage !== "exam" || AppState.examSession.submitted) return;
-
-      const session = AppState.examSession;
-
-      // 1. Entry Grace Period (Fix Issue #1): Protect from initial permission popups or browser focus settling
-      if (Date.now() < (session.gracePeriodUntil || 0)) {
-        console.info("[Proctoring] Ignored during entry grace period:", eventType);
-        return;
-      }
-
-      // 2. Media Request Guard (Fix Issue #8): Ignore focus events caused by mic or camera requests
-      if (AppState.isRequestingMediaPermission) {
-        console.info("[Proctoring] Ignored during media permission prompt:", eventType);
-        return;
-      }
-
-      // 3. Debounce: Cooldown of 4 seconds between violation strikes
-      const now = Date.now();
-      if (now - (session.lastViolationTime || 0) < 4000) {
-        return;
-      }
-      session.lastViolationTime = now;
-
-      triggerSpaViolation();
-    }
-
-    function triggerSpaViolation() {
+    function triggerSpaViolation(type = "INTEGRITY_VIOLATION", message = "Terdeteksi beralih tab atau keluar dari mode layar penuh.") {
       const session = AppState.examSession;
       session.strikes = (session.strikes || 0) + 1;
+      
+      // Log violation
+      if (!session.proctoringLogs) session.proctoringLogs = [];
+      session.proctoringLogs.push({
+        type: type,
+        message: message,
+        strike: session.strikes,
+        timestamp: new Date().toISOString()
+      });
+
+      SoundFX.playWrong();
+
       const strikeEl = document.getElementById("playerStrikeCount");
-      if (strikeEl) strikeEl.innerText = session.strikes + " / 3";
+      if (strikeEl) {
+        strikeEl.innerText = session.strikes + " / 3 Strikes";
+        strikeEl.className = `font-mono text-xs font-black leading-tight ${session.strikes >= 2 ? 'text-red-400' : 'text-amber-400'}`;
+      }
       
       const modalStrike = document.getElementById("modalStrikeSpan");
       if (modalStrike) modalStrike.innerText = session.strikes;
 
+      const reasonEl = document.getElementById("modalViolationReason");
+      if (reasonEl) reasonEl.innerText = message;
+
+      // Update the 3 visual badges in modal
+      const b1 = document.getElementById("strikeBadge1");
+      const b2 = document.getElementById("strikeBadge2");
+      const b3 = document.getElementById("strikeBadge3");
+      if (b1 && session.strikes >= 1) b1.className = "p-2 rounded-xl border text-center bg-amber-100 border-amber-400 text-amber-900 font-bold scale-105 shadow-sm";
+      if (b2 && session.strikes >= 2) b2.className = "p-2 rounded-xl border text-center bg-orange-100 border-orange-500 text-orange-950 font-bold scale-105 shadow-sm";
+      if (b3 && session.strikes >= 3) b3.className = "p-2 rounded-xl border text-center bg-red-600 border-red-700 text-white font-black animate-pulse scale-105 shadow-md";
+
       const modal = document.getElementById("spaViolationModal");
       if (modal) modal.classList.remove("hidden");
+      lucide.createIcons();
 
       if (session.strikes >= 3) {
         setTimeout(() => {
-          alert("Peringatan keamanan (3x strikes) telah tercapai. Ujian Anda otomatis dikumpulkan oleh sistem.");
+          alert("Peringatan keamanan (3x strikes) telah tercapai. Ujian Anda otomatis dikumpulkan oleh sistem demi menjaga integritas.");
           submitSpaExam();
         }, 1500);
       }
@@ -4756,8 +4956,33 @@
     function closeViolationModal() {
       const modal = document.getElementById("spaViolationModal");
       if (modal) modal.classList.add("hidden");
-      // Give 5 seconds grace period after closing modal so focus settling doesn't immediately strike again
-      AppState.examSession.gracePeriodUntil = Date.now() + 5000;
+
+      // Attempt to enter fullscreen
+      toggleExamFullscreen(true);
+
+      // Give 4 seconds grace period so focus settling doesn't immediately strike again
+      AppState.examSession.gracePeriodUntil = Date.now() + 4000;
+      showToast("Layar ujian dipulihkan. Mohon tetap fokus pada lembar asesmen.");
+    }
+
+    function toggleExamFullscreen(forceEnter = false) {
+      try {
+        const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
+        if (!isFs || forceEnter) {
+          const docEl = document.documentElement;
+          if (docEl.requestFullscreen) {
+            docEl.requestFullscreen().catch(() => {});
+          } else if (docEl.webkitRequestFullscreen) {
+            docEl.webkitRequestFullscreen().catch(() => {});
+          }
+        } else if (!forceEnter && isFs) {
+          if (document.exitFullscreen) {
+            document.exitFullscreen().catch(() => {});
+          } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen().catch(() => {});
+          }
+        }
+      } catch(e) {}
     }
 
     function confirmExitExam() {
@@ -8669,7 +8894,24 @@
         }
       }
     });
-  </script>
+  
+    async function resetStudentStrikesFromTeacher(subId) {
+      if (!confirm("Beri toleransi dan reset peringatan keamanan untuk siswa ini menjadi 0?")) return;
+      try {
+        let list = JSON.parse(localStorage.getItem("alimam_submissions_v1") || "[]");
+        const idx = list.findIndex(s => s.id === subId);
+        if (idx !== -1) {
+          list[idx].violationsCount = 0;
+          list[idx].proctoringLogs = [{ type: "tolerated", detail: "Peringatan direset oleh Pengajar (Bu Tri Nuryani, S.S)." }];
+          localStorage.setItem("alimam_submissions_v1", JSON.stringify(list));
+          await AlImamStorage.saveSubmission(list[idx]);
+          showToast("✓ Peringatan keamanan siswa berhasil direset menjadi 0.");
+          closeSubmissionDetailModal();
+          renderAdminSubmissionsTable();
+        }
+      } catch(e) {}
+    }
+</script>
     <!-- Modal Impor Token Nilai Ujian Siswa -->
     <div id="spaImportSubmissionsModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
       <div class="bg-white rounded-3xl max-w-xl w-full p-6 space-y-4 shadow-2xl border border-slate-200">
@@ -8729,6 +8971,9 @@ ALIMAM_EXAM:eyJ0b2tlblR5cGUi..." class="w-full p-3 font-mono text-xs rounded-xl 
         <div class="flex justify-end gap-2 pt-3 border-t border-slate-100">
           <button onclick="closeSubmissionDetailModal()" class="px-4 py-2 rounded-xl border border-slate-200 text-slate-600 font-bold text-xs hover:bg-slate-50 cursor-pointer">
             Tutup
+          </button>
+          <button id="subDetailResetStrikesBtn" class="px-4 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 font-bold text-xs transition-all cursor-pointer flex items-center gap-1.5" title="Reset akumulasi peringatan siswa jika terjadi kendala teknis">
+            <i data-lucide="rotate-ccw" class="w-4 h-4 text-amber-600"></i> Reset Peringatan (Toleransi)
           </button>
           <button id="subDetailPrintBtn" class="px-4 py-2 rounded-xl bg-brand-600 text-white font-bold text-xs shadow-sm hover:bg-brand-700 transition-all cursor-pointer flex items-center gap-1.5">
             <i data-lucide="printer" class="w-4 h-4"></i> Cetak Rapor Siswa
